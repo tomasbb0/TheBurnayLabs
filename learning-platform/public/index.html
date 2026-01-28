@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning with Tomas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; min-height: 100vh; }
+        body.login-view { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; }
+        body.dashboard-view { background: #F9FAFB; display: block; }
+        
+        /* Login */
+        #login-screen { background: white; padding: 48px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); width: 100%; max-width: 420px; }
+        .login-header { text-align: center; margin-bottom: 32px; }
+        .logo-icon { width: 64px; height: 64px; background: #4F46E5; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+        .logo-icon svg { width: 36px; height: 36px; stroke: white; fill: none; }
+        .login-header h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; color: #111827; }
+        .subtitle { color: #6B7280; font-size: 14px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #4B5563; }
+        .form-group input, .form-group select { width: 100%; padding: 12px 16px; border: 1px solid #E5E7EB; border-radius: 8px; font-size: 15px; font-family: inherit; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+        .btn { display: block; width: 100%; padding: 12px 24px; background: #4F46E5; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 500; cursor: pointer; font-family: inherit; }
+        .btn:hover { background: #4338CA; }
+        .error-message { margin-top: 16px; padding: 12px; background: #FEF2F2; border: 1px solid #FECACA; border-radius: 8px; color: #EF4444; font-size: 14px; text-align: center; display: none; }
+        .error-message.show { display: block; }
+        .hidden { display: none !important; }
+        
+        /* Dashboard */
+        #dashboard-screen { display: none; min-height: 100vh; }
+        #dashboard-screen.active { display: block; }
+        .main-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background: white; border-bottom: 1px solid #E5E7EB; }
+        .header-left, .header-right { display: flex; align-items: center; gap: 12px; }
+        .logo-small { width: 36px; height: 36px; background: #4F46E5; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .logo-small svg { width: 20px; height: 20px; stroke: white; fill: none; }
+        .main-header h1 { font-size: 18px; color: #111827; }
+        .btn-icon { width: 40px; height: 40px; border: none; background: transparent; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .btn-icon:hover { background: #F3F4F6; }
+        .btn-icon svg { width: 20px; height: 20px; stroke: #4B5563; fill: none; }
+        .role-badge { font-size: 11px; padding: 4px 8px; border-radius: 12px; font-weight: 600; background: #DBEAFE; color: #1D4ED8; }
+        .main-content { display: flex; min-height: calc(100vh - 65px); }
+        .sidebar { width: 280px; background: white; border-right: 1px solid #E5E7EB; padding: 20px; }
+        .sidebar h3 { font-size: 14px; color: #6B7280; margin-bottom: 16px; font-weight: 600; }
+        .student-list { display: flex; flex-direction: column; gap: 8px; }
+        .student-item { display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid #E5E7EB; border-radius: 8px; cursor: pointer; transition: all 0.15s; }
+        .student-item:hover { background: #F3F4F6; }
+        .student-item.active { background: #4F46E5; color: white; border-color: #4F46E5; }
+        .student-avatar { width: 40px; height: 40px; background: #818CF8; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 16px; }
+        .main-panel { flex: 1; padding: 24px; }
+        .welcome-content { text-align: center; padding: 80px 20px; }
+        .welcome-content svg { width: 80px; height: 80px; stroke: #818CF8; fill: none; margin-bottom: 24px; }
+        .welcome-content h2 { font-size: 24px; margin-bottom: 8px; color: #111827; }
+        .welcome-content p { color: #6B7280; }
+        .btn-small { padding: 8px 16px; font-size: 13px; background: #4F46E5; color: white; border: none; border-radius: 8px; cursor: pointer; font-family: inherit; }
+        .btn-small:hover { background: #4338CA; }
+        .empty-state { text-align: center; padding: 40px; color: #6B7280; }
+        .nav-tabs { display: flex; gap: 4px; flex-direction: column; margin-top: 20px; }
+        .nav-tab { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: none; background: transparent; border-radius: 8px; cursor: pointer; font-size: 14px; color: #4B5563; text-align: left; width: 100%; font-family: inherit; transition: all 0.15s; }
+        .nav-tab:hover { background: #F3F4F6; }
+        .nav-tab.active { background: #4F46E5; color: white; }
+        .nav-tab svg { width: 20px; height: 20px; stroke: currentColor; fill: none; }
+        .panel { display: none; }
+        .panel.active { display: block; }
+        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .panel-header h2 { font-size: 20px; color: #111827; }
+        .items-list { display: flex; flex-direction: column; gap: 12px; }
+        .item-card { display: flex; gap: 16px; padding: 20px; background: white; border: 1px solid #E5E7EB; border-radius: 8px; }
+        .item-icon { width: 48px; height: 48px; background: #EEF2FF; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .item-icon svg { width: 24px; height: 24px; stroke: #4F46E5; fill: none; }
+        .item-content { flex: 1; }
+        .item-title { font-weight: 600; margin-bottom: 4px; color: #111827; }
+        .item-desc { font-size: 14px; color: #6B7280; margin-bottom: 8px; }
+        .status-badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; }
+        .status-badge.pending { background: #FEF3C7; color: #D97706; }
+        .status-badge.completed { background: #D1FAE5; color: #059669; }
+        
+        /* Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .modal { background: white; border-radius: 12px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid #E5E7EB; }
+        .modal-header h3 { font-size: 18px; color: #111827; }
+        .modal-close { width: 36px; height: 36px; border: none; background: #F3F4F6; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+        .modal-close:hover { background: #E5E7EB; }
+        .modal-content { padding: 20px; }
+        
+        /* Full-screen Diagnostic */
+        .diag-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #F9FAFB; z-index: 2000; display: none; flex-direction: column; }
+        .diag-overlay.active { display: flex; }
+        .diag-header { background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%); color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+        .diag-header h2 { font-size: 18px; font-weight: 600; }
+        .diag-close { background: rgba(255,255,255,0.2); border: none; color: white; width: 40px; height: 40px; border-radius: 8px; cursor: pointer; font-size: 20px; }
+        .diag-close:hover { background: rgba(255,255,255,0.3); }
+        .diag-progress { background: white; padding: 12px 24px; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; gap: 16px; }
+        .diag-progress-bar { flex: 1; height: 8px; background: #E5E7EB; border-radius: 4px; overflow: hidden; }
+        .diag-progress-fill { height: 100%; background: linear-gradient(90deg, #10B981, #059669); transition: width 0.3s; }
+        .diag-progress-text { font-size: 14px; color: #6B7280; min-width: 100px; text-align: right; }
+        .diag-body { flex: 1; display: flex; overflow: hidden; }
+        .diag-sidebar { width: 280px; background: white; border-right: 1px solid #E5E7EB; overflow-y: auto; padding: 16px; }
+        .diag-section-nav { display: flex; flex-direction: column; gap: 4px; }
+        .diag-section-btn { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: none; background: transparent; border-radius: 8px; cursor: pointer; text-align: left; font-family: inherit; font-size: 13px; color: #4B5563; transition: all 0.15s; }
+        .diag-section-btn:hover { background: #F3F4F6; }
+        .diag-section-btn.active { background: #EEF2FF; color: #4F46E5; font-weight: 600; }
+        .diag-section-btn.completed { color: #059669; }
+        .diag-section-btn .check { margin-left: auto; }
+        .diag-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .diag-content { flex: 1; overflow-y: auto; padding: 32px; }
+        .diag-section-header { margin-bottom: 24px; }
+        .diag-section-header h3 { font-size: 24px; color: #111827; margin-bottom: 8px; }
+        .diag-section-header .category { display: inline-block; background: #EEF2FF; color: #4F46E5; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-bottom: 12px; }
+        .diag-section-header .instruction { color: #6B7280; font-size: 14px; line-height: 1.6; }
+        .diag-section-header .tip { margin-top: 12px; padding: 12px 16px; background: #FEF3C7; border-radius: 8px; font-size: 13px; color: #92400E; }
+        .diag-items { display: flex; flex-direction: column; gap: 8px; }
+        .diag-item { display: flex; align-items: center; gap: 16px; padding: 16px 20px; background: white; border: 2px solid #E5E7EB; border-radius: 12px; transition: all 0.2s; }
+        .diag-item:hover { border-color: #C7D2FE; }
+        .diag-item.answered { border-color: #10B981; background: #F0FDF4; }
+        .diag-item-emoji { font-size: 32px; width: 48px; text-align: center; }
+        .diag-item-text { flex: 1; }
+        .diag-item-pt { font-size: 18px; font-weight: 600; color: #111827; }
+        .diag-item-en { font-size: 14px; color: #6B7280; }
+        .diag-item-btns { display: flex; gap: 8px; }
+        .diag-item-btn { width: 48px; height: 48px; border-radius: 12px; border: 2px solid #E5E7EB; background: white; cursor: pointer; font-size: 20px; transition: all 0.15s; display: flex; align-items: center; justify-content: center; }
+        .diag-item-btn:hover { transform: scale(1.1); }
+        .diag-item-btn.correct { border-color: #10B981; background: #10B981; color: white; }
+        .diag-item-btn.partial { border-color: #F59E0B; background: #F59E0B; color: white; }
+        .diag-item-btn.none { border-color: #EF4444; background: #EF4444; color: white; }
+        .diag-item-btn.selected { transform: scale(1.15); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .diag-footer { background: white; border-top: 1px solid #E5E7EB; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+        .diag-nav-btn { display: flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 8px; border: none; font-size: 15px; font-weight: 500; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+        .diag-nav-btn.prev { background: #F3F4F6; color: #4B5563; }
+        .diag-nav-btn.prev:hover { background: #E5E7EB; }
+        .diag-nav-btn.next { background: #4F46E5; color: white; }
+        .diag-nav-btn.next:hover { background: #4338CA; }
+        .diag-nav-btn.finish { background: linear-gradient(135deg, #059669, #10B981); color: white; }
+        .diag-nav-btn.finish:hover { background: #047857; }
+        .diag-nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .diag-notes { margin-top: 24px; }
+        .diag-notes textarea { width: 100%; padding: 16px; border: 2px solid #E5E7EB; border-radius: 12px; font-family: inherit; font-size: 14px; resize: vertical; min-height: 100px; }
+        .diag-notes textarea:focus { outline: none; border-color: #4F46E5; }
+        .diag-notes label { display: block; font-weight: 600; color: #111827; margin-bottom: 8px; }
+        
+        /* Results View */
+        .results-section { margin-bottom: 24px; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .results-section-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: #F9FAFB; border-bottom: 1px solid #E5E7EB; cursor: pointer; }
+        .results-section-header h4 { font-size: 16px; color: #111827; display: flex; align-items: center; gap: 8px; }
+        .results-score { background: #EEF2FF; color: #4F46E5; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 14px; }
+        .results-items { padding: 16px 20px; display: none; }
+        .results-items.open { display: block; }
+        .results-item { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid #F3F4F6; }
+        .results-item:last-child { border-bottom: none; }
+        
+        /* Collapsible Students */
+        .students-toggle { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #4F46E5; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; width: 100%; font-family: inherit; margin-bottom: 8px; }
+        .students-toggle:hover { background: #4338CA; }
+        .students-toggle .arrow { transition: transform 0.2s; }
+        .students-toggle.open .arrow { transform: rotate(180deg); }
+        .students-content { display: none; }
+        .students-content.open { display: block; }
+        .add-student-bottom { margin-top: 12px; padding: 12px; background: #F3F4F6; border-radius: 8px; text-align: center; }
+        .add-student-bottom button { width: 100%; }
+        
+        /* Delete button */
+        .delete-btn { background: #FEE2E2; color: #EF4444; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-family: inherit; margin-left: 8px; }
+        .delete-btn:hover { background: #FCA5A5; }
+        .item-actions { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+        
+        /* Credentials display */
+        .credentials-box { background: #F0FDF4; border: 1px solid #86EFAC; border-radius: 8px; padding: 16px; margin-top: 16px; }
+        .credentials-box h4 { color: #059669; margin-bottom: 12px; }
+        .credentials-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #D1FAE5; }
+        .credentials-item:last-child { border-bottom: none; }
+        .credentials-item label { color: #6B7280; font-size: 13px; }
+        .credentials-item span { font-weight: 600; color: #111827; font-family: monospace; }
+    </style>
+</head>
+<body class="login-view">
+    <!-- Login Screen -->
+    <div id="login-screen">
+        <div class="login-header">
+            <div class="logo-icon">
+                <svg viewBox="0 0 24 24" stroke-width="2">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                </svg>
+            </div>
+            <h1>Learning with Tomas</h1>
+            <p class="subtitle">Student Learning Platform</p>
+        </div>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" required placeholder="Enter your username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="Enter your password">
+            </div>
+            <button type="submit" class="btn">Sign In</button>
+            <div id="login-error" class="error-message"></div>
+        </form>
+    </div>
+
+    <!-- Dashboard Screen -->
+    <div id="dashboard-screen">
+        <header class="main-header">
+            <div class="header-left">
+                <div class="logo-small">
+                    <svg viewBox="0 0 24 24" stroke-width="2">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                    </svg>
+                </div>
+                <h1>Learning with Tomas</h1>
+            </div>
+            <div class="header-right">
+                <span id="current-user-name">Welcome!</span>
+                <span id="user-role-badge" class="role-badge">admin</span>
+                <button id="logout-btn" class="btn-icon" title="Logout">
+                    <svg viewBox="0 0 24 24" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+        <div class="main-content">
+            <aside class="sidebar">
+                <div id="admin-panel">
+                    <button class="students-toggle" id="students-toggle">
+                        <span>👥 Students</span>
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="students-content" id="students-content">
+                        <div id="student-list" class="student-list">
+                            <div class="empty-state">No students yet</div>
+                        </div>
+                        <div class="add-student-bottom">
+                            <button id="add-student-btn" class="btn-small" style="width:100%">+ Add New Student</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="student-nav" class="nav-tabs hidden">
+                    <button class="nav-tab active" data-tab="diagnostics">
+                        <svg viewBox="0 0 24 24" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        Diagnostics
+                    </button>
+                    <button class="nav-tab" data-tab="games">
+                        <svg viewBox="0 0 24 24" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/></svg>
+                        Games
+                    </button>
+                    <button class="nav-tab" data-tab="tests">
+                        <svg viewBox="0 0 24 24" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        Tests
+                    </button>
+                    <button class="nav-tab" data-tab="links">
+                        <svg viewBox="0 0 24 24" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                        Links
+                    </button>
+                    <button class="nav-tab" data-tab="progress">
+                        <svg viewBox="0 0 24 24" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+                        Progress
+                    </button>
+                </div>
+            </aside>
+            <main class="main-panel">
+                <div id="welcome-panel" class="panel active">
+                    <div class="welcome-content">
+                        <svg viewBox="0 0 24 24" stroke-width="1.5">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                        </svg>
+                        <h2>Welcome!</h2>
+                        <p id="welcome-message">Select a student from the sidebar to view their dashboard.</p>
+                    </div>
+                </div>
+                <div id="diagnostics-panel" class="panel">
+                    <div class="panel-header"><h2>Diagnostics</h2><button id="add-diagnostic-btn" class="btn-small">+ Assign</button></div>
+                    <div id="diagnostics-list" class="items-list"><div class="empty-state">No diagnostics assigned</div></div>
+                </div>
+                <div id="games-panel" class="panel">
+                    <div class="panel-header"><h2>Games</h2><button id="add-game-btn" class="btn-small">+ Add Game</button></div>
+                    <div id="games-list" class="items-list"><div class="empty-state">No games assigned</div></div>
+                </div>
+                <div id="tests-panel" class="panel">
+                    <div class="panel-header"><h2>Tests</h2><button id="add-test-btn" class="btn-small">+ Add Test</button></div>
+                    <div id="tests-list" class="items-list"><div class="empty-state">No tests assigned</div></div>
+                </div>
+                <div id="links-panel" class="panel">
+                    <div class="panel-header"><h2>Links</h2><button id="add-link-btn" class="btn-small">+ Add Link</button></div>
+                    <div id="links-list" class="items-list"><div class="empty-state">No links saved</div></div>
+                </div>
+                <div id="progress-panel" class="panel">
+                    <div class="panel-header"><h2>Progress</h2><button id="add-progress-btn" class="btn-small">+ Add Topic</button></div>
+                    <div id="progress-list" class="items-list"><div class="empty-state">No progress tracked</div></div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modal-title">Modal</h3>
+                <button class="modal-close" id="modal-close-btn">X</button>
+            </div>
+            <div id="modal-content" class="modal-content"></div>
+        </div>
+    </div>
+    
+    <!-- Full-screen Diagnostic Assessment -->
+    <div id="diag-overlay" class="diag-overlay">
+        <div class="diag-header">
+            <h2 id="diag-title">📝 Assessment</h2>
+            <button class="diag-close" id="diag-close-btn">✕</button>
+        </div>
+        <div class="diag-progress">
+            <div class="diag-progress-bar"><div class="diag-progress-fill" id="diag-progress-fill"></div></div>
+            <div class="diag-progress-text" id="diag-progress-text">Section 1 of 15</div>
+        </div>
+        <div class="diag-body">
+            <div class="diag-sidebar">
+                <div class="diag-section-nav" id="diag-section-nav"></div>
+            </div>
+            <div class="diag-main">
+                <div class="diag-content" id="diag-content"></div>
+                <div class="diag-footer">
+                    <button class="diag-nav-btn prev" id="diag-prev-btn">← Previous</button>
+                    <button class="diag-nav-btn next" id="diag-next-btn">Next →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script>
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyAki3QaFgKY0cTWAt2R06c86WimoXRVWKs",
+            authDomain: "lessonsplatform-e228c.firebaseapp.com",
+            projectId: "lessonsplatform-e228c",
+            storageBucket: "lessonsplatform-e228c.firebasestorage.app",
+            messagingSenderId: "804556322280",
+            appId: "1:804556322280:web:85ffeb6fd6a49e321c605d"
+        };
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+
+        // Users
+        const USERS = {
+            'tomas': { password: 'admin123', role: 'admin', name: 'Tomas' },
+            'leo': { password: 'leo123', role: 'student', name: 'Leo', studentId: 'c2PmfTNfEwbcqJtk0xiU' },
+            'george': { password: 'georgept2026', role: 'student', name: 'George' }
+        };
+
+        let currentUser = null;
+        let selectedStudent = null;
+
+        // Login - checks both hardcoded users and Firebase students
+        document.getElementById('login-form').onsubmit = function(e) {
+            e.preventDefault();
+            var username = document.getElementById('username').value.trim().toLowerCase();
+            var password = document.getElementById('password').value;
+            var errorDiv = document.getElementById('login-error');
+            
+            // First check hardcoded users
+            if (USERS[username] && USERS[username].password === password) {
+                loginSuccess(username, USERS[username]);
+                return;
+            }
+            
+            // Then check Firebase for dynamically added students
+            db.collection('students').where('username', '==', username).get().then(function(snap) {
+                if (!snap.empty) {
+                    var studentDoc = snap.docs[0];
+                    var student = studentDoc.data();
+                    if (student.password === password) {
+                        // Add to USERS for future reference
+                        USERS[username] = { password: password, role: 'student', name: student.name, studentId: studentDoc.id };
+                        loginSuccess(username, USERS[username]);
+                        return;
+                    }
+                }
+                errorDiv.textContent = 'Invalid username or password';
+                errorDiv.classList.add('show');
+            }).catch(function(err) {
+                errorDiv.textContent = 'Login error: ' + err.message;
+                errorDiv.classList.add('show');
+            });
+        };
+        
+        function loginSuccess(username, userData) {
+            currentUser = { username: username, password: userData.password, role: userData.role, name: userData.name };
+            document.body.className = 'dashboard-view';
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('dashboard-screen').classList.add('active');
+            document.getElementById('current-user-name').textContent = currentUser.name;
+            document.getElementById('user-role-badge').textContent = currentUser.role;
+            document.getElementById('login-error').classList.remove('show');
+            if (currentUser.role === 'admin') {
+                document.getElementById('admin-panel').classList.remove('hidden');
+                loadStudents();
+            } else {
+                document.getElementById('admin-panel').classList.add('hidden');
+                document.getElementById('student-nav').classList.remove('hidden');
+                // Auto-load student data for student users
+                loadStudentDataByName(currentUser.name);
+            }
+        }
+
+        // Logout
+        document.getElementById('logout-btn').onclick = function() {
+            currentUser = null;
+            selectedStudent = null;
+            document.body.className = 'login-view';
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('dashboard-screen').classList.remove('active');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('login-error').classList.remove('show');
+        };
+
+        // Students toggle
+        document.getElementById('students-toggle').onclick = function() {
+            this.classList.toggle('open');
+            document.getElementById('students-content').classList.toggle('open');
+        };
+        
+        // Load Students
+        function loadStudents() {
+            var list = document.getElementById('student-list');
+            db.collection('students').get().then(function(snapshot) {
+                if (snapshot.empty) {
+                    list.innerHTML = '<div class="empty-state">No students yet</div>';
+                    return;
+                }
+                list.innerHTML = '';
+                snapshot.forEach(function(doc) {
+                    var student = doc.data();
+                    var div = document.createElement('div');
+                    div.className = 'student-item';
+                    div.innerHTML = '<div class="student-avatar">' + student.name.charAt(0).toUpperCase() + '</div><div style="flex:1"><div style="font-weight:600">' + student.name + '</div><div style="font-size:12px;color:#6B7280">' + (student.level || 'A0') + (student.username ? ' • @' + student.username : '') + '</div></div>';
+                    div.onclick = function() {
+                        selectedStudent = { id: doc.id, name: student.name, level: student.level };
+                        document.querySelectorAll('.student-item').forEach(function(el) { el.classList.remove('active'); });
+                        div.classList.add('active');
+                        document.getElementById('student-nav').classList.remove('hidden');
+                        showPanel('diagnostics');
+                        loadStudentData();
+                    };
+                    list.appendChild(div);
+                });
+                // Auto-open if there are students
+                document.getElementById('students-toggle').classList.add('open');
+                document.getElementById('students-content').classList.add('open');
+            }).catch(function(e) {
+                list.innerHTML = '<div class="empty-state">Error loading: ' + e.message + '</div>';
+            });
+        }
+
+        // Tab Navigation
+        document.querySelectorAll('.nav-tab').forEach(function(tab) {
+            tab.onclick = function() {
+                document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
+                this.classList.add('active');
+                showPanel(this.dataset.tab);
+            };
+        });
+
+        function showPanel(name) {
+            document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+            document.getElementById(name + '-panel').classList.add('active');
+        }
+
+        // Generate username and password
+        function generateUsername(name) {
+            return name.toLowerCase().replace(/[^a-z0-9]/g, '') + Math.floor(Math.random() * 100);
+        }
+        function generatePassword() {
+            var chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            var pass = '';
+            for (var i = 0; i < 8; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length));
+            return pass;
+        }
+        
+        // Add Student
+        document.getElementById('add-student-btn').onclick = function() {
+            openModal('Add New Student', '<form id="student-form"><div class="form-group"><label>Student Name</label><input type="text" id="new-student-name" name="name" required placeholder="Enter student\'s name"></div><div class="form-group"><label>Level</label><select name="level"><option value="A0">A0 - Beginner</option><option value="A1">A1 - Elementary</option><option value="A2">A2 - Pre-Intermediate</option><option value="B1">B1 - Intermediate</option><option value="B2">B2 - Upper-Intermediate</option></select></div><div id="credentials-preview" style="display:none"></div><button type="submit" class="btn">Create Student Account</button></form>');
+            
+            // Preview credentials as they type
+            document.getElementById('new-student-name').oninput = function() {
+                var name = this.value.trim();
+                if (name.length >= 2) {
+                    var username = generateUsername(name);
+                    var password = generatePassword();
+                    document.getElementById('credentials-preview').innerHTML = '<div class="credentials-box"><h4>🔐 Auto-Generated Credentials</h4><div class="credentials-item"><label>Username:</label><span id="gen-username">' + username + '</span></div><div class="credentials-item"><label>Password:</label><span id="gen-password">' + password + '</span></div><p style="font-size:11px;color:#6B7280;margin-top:12px">Save these credentials! They will be shown once after creation.</p></div>';
+                    document.getElementById('credentials-preview').style.display = 'block';
+                } else {
+                    document.getElementById('credentials-preview').style.display = 'none';
+                }
+            };
+            
+            document.getElementById('student-form').onsubmit = function(e) {
+                e.preventDefault();
+                var form = new FormData(this);
+                var name = form.get('name');
+                var username = document.getElementById('gen-username').textContent;
+                var password = document.getElementById('gen-password').textContent;
+                
+                db.collection('students').add({
+                    name: name,
+                    level: form.get('level'),
+                    username: username,
+                    password: password,
+                    createdAt: new Date()
+                }).then(function(docRef) {
+                    // Also add to USERS dynamically
+                    USERS[username] = { password: password, role: 'student', name: name, studentId: docRef.id };
+                    
+                    // Show success with credentials
+                    document.getElementById('modal-content').innerHTML = '<div style="text-align:center;padding:20px"><div style="font-size:48px;margin-bottom:16px">✅</div><h3 style="margin-bottom:16px">Student Created!</h3><div class="credentials-box"><h4>🔐 Login Credentials</h4><div class="credentials-item"><label>Username:</label><span>' + username + '</span></div><div class="credentials-item"><label>Password:</label><span>' + password + '</span></div></div><p style="margin-top:16px;color:#EF4444;font-size:13px">⚠️ Save these credentials now! They cannot be retrieved later.</p><button class="btn" style="margin-top:20px" onclick="closeModal(); loadStudents();">Done</button></div>';
+                }).catch(function(e) {
+                    alert('Error: ' + e.message);
+                });
+            };
+        };
+
+        // Load student by name (for student login)
+        function loadStudentDataByName(name) {
+            db.collection('students').where('name', '==', name).get().then(function(snap) {
+                if (!snap.empty) {
+                    var doc = snap.docs[0];
+                    selectedStudent = { id: doc.id, name: doc.data().name, level: doc.data().level };
+                    showPanel('diagnostics');
+                    loadStudentData();
+                }
+            });
+        }
+
+        // Load Student Data
+        function loadStudentData() {
+            if (!selectedStudent) return;
+            
+            // Load diagnostics with interactive support
+            loadDiagnostics();
+            
+            // Load other tabs
+            var isAdmin = currentUser && currentUser.role === 'admin';
+            ['games', 'tests', 'links', 'progress'].forEach(function(tab) {
+                db.collection('students').doc(selectedStudent.id).collection(tab).orderBy('createdAt', 'desc').get().then(function(snap) {
+                    var list = document.getElementById(tab + '-list');
+                    if (snap.empty) {
+                        list.innerHTML = '<div class="empty-state">No ' + tab + ' yet</div>';
+                    } else {
+                        list.innerHTML = '';
+                        snap.forEach(function(doc) {
+                            var item = doc.data();
+                            var deleteBtn = isAdmin ? '<button class="delete-btn" onclick="deleteItem(\'' + tab + '\', \'' + doc.id + '\')">🗑️ Delete</button>' : '';
+                            if (tab === 'games') {
+                                list.innerHTML += '<div class="item-card"><div class="item-icon"><svg viewBox="0 0 24 24" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/></svg></div><div class="item-content"><div class="item-title">' + (item.title || 'Game') + '</div><div class="item-desc">' + (item.description || '') + '</div><div class="item-actions"><a href="' + item.url + '" target="_blank" class="btn-small" style="text-decoration:none">🎮 Play Game</a>' + deleteBtn + '</div></div></div>';
+                            } else {
+                                list.innerHTML += '<div class="item-card"><div class="item-icon"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></div><div class="item-content"><div class="item-title">' + (item.title || 'Untitled') + '</div><div class="item-desc">' + (item.description || item.url || '') + '</div><div class="item-actions">' + (item.status ? '<span class="status-badge ' + item.status + '">' + item.status + '</span>' : '') + deleteBtn + '</div></div></div>';
+                            }
+                        });
+                    }
+                });
+            });
+        }
+        
+        // Load Diagnostics with interactive fill-out
+        function loadDiagnostics() {
+            var list = document.getElementById('diagnostics-list');
+            var isAdmin = currentUser && currentUser.role === 'admin';
+            db.collection('students').doc(selectedStudent.id).collection('diagnostics').orderBy('createdAt', 'desc').get().then(function(snap) {
+                if (snap.empty) {
+                    list.innerHTML = '<div class="empty-state">No diagnostics assigned</div>';
+                    return;
+                }
+                list.innerHTML = '';
+                snap.forEach(function(doc) {
+                    var item = doc.data();
+                    var statusClass = item.status === 'completed' ? 'completed' : 'pending';
+                    var actionBtn = '';
+                    if (item.sections && item.status !== 'completed') {
+                        actionBtn = '<button onclick="openDiagnosticForm(\'' + doc.id + '\')" class="btn-small">📝 Fill Out Assessment</button>';
+                    } else if (item.sections && item.status === 'completed') {
+                        actionBtn = '<button onclick="viewDiagnosticResults(\'' + doc.id + '\')" class="btn-small" style="background:#059669">✅ View Results</button>';
+                    }
+                    var deleteBtn = isAdmin ? '<button class="delete-btn" onclick="deleteItem(\'diagnostics\', \'' + doc.id + '\')">🗑️ Delete</button>' : '';
+                    list.innerHTML += '<div class="item-card"><div class="item-icon"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="item-content"><div class="item-title">' + (item.title || 'Diagnostic') + '</div><div class="item-desc">' + (item.description || '') + '</div><div class="item-actions"><span class="status-badge ' + statusClass + '">' + item.status + '</span>' + actionBtn + deleteBtn + '</div></div></div>';
+                });
+            });
+        }
+        
+        // Open diagnostic form for filling
+        var currentDiag = null;
+        var currentDiagId = null;
+        var currentSection = 0;
+        
+        function openDiagnosticForm(diagId) {
+            db.collection('students').doc(selectedStudent.id).collection('diagnostics').doc(diagId).get().then(function(doc) {
+                var diag = doc.data();
+                if (!diag.sections) { alert('This diagnostic does not have an interactive form'); return; }
+                
+                currentDiag = diag;
+                currentDiagId = diagId;
+                currentSection = 0;
+                
+                document.getElementById('diag-title').textContent = '📝 ' + diag.title;
+                document.getElementById('diag-overlay').classList.add('active');
+                
+                renderSectionNav();
+                renderSection(0);
+            });
+        }
+        
+        function renderSectionNav() {
+            var nav = document.getElementById('diag-section-nav');
+            nav.innerHTML = '';
+            currentDiag.sections.forEach(function(section, i) {
+                var completed = isSectionCompleted(section);
+                var btn = document.createElement('button');
+                btn.className = 'diag-section-btn' + (i === currentSection ? ' active' : '') + (completed ? ' completed' : '');
+                btn.innerHTML = '<span style="font-size:18px">' + section.title.split(' ')[0] + '</span><span style="flex:1">' + section.title.split(' ').slice(1).join(' ') + '</span>' + (completed ? '<span class="check">✓</span>' : '');
+                btn.onclick = function() { goToSection(i); };
+                nav.appendChild(btn);
+            });
+        }
+        
+        function isSectionCompleted(section) {
+            return section.items.every(function(item) { return item.response !== '' && item.response !== undefined; });
+        }
+        
+        function countAnswered() {
+            var total = 0, answered = 0;
+            currentDiag.sections.forEach(function(s) {
+                s.items.forEach(function(item) {
+                    total++;
+                    if (item.response && item.response !== '') answered++;
+                });
+            });
+            return { total: total, answered: answered };
+        }
+        
+        function updateProgress() {
+            var counts = countAnswered();
+            var pct = Math.round((counts.answered / counts.total) * 100);
+            document.getElementById('diag-progress-fill').style.width = pct + '%';
+            document.getElementById('diag-progress-text').textContent = 'Section ' + (currentSection + 1) + ' of ' + currentDiag.sections.length + ' • ' + counts.answered + '/' + counts.total + ' answered';
+        }
+        
+        function goToSection(index) {
+            currentSection = index;
+            renderSection(index);
+            renderSectionNav();
+        }
+        
+        function renderSection(index) {
+            var section = currentDiag.sections[index];
+            var content = document.getElementById('diag-content');
+            var isLastSection = index === currentDiag.sections.length - 1;
+            
+            var html = '<div class="diag-section-header">';
+            html += '<span class="category">' + (section.category || 'Vocabulary') + '</span>';
+            html += '<h3>' + section.title + '</h3>';
+            html += '<p class="instruction">' + section.instruction + '</p>';
+            if (section.tip) html += '<div class="tip">💡 <strong>Tip:</strong> ' + section.tip + '</div>';
+            html += '</div>';
+            
+            html += '<div class="diag-items">';
+            section.items.forEach(function(item, ii) {
+                var answered = item.response && item.response !== '';
+                html += '<div class="diag-item' + (answered ? ' answered' : '') + '" data-item="' + ii + '">';
+                html += '<div class="diag-item-emoji">' + item.emoji + '</div>';
+                html += '<div class="diag-item-text">';
+                html += '<div class="diag-item-pt">' + item.portuguese + '</div>';
+                html += '<div class="diag-item-en">' + item.english + '</div>';
+                html += '</div>';
+                html += '<div class="diag-item-btns">';
+                html += '<button class="diag-item-btn' + (item.response === 'correct' ? ' correct selected' : '') + '" data-val="correct" data-section="' + index + '" data-item="' + ii + '" title="Correct">✓</button>';
+                html += '<button class="diag-item-btn' + (item.response === 'partial' ? ' partial selected' : '') + '" data-val="partial" data-section="' + index + '" data-item="' + ii + '" title="Partial">~</button>';
+                html += '<button class="diag-item-btn' + (item.response === 'none' ? ' none selected' : '') + '" data-val="none" data-section="' + index + '" data-item="' + ii + '" title="No Response">✗</button>';
+                html += '</div></div>';
+            });
+            html += '</div>';
+            
+            // Add notes section on last section
+            if (isLastSection) {
+                html += '<div class="diag-notes" style="margin-top:32px">';
+                html += '<label>📝 Parent Notes & Observations</label>';
+                html += '<textarea id="parent-notes" placeholder="Share any observations about your child\'s engagement, confidence, or anything else you noticed...">' + (currentDiag.parentNotes || '') + '</textarea>';
+                html += '</div>';
+                html += '<div class="diag-notes">';
+                html += '<label>💪 Child\'s Strengths</label>';
+                html += '<textarea id="child-strengths" placeholder="What did your child do well? What words/topics did they know?">' + (currentDiag.childStrengths || '') + '</textarea>';
+                html += '</div>';
+                html += '<div class="diag-notes">';
+                html += '<label>📈 Areas for Improvement</label>';
+                html += '<textarea id="areas-improvement" placeholder="What areas need more practice? Any challenges observed?">' + (currentDiag.areasForImprovement || '') + '</textarea>';
+                html += '</div>';
+            }
+            
+            content.innerHTML = html;
+            
+            // Bind button clicks
+            content.querySelectorAll('.diag-item-btn').forEach(function(btn) {
+                btn.onclick = function() {
+                    var si = parseInt(this.dataset.section);
+                    var ii = parseInt(this.dataset.item);
+                    var val = this.dataset.val;
+                    
+                    currentDiag.sections[si].items[ii].response = val;
+                    
+                    // Update UI
+                    var parent = this.parentNode;
+                    parent.querySelectorAll('.diag-item-btn').forEach(function(b) { 
+                        b.classList.remove('selected', 'correct', 'partial', 'none'); 
+                    });
+                    this.classList.add('selected', val);
+                    this.closest('.diag-item').classList.add('answered');
+                    
+                    updateProgress();
+                    renderSectionNav();
+                };
+            });
+            
+            // Update nav buttons
+            document.getElementById('diag-prev-btn').disabled = index === 0;
+            var nextBtn = document.getElementById('diag-next-btn');
+            if (isLastSection) {
+                nextBtn.textContent = '✅ Submit Assessment';
+                nextBtn.className = 'diag-nav-btn finish';
+            } else {
+                nextBtn.textContent = 'Next →';
+                nextBtn.className = 'diag-nav-btn next';
+            }
+            
+            updateProgress();
+        }
+        
+        document.getElementById('diag-prev-btn').onclick = function() {
+            if (currentSection > 0) goToSection(currentSection - 1);
+        };
+        
+        document.getElementById('diag-next-btn').onclick = function() {
+            // Save notes if on last section
+            if (currentSection === currentDiag.sections.length - 1) {
+                var notesEl = document.getElementById('parent-notes');
+                var strengthsEl = document.getElementById('child-strengths');
+                var improvementEl = document.getElementById('areas-improvement');
+                if (notesEl) currentDiag.parentNotes = notesEl.value;
+                if (strengthsEl) currentDiag.childStrengths = strengthsEl.value;
+                if (improvementEl) currentDiag.areasForImprovement = improvementEl.value;
+                
+                // Calculate scores and submit
+                submitDiagnostic();
+            } else {
+                goToSection(currentSection + 1);
+            }
+        };
+        
+        document.getElementById('diag-close-btn').onclick = function() {
+            if (confirm('Are you sure? Your progress will be saved but the assessment will remain pending.')) {
+                saveDiagnosticProgress();
+                document.getElementById('diag-overlay').classList.remove('active');
+            }
+        };
+        
+        function saveDiagnosticProgress() {
+            db.collection('students').doc(selectedStudent.id).collection('diagnostics').doc(currentDiagId).set(currentDiag);
+        }
+        
+        function submitDiagnostic() {
+            var totalScore = 0;
+            currentDiag.sections.forEach(function(section) {
+                var sectionScore = 0;
+                section.items.forEach(function(item) {
+                    if (item.response === 'correct') sectionScore += 1;
+                    else if (item.response === 'partial') sectionScore += 0.5;
+                });
+                section.score = sectionScore;
+                totalScore += sectionScore;
+            });
+            
+            currentDiag.totalScore = totalScore;
+            currentDiag.status = 'completed';
+            currentDiag.completedAt = new Date();
+            
+            db.collection('students').doc(selectedStudent.id).collection('diagnostics').doc(currentDiagId).set(currentDiag).then(function() {
+                document.getElementById('diag-overlay').classList.remove('active');
+                loadDiagnostics();
+                var pct = Math.round((totalScore / currentDiag.maxTotalScore) * 100);
+                alert('🎉 Assessment Complete!\n\nTotal Score: ' + totalScore + ' / ' + currentDiag.maxTotalScore + ' (' + pct + '%)\n\nThank you for completing the assessment! Your teacher will review the results.');
+            }).catch(function(err) { alert('Error saving: ' + err.message); });
+        }
+        
+        // View completed diagnostic results
+        function viewDiagnosticResults(diagId) {
+            db.collection('students').doc(selectedStudent.id).collection('diagnostics').doc(diagId).get().then(function(doc) {
+                var diag = doc.data();
+                var pct = Math.round((diag.totalScore / diag.maxTotalScore) * 100);
+                var grade = pct >= 90 ? 'A' : pct >= 80 ? 'B' : pct >= 70 ? 'C' : pct >= 60 ? 'D' : 'Needs Practice';
+                var gradeColor = pct >= 80 ? '#059669' : pct >= 60 ? '#F59E0B' : '#EF4444';
+                
+                var html = '<div style="max-height:70vh;overflow-y:auto">';
+                
+                // Score Summary Card
+                html += '<div style="background:linear-gradient(135deg,#4F46E5,#7C3AED);border-radius:16px;padding:32px;color:white;text-align:center;margin-bottom:24px">';
+                html += '<div style="font-size:14px;opacity:0.9;margin-bottom:8px">OVERALL SCORE</div>';
+                html += '<div style="font-size:56px;font-weight:bold;line-height:1">' + diag.totalScore + '<span style="font-size:24px;opacity:0.7">/' + diag.maxTotalScore + '</span></div>';
+                html += '<div style="margin-top:16px;display:flex;justify-content:center;gap:24px">';
+                html += '<div><div style="font-size:32px;font-weight:bold">' + pct + '%</div><div style="font-size:12px;opacity:0.8">Percentage</div></div>';
+                html += '<div><div style="font-size:32px;font-weight:bold">' + grade + '</div><div style="font-size:12px;opacity:0.8">Grade</div></div>';
+                html += '</div></div>';
+                
+                // Section Breakdown
+                html += '<h4 style="margin-bottom:16px;color:#111827">📊 Section Breakdown</h4>';
+                
+                diag.sections.forEach(function(section, si) {
+                    var secPct = Math.round((section.score / section.maxScore) * 100);
+                    var barColor = secPct >= 80 ? '#10B981' : secPct >= 60 ? '#F59E0B' : '#EF4444';
+                    
+                    html += '<div class="results-section">';
+                    html += '<div class="results-section-header" onclick="this.nextElementSibling.classList.toggle(\'open\')">';
+                    html += '<h4>' + section.title + '</h4>';
+                    html += '<span class="results-score" style="background:' + (secPct >= 80 ? '#D1FAE5;color:#059669' : secPct >= 60 ? '#FEF3C7;color:#D97706' : '#FEE2E2;color:#EF4444') + '">' + section.score + '/' + section.maxScore + ' (' + secPct + '%)</span>';
+                    html += '</div>';
+                    html += '<div class="results-items">';
+                    section.items.forEach(function(item) {
+                        var icon = item.response === 'correct' ? '✅' : (item.response === 'partial' ? '🔶' : (item.response === 'none' ? '❌' : '⚪'));
+                        html += '<div class="results-item">';
+                        html += '<span style="font-size:16px">' + icon + '</span>';
+                        html += '<span style="font-size:20px">' + item.emoji + '</span>';
+                        html += '<span style="flex:1"><strong>' + item.portuguese + '</strong> <span style="color:#6B7280">(' + item.english + ')</span></span>';
+                        html += '</div>';
+                    });
+                    html += '</div></div>';
+                });
+                
+                // Parent Notes
+                if (diag.parentNotes || diag.childStrengths || diag.areasForImprovement) {
+                    html += '<h4 style="margin:24px 0 16px;color:#111827">📝 Notes & Observations</h4>';
+                    if (diag.parentNotes) {
+                        html += '<div style="padding:16px;background:#F3F4F6;border-radius:12px;margin-bottom:12px">';
+                        html += '<div style="font-weight:600;margin-bottom:8px">Parent Notes</div>';
+                        html += '<p style="color:#4B5563;line-height:1.6">' + diag.parentNotes + '</p></div>';
+                    }
+                    if (diag.childStrengths) {
+                        html += '<div style="padding:16px;background:#D1FAE5;border-radius:12px;margin-bottom:12px">';
+                        html += '<div style="font-weight:600;margin-bottom:8px;color:#059669">💪 Strengths</div>';
+                        html += '<p style="color:#065F46;line-height:1.6">' + diag.childStrengths + '</p></div>';
+                    }
+                    if (diag.areasForImprovement) {
+                        html += '<div style="padding:16px;background:#FEF3C7;border-radius:12px;margin-bottom:12px">';
+                        html += '<div style="font-weight:600;margin-bottom:8px;color:#D97706">📈 Areas for Improvement</div>';
+                        html += '<p style="color:#92400E;line-height:1.6">' + diag.areasForImprovement + '</p></div>';
+                    }
+                }
+                
+                // Meta info
+                if (diag.completedAt) {
+                    html += '<p style="margin-top:24px;padding-top:16px;border-top:1px solid #E5E7EB;color:#6B7280;font-size:13px">';
+                    html += '✅ Completed: ' + new Date(diag.completedAt.seconds * 1000).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                    if (diag.estimatedTime) html += ' • ⏱️ Est. time: ' + diag.estimatedTime;
+                    html += '</p>';
+                }
+                
+                html += '</div>';
+                
+                openModal('📊 Assessment Results', html);
+            });
+        }
+
+        // Add Item Buttons
+        ['diagnostic', 'game', 'test', 'link', 'progress'].forEach(function(type) {
+            var btn = document.getElementById('add-' + type + '-btn');
+            if (btn) {
+                btn.onclick = function() {
+                    if (!selectedStudent) { alert('Select a student first'); return; }
+                    var fields = type === 'game' || type === 'link' ? ['title', 'url', 'description'] : ['title', 'description', 'status'];
+                    var html = '<form id="item-form">';
+                    fields.forEach(function(f) {
+                        if (f === 'status') {
+                            html += '<div class="form-group"><label>Status</label><select name="status"><option value="pending">Pending</option><option value="completed">Completed</option></select></div>';
+                        } else {
+                            html += '<div class="form-group"><label>' + f.charAt(0).toUpperCase() + f.slice(1) + '</label><input type="' + (f === 'url' ? 'url' : 'text') + '" name="' + f + '" ' + (f === 'title' ? 'required' : '') + '></div>';
+                        }
+                    });
+                    html += '<button type="submit" class="btn">Add</button></form>';
+                    openModal('Add ' + type.charAt(0).toUpperCase() + type.slice(1), html);
+                    document.getElementById('item-form').onsubmit = function(e) {
+                        e.preventDefault();
+                        var form = new FormData(this);
+                        var data = { createdAt: new Date() };
+                        fields.forEach(function(f) { data[f] = form.get(f) || ''; });
+                        var col = type === 'progress' ? 'progress' : type + 's';
+                        db.collection('students').doc(selectedStudent.id).collection(col).add(data).then(function() {
+                            closeModal();
+                            loadStudentData();
+                        }).catch(function(e) { alert('Error: ' + e.message); });
+                    };
+                };
+            }
+        });
+
+        // Delete Item
+        function deleteItem(collection, docId) {
+            if (!confirm('Are you sure you want to delete this item?')) return;
+            db.collection('students').doc(selectedStudent.id).collection(collection).doc(docId).delete().then(function() {
+                loadStudentData();
+            }).catch(function(e) {
+                alert('Error deleting: ' + e.message);
+            });
+        }
+        
+        // Modal
+        function openModal(title, content) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-content').innerHTML = content;
+            document.getElementById('modal-overlay').classList.remove('hidden');
+        }
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.add('hidden');
+        }
+        document.getElementById('modal-overlay').onclick = function(e) { if (e.target === this) closeModal(); };
+        document.getElementById('modal-close-btn').onclick = closeModal;
+    </script>
+</body>
+</html>

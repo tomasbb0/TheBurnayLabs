@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚗 Constrói o Teu Carro! - Build Your Car!</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="screen active">
+        <div class="welcome-container">
+            <h1>🚗 Constrói o Teu Carro!</h1>
+            <h2>Build Your Car!</h2>
+            <div class="cardboard-decoration">
+                <div class="box">📦</div>
+                <div class="box">📦</div>
+                <div class="box">📦</div>
+            </div>
+            <p class="welcome-text">Aprende português enquanto constróis!</p>
+            <p class="welcome-text-en">Learn Portuguese while you build!</p>
+            
+            <div class="name-input">
+                <label for="player-name">Como te chamas? / What's your name?</label>
+                <input type="text" id="player-name" placeholder="Escreve o teu nome..." maxlength="20">
+            </div>
+            
+            <button id="start-btn" class="big-button" onclick="startGame()">
+                <span class="btn-emoji">🎮</span>
+                <span>Começar! / Start!</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen">
+        <header>
+            <div class="player-info">
+                <span id="player-display">👋 Olá!</span>
+            </div>
+            <div class="score-display">
+                <span class="stars" id="stars">⭐⭐⭐⭐⭐</span>
+                <span class="score">Peças: <span id="parts-count">0</span>/6</span>
+            </div>
+        </header>
+
+        <main>
+            <!-- Car Building Area -->
+            <div class="car-workshop">
+                <h2 id="workshop-title">🔧 A Tua Oficina / Your Workshop</h2>
+                <div class="car-container">
+                    <div id="car-body" class="car-frame">
+                        <!-- Car parts will be added here -->
+                        <div class="car-part" id="part-body" data-part="body">
+                            <span class="part-placeholder">?</span>
+                            <span class="part-icon hidden">🚗</span>
+                        </div>
+                        <div class="car-part" id="part-wheel1" data-part="wheel1">
+                            <span class="part-placeholder">?</span>
+                            <span class="part-icon hidden">⚫</span>
+                        </div>
+                        <div class="car-part" id="part-wheel2" data-part="wheel2">
+                            <span class="part-placeholder">?</span>
+                            <span class="part-icon hidden">⚫</span>
+                        </div>
+                        <div class="car-part" id="part-window" data-part="window">
+                            <span class="part-placeholder">?</span>
+                            <span class="part-icon hidden">🪟</span>
+                        </div>
+                        <div class="car-part" id="part-door" data-part="door">
+                            <span class="part-placeholder">?</span>
+                            <span class="part-icon hidden">🚪</span>
+                        </div>
+                        <div class="car-part" id="part-lights" data-part="lights">
+                            <span class="part-placeholder">?</span>
+                            <span class="part-icon hidden">💡</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Area -->
+            <div class="game-area">
+                <div id="question-container" class="question-box">
+                    <div class="question-header">
+                        <span class="level-badge" id="level-badge">Nível 1</span>
+                        <span class="question-number" id="question-number">1/3</span>
+                    </div>
+                    <div class="question-content">
+                        <div id="question-image" class="question-image"></div>
+                        <h3 id="question-text" class="question-text">Loading...</h3>
+                        <p id="question-hint" class="question-hint"></p>
+                    </div>
+                </div>
+
+                <div id="answers-container" class="answers-grid">
+                    <!-- Answers will be dynamically generated -->
+                </div>
+
+                <div id="feedback" class="feedback hidden">
+                    <div class="feedback-content">
+                        <span class="feedback-emoji" id="feedback-emoji">🎉</span>
+                        <p class="feedback-text" id="feedback-text">Muito bem!</p>
+                        <p class="feedback-word" id="feedback-word"></p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Progress bar for current part -->
+        <div class="progress-container">
+            <div class="progress-label">Próxima peça: <span id="next-part-name">Corpo do Carro</span></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Celebration Screen -->
+    <div id="celebration-screen" class="screen">
+        <div class="celebration-container">
+            <div class="confetti-container" id="confetti"></div>
+            <h1>🎉 Parabéns! 🎉</h1>
+            <h2>Congratulations, <span id="winner-name"></span>!</h2>
+            <div class="finished-car">
+                <div class="car-complete">🚗</div>
+                <p>O teu carro está pronto!</p>
+                <p class="en">Your car is ready!</p>
+            </div>
+            <div class="final-stats">
+                <div class="stat">
+                    <span class="stat-number" id="final-stars">0</span>
+                    <span class="stat-label">Estrelas / Stars</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="words-learned">0</span>
+                    <span class="stat-label">Palavras / Words</span>
+                </div>
+            </div>
+            <div class="words-review">
+                <h3>📚 Palavras que Aprendeste / Words You Learned:</h3>
+                <div id="words-list" class="words-list"></div>
+            </div>
+            <button class="big-button" onclick="playAgain()">
+                <span class="btn-emoji">🔄</span>
+                <span>Jogar Outra Vez! / Play Again!</span>
+            </button>
+            <button class="secondary-button" onclick="showCertificate()">
+                <span class="btn-emoji">🏆</span>
+                <span>Ver Certificado / See Certificate</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Certificate Screen -->
+    <div id="certificate-screen" class="screen">
+        <div class="certificate">
+            <div class="certificate-border">
+                <div class="certificate-content">
+                    <div class="certificate-header">
+                        <span class="cert-star">⭐</span>
+                        <span class="cert-star">⭐</span>
+                        <span class="cert-star">⭐</span>
+                    </div>
+                    <h1>Certificado de Português</h1>
+                    <h2>Portuguese Achievement Certificate</h2>
+                    <div class="cert-line"></div>
+                    <p class="cert-text">Este certificado é apresentado a</p>
+                    <p class="cert-text-en">This certificate is presented to</p>
+                    <h3 class="cert-name" id="cert-name"></h3>
+                    <p class="cert-text">por completar o jogo</p>
+                    <p class="cert-text-en">for completing the game</p>
+                    <h4>"Constrói o Teu Carro!"</h4>
+                    <div class="cert-stats">
+                        <span>⭐ <span id="cert-stars">0</span> estrelas</span>
+                        <span>📚 <span id="cert-words">0</span> palavras</span>
+                    </div>
+                    <p class="cert-date" id="cert-date"></p>
+                    <div class="cert-footer">
+                        <span>🚗</span>
+                        <span>Bom trabalho! / Great job!</span>
+                        <span>🚗</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="certificate-buttons">
+            <button class="secondary-button" onclick="goBack()">
+                <span>← Voltar / Back</span>
+            </button>
+            <button class="big-button" onclick="printCertificate()">
+                <span class="btn-emoji">🖨️</span>
+                <span>Imprimir / Print</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Audio elements for sound effects -->
+    <audio id="sound-correct" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sound-wrong" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2001/2001-preview.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sound-win" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="game.js"></script>
+</body>
+</html>

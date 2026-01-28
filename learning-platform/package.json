@@ -1,0 +1,14 @@
+{
+  "name": "learning-with-tomas",
+  "version": "1.0.0",
+  "description": "Student Learning Management Platform with Firebase",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "firebase": "^12.8.0"
+  }
+}
