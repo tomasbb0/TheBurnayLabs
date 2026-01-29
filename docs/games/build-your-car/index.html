@@ -145,15 +145,20 @@
             
             if (selected === correct) {
                 btn.classList.add('correct');
-                playSuccessSound();
-                showSuccessSplash('Parabéns! 🎉');
+                // schedule progression first so errors in audio/UI cannot block the game
                 setTimeout(() => nextQuestion(), 800);
+                try { playSuccessSound(); } catch(e) { /* ignore audio errors */ }
+                try { playCheerSound(); } catch(e) { /* ignore audio errors */ }
+                try { showSuccessSplash('Parabéns! 🎉'); } catch(e) { /* ignore UI errors */ }
             } else {
                 btn.classList.add('wrong');
+                // schedule progression even if sound/UI fails
+                setTimeout(() => nextQuestion(), 1500);
+                try { playOhSound(); } catch(e) { /* ignore audio errors */ }
                 stars = Math.max(0, stars - 1);
                 document.getElementById('stars').textContent = '⭐'.repeat(stars) + '☆'.repeat(5 - stars);
                 btns.forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
-                setTimeout(() => nextQuestion(), 1500);
+                try { showFailureSplash('Ohhhh...'); } catch(e) { /* ignore UI errors */ }
             }
         }
         
