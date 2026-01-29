@@ -46,11 +46,11 @@ async function setup() {
   // Add games
   const gamesRef = collection(db, 'students', leoId, 'games');
   const games = [
-    { title: '🚗 Build Your Car', url: 'https://tomasbb0.github.io/PreplyClasses/games/build-your-car/', description: 'Colors, Numbers, Animals, Family, Body, Food' },
-    { title: '🏠 Build Your House', url: 'https://tomasbb0.github.io/PreplyClasses/games/build-your-house/', description: 'Shapes, Rooms, Furniture, Nature, Weather, Sizes' },
-    { title: '🚀 Build Your Rocket', url: 'https://tomasbb0.github.io/PreplyClasses/games/build-your-rocket/', description: 'Planets, Directions, Numbers 6-10, Actions, Transport, Professions' },
-    { title: '🤖 Build Your Robot', url: 'https://tomasbb0.github.io/PreplyClasses/games/build-your-robot/', description: 'Colors, Opposites, Emotions, Instruments, Sports, School' },
-    { title: '🦖 Build Your Dinosaur', url: 'https://tomasbb0.github.io/PreplyClasses/games/build-your-dinosaur/', description: 'Wild Animals, Fruits, Vegetables, Insects, Seasons, Days' }
+    { title: '🚗 Build Your Car', url: 'https://tomasbb0.github.io/PreplyClasses/docs/games/build-your-car/', description: 'Colors, Numbers, Animals, Family, Body, Food' },
+    { title: '🏠 Build Your House', url: 'https://tomasbb0.github.io/PreplyClasses/docs/games/build-your-house/', description: 'Shapes, Rooms, Furniture, Nature, Weather, Sizes' },
+    { title: '🚀 Build Your Rocket', url: 'https://tomasbb0.github.io/PreplyClasses/docs/games/build-your-rocket/', description: 'Planets, Directions, Numbers 6-10, Actions, Transport, Professions' },
+    { title: '🤖 Build Your Robot', url: 'https://tomasbb0.github.io/PreplyClasses/docs/games/build-your-robot/', description: 'Colors, Opposites, Emotions, Instruments, Sports, School' },
+    { title: '🦖 Build Your Dinosaur', url: 'https://tomasbb0.github.io/PreplyClasses/docs/games/build-your-dinosaur/', description: 'Wild Animals, Fruits, Vegetables, Insects, Seasons, Days' }
   ];
   
   for (const game of games) {
