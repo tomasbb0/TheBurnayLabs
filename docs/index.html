@@ -673,6 +673,7 @@
         padding: 40px;
         color: var(--text-muted);
         font-size: 14px;
+        display: none;
       }
       .panel {
         display: none;
@@ -1849,7 +1850,12 @@
         <div class="header-right">
           <span
             id="current-user-name"
-            style="font-size: 13px; color: var(--text-secondary); cursor: pointer; text-decoration: underline;"
+            style="
+              font-size: 13px;
+              color: var(--text-secondary);
+              cursor: pointer;
+              text-decoration: underline;
+            "
             onclick="editHeaderName()"
             title="Click to change display name"
           ></span>
@@ -2183,8 +2189,10 @@
             document.getElementById("remember-me").checked = true;
             // Auto-login
             if (u && p) {
-              setTimeout(function() {
-                document.getElementById("login-form").dispatchEvent(new Event("submit"));
+              setTimeout(function () {
+                document
+                  .getElementById("login-form")
+                  .dispatchEvent(new Event("submit"));
               }, 100);
             }
           } catch (e) {}
