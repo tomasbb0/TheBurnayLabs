@@ -100,6 +100,7 @@
       [data-theme="light"] .main-header .role-badge {
         color: #a1a1a1;
         border-color: rgba(255, 255, 255, 0.06);
+        background: rgba(255, 255, 255, 0.06);
       }
       [data-theme="light"] #theme-toggle {
         color: #fafafa;
@@ -564,7 +565,7 @@
         align-items: center;
         gap: 12px;
         padding: 10px 12px;
-        border: 0.5px solid transparent;
+        border: none;
         border-radius: var(--radius);
         cursor: pointer;
         transition: var(--transition);
@@ -572,8 +573,7 @@
       .student-item:hover {
         background: var(--bg-tertiary);
         transform: translateX(4px);
-        border-color: var(--border-hover);
-        border-width: 0.5px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
       }
       .student-item:active {
         transform: translateX(2px);
@@ -612,7 +612,7 @@
       }
       .student-item.active {
         background: var(--bg-elevated);
-        border: 0.5px solid transparent;
+        border: none;
         animation: borderGlow 3s ease-in-out infinite;
       }
       .student-avatar {
