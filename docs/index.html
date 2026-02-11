@@ -1596,28 +1596,56 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: var(--bg-primary);
+        background: radial-gradient(
+          circle at center,
+          rgba(103, 126, 234, 0.15) 0%,
+          rgba(10, 10, 10, 0.95) 100%
+        ),
+        var(--bg-primary);
         z-index: 10000;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 24px;
+        gap: 0;
         opacity: 1;
         transition: opacity 0.5s ease;
+        backdrop-filter: blur(20px);
       }
       .loading-overlay.hidden {
         opacity: 0;
         pointer-events: none;
       }
-      .loading-overlay h2 {
+      .loading-logo {
+        animation: logoZoomOut 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        transform: scale(2.5);
+        margin-bottom: 24px;
+      }
+      .loading-logo .logo-b {
+        stroke-dasharray: 400;
+        stroke-dashoffset: 400;
+        animation: drawB 1s cubic-bezier(0.47, 0, 0.745, 0.715) forwards;
+      }
+      .loading-logo .logo-b-bar {
+        stroke-dasharray: 50;
+        stroke-dashoffset: 50;
+        animation: drawBbar 0.3s 0.8s cubic-bezier(0.47, 0, 0.745, 0.715) forwards;
+      }
+      .loading-logo .logo-l {
+        stroke-dasharray: 200;
+        stroke-dashoffset: 200;
+        animation: drawL 0.7s 0.3s cubic-bezier(0.47, 0, 0.745, 0.715) forwards;
+      }
+      .loading-welcome {
         font-size: 28px;
         font-weight: 600;
-        margin-top: 16px;
+        margin: 0 0 8px 0;
+        color: var(--text-primary);
       }
-      .loading-overlay p {
+      .loading-name {
         font-size: 18px;
         color: var(--text-secondary);
+        margin: 0 0 32px 0;
       }
       .loader {
         display: inline-flex;
@@ -1780,9 +1808,10 @@
   <body class="login-view">
     <!-- Loading Overlay -->
     <div id="loading-overlay" class="loading-overlay hidden">
-      <div class="logo-icon">
+      <div class="logo-icon loading-logo">
         <svg viewBox="-2 -2 100 114" width="72" height="78" fill="none">
           <path
+            class="logo-b"
             d="M10,6 L48,6 L58,16 L58,38 L48,48 L58,58 L58,84 L48,96 L10,96 Z"
             stroke="#fafafa"
             stroke-width="2.5"
@@ -1790,6 +1819,7 @@
             stroke-linejoin="miter"
           />
           <line
+            class="logo-b-bar"
             x1="10"
             y1="48"
             x2="48"
@@ -1798,6 +1828,7 @@
             stroke-width="2.5"
           />
           <polyline
+            class="logo-l"
             points="70,4 70,70 48,96 92,96"
             stroke="#fafafa"
             stroke-width="2.5"
@@ -1806,8 +1837,8 @@
           />
         </svg>
       </div>
-      <h2>Welcome</h2>
-      <p id="loading-user-name"></p>
+      <h2 class="loading-welcome">Welcome</h2>
+      <p id="loading-user-name" class="loading-name"></p>
       <div class="loader">
         <span></span>
         <span></span>
