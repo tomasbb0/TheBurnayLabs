@@ -1,4 +1,4 @@
-# Learning with Tomas - Platform
+# The Burnay Lab - Platform
 
 A student learning management platform powered by Firebase.
 
@@ -32,12 +32,12 @@ Open `public/firebase-config.js` and replace the placeholder values:
 
 ```javascript
 const firebaseConfig = {
-    apiKey: "AIzaSy...",           // Your actual API key
-    authDomain: "your-project.firebaseapp.com",
-    projectId: "your-project",
-    storageBucket: "your-project.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:abc123"
+  apiKey: "AIzaSy...", // Your actual API key
+  authDomain: "your-project.firebaseapp.com",
+  projectId: "your-project",
+  storageBucket: "your-project.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abc123",
 };
 ```
 
@@ -110,6 +110,7 @@ learning-platform/
 ## 🔧 VS Code Firebase Extensions
 
 You have these Firebase extensions installed:
+
 - **Firebase Snippets** - Code snippets
 - **VS Fire** - Firebase viewer
 - **Firebase Data Connect** - Database tools
