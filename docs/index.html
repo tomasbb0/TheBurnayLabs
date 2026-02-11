@@ -382,8 +382,8 @@
       .main-content {
         display: flex;
         min-height: calc(100vh - 56px);
-        padding: 12px;
-        gap: 12px;
+        padding: 8px;
+        gap: 8px;
         background: var(--bg-primary);
       }
 
@@ -608,7 +608,7 @@
       /* ===== MAIN PANEL ===== */
       .main-panel {
         flex: 1;
-        padding: 32px;
+        padding: 20px;
         background: var(--bg-secondary);
         border: 0.5px solid var(--border);
         border-radius: 12px;
@@ -700,7 +700,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 48px 16px;
+        padding: 16px;
         background: var(--bg-primary);
         border: 0.5px solid var(--border);
         border-radius: var(--radius-lg);
@@ -1849,7 +1849,9 @@
         <div class="header-right">
           <span
             id="current-user-name"
-            style="font-size: 13px; color: var(--text-secondary)"
+            style="font-size: 13px; color: var(--text-secondary); cursor: pointer; text-decoration: underline;"
+            onclick="editHeaderName()"
+            title="Click to change display name"
           ></span>
           <span id="user-role-badge" class="role-badge">admin</span>
           <button id="logout-btn" class="btn-icon" title="Logout">
@@ -2168,15 +2170,23 @@
       var currentUser = null;
       var selectedStudent = null;
 
-      // Remember Me: restore saved credentials on load
+      // Remember Me: restore saved credentials on load and auto-login
       (function () {
         var saved = localStorage.getItem("bl_remember");
         if (saved) {
           try {
             var creds = JSON.parse(saved);
-            document.getElementById("username").value = creds.u || "";
-            document.getElementById("password").value = creds.p || "";
+            var u = creds.u || "";
+            var p = creds.p || "";
+            document.getElementById("username").value = u;
+            document.getElementById("password").value = p;
             document.getElementById("remember-me").checked = true;
+            // Auto-login
+            if (u && p) {
+              setTimeout(function() {
+                document.getElementById("login-form").dispatchEvent(new Event("submit"));
+              }, 100);
+            }
           } catch (e) {}
         }
       })();
@@ -2320,6 +2330,24 @@
               currentUser.displayName,
             );
           }
+        }
+      }
+
+      // Edit header name
+      function editHeaderName() {
+        var newName = prompt(
+          "What name would you like displayed in the header?",
+          currentUser.name,
+        );
+        if (newName && newName.trim()) {
+          currentUser.name = newName.trim();
+          document.getElementById("current-user-name").textContent =
+            currentUser.name;
+          // Save to localStorage for admin
+          localStorage.setItem(
+            "bl_header_name_" + currentUser.username,
+            currentUser.name,
+          );
         }
       }
 
