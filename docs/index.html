@@ -1961,7 +1961,6 @@
               font-size: 13px;
               color: var(--text-secondary);
               cursor: pointer;
-              text-decoration: underline;
             "
             onclick="editHeaderName()"
             title="Click to change display name"
@@ -2463,20 +2462,48 @@
 
       // Edit header name
       function editHeaderName() {
-        var newName = prompt(
-          "What name would you like displayed in the header?",
-          currentUser.name,
-        );
-        if (newName && newName.trim()) {
-          currentUser.name = newName.trim();
-          document.getElementById("current-user-name").textContent =
-            currentUser.name;
-          // Save to localStorage for admin
-          localStorage.setItem(
-            "bl_header_name_" + currentUser.username,
-            currentUser.name,
-          );
+        var span = document.getElementById("current-user-name");
+        var original = span.textContent;
+        span.contentEditable = "true";
+        span.focus();
+        // Select all text
+        var range = document.createRange();
+        range.selectNodeContents(span);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        span.style.outline = "none";
+        span.style.borderBottom = "1px solid var(--text-muted)";
+        span.style.paddingBottom = "2px";
+
+        function finishEdit() {
+          span.contentEditable = "false";
+          span.style.borderBottom = "none";
+          span.style.paddingBottom = "0";
+          var newName = span.textContent.trim();
+          if (newName && newName !== original) {
+            currentUser.name = newName;
+            localStorage.setItem(
+              "bl_header_name_" + currentUser.username,
+              newName,
+            );
+          } else {
+            span.textContent = original;
+          }
+          span.removeEventListener("blur", finishEdit);
+          span.removeEventListener("keydown", onKey);
         }
+        function onKey(e) {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            span.blur();
+          } else if (e.key === "Escape") {
+            span.textContent = original;
+            span.blur();
+          }
+        }
+        span.addEventListener("blur", finishEdit);
+        span.addEventListener("keydown", onKey);
       }
 
       // Load Students
