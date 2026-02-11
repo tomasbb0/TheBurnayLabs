@@ -73,6 +73,7 @@ git push -u origin main
 ## 🔗 Sharing the Game
 
 Once hosted, share the link with:
+
 - **Rita (mom)**: She can help her son play at home
 - **The student**: Bookmark it on their tablet/computer
 - **Link format**: `https://your-username.github.io/portuguese-car-game/`
@@ -81,14 +82,14 @@ Once hosted, share the link with:
 
 By completing the game, students will learn:
 
-| Level | Theme | Words Learned |
-|-------|-------|---------------|
-| 1 | Colors | Vermelho, Azul, Amarelo |
-| 2 | Numbers | Um, Dois, Cinco |
-| 3 | Animals | Cão, Gato, Peixe |
-| 4 | Family | Mãe, Pai, Menino |
-| 5 | Body | Mão, Nariz, Orelha |
-| 6 | Greetings | Olá, Adeus, Obrigado |
+| Level | Theme     | Words Learned           |
+| ----- | --------- | ----------------------- |
+| 1     | Colors    | Vermelho, Azul, Amarelo |
+| 2     | Numbers   | Um, Dois, Cinco         |
+| 3     | Animals   | Cão, Gato, Peixe        |
+| 4     | Family    | Mãe, Pai, Menino        |
+| 5     | Body      | Mão, Nariz, Orelha      |
+| 6     | Greetings | Olá, Adeus, Obrigado    |
 
 ## 🛠️ Customization
 
@@ -113,16 +114,17 @@ Edit `styles.css` and modify the CSS variables at the top:
 
 ```css
 :root {
-    --primary-color: #FF6B35;    /* Orange */
-    --secondary-color: #4ECDC4;  /* Teal */
-    --accent-color: #FFE66D;     /* Yellow */
-    /* ... etc */
+  --primary-color: #ff6b35; /* Orange */
+  --secondary-color: #4ecdc4; /* Teal */
+  --accent-color: #ffe66d; /* Yellow */
+  /* ... etc */
 }
 ```
 
 ### Adding Sound Effects
 
 The game references sound files from Mixkit (free). To use local sounds:
+
 1. Download MP3 files
 2. Put them in the same folder
 3. Update the `<audio>` elements in `index.html`
@@ -136,7 +138,7 @@ The game references sound files from Mixkit (free). To use local sounds:
 
 ## 🎨 Credits
 
-- **Game Design**: Preply Classes
+- **Game Design**: The Burnay Lab
 - **For**: Young Portuguese learners (A0 level)
 - **Sound Effects**: Mixkit (free sounds)
 - **Emojis**: Standard Unicode emojis
