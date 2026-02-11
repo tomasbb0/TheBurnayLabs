@@ -75,9 +75,6 @@
       .logo-icon svg {
         width: 48px;
         height: 48px;
-        stroke: var(--text-primary);
-        fill: none;
-        stroke-width: 1.5;
       }
       .login-header h1 {
         font-size: 20px;
@@ -1391,15 +1388,45 @@
     <div id="login-screen">
       <div class="login-header">
         <div class="logo-icon">
-          <svg viewBox="0 0 24 24">
-            <path
-              d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19 14.5M14.25 3.104c.251.023.501.05.75.082M19 14.5l-1.217.848a3 3 0 0 1-2.12.602L12 15.75l-3.663.2a3 3 0 0 1-2.12-.602L5 14.5m14 0V19a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-4.5"
+          <svg viewBox="0 0 48 48" width="48" height="48" fill="none">
+            <rect
+              x="1"
+              y="1"
+              width="46"
+              height="46"
+              rx="10"
+              stroke="#fafafa"
+              stroke-width="2"
             />
+            <text
+              x="24"
+              y="33"
+              text-anchor="middle"
+              font-family="Inter,system-ui,sans-serif"
+              font-weight="700"
+              font-size="24"
+              fill="#fafafa"
+              letter-spacing="-1"
+            >
+              BL
+            </text>
           </svg>
         </div>
         <h1>The Burnay Lab</h1>
         <p class="subtitle">Learnings &amp; Mentoring Studio</p>
-        <p style="margin-top:12px;font-size:12px;color:var(--text-muted)">By <a href="https://www.linkedin.com/in/tomasmbatalha" target="_blank" style="color:var(--text-secondary);text-decoration:none;border-bottom:1px solid var(--border)">Tomás Burnay Batalha</a></p>
+        <p style="margin-top: 12px; font-size: 12px; color: var(--text-muted)">
+          By
+          <a
+            href="https://www.linkedin.com/in/tomasmbatalha"
+            target="_blank"
+            style="
+              color: var(--text-secondary);
+              text-decoration: none;
+              border-bottom: 1px solid var(--border);
+            "
+            >Tomás Burnay Batalha</a
+          >
+        </p>
       </div>
       <form id="login-form">
         <div class="form-group">
@@ -1430,10 +1457,28 @@
       <header class="main-header">
         <div class="header-left">
           <div class="logo-small">
-            <svg viewBox="0 0 24 24">
-              <path
-                d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19 14.5M14.25 3.104c.251.023.501.05.75.082M19 14.5l-1.217.848a3 3 0 0 1-2.12.602L12 15.75l-3.663.2a3 3 0 0 1-2.12-.602L5 14.5m14 0V19a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-4.5"
+            <svg viewBox="0 0 48 48" width="24" height="24" fill="none">
+              <rect
+                x="1"
+                y="1"
+                width="46"
+                height="46"
+                rx="10"
+                stroke="#fafafa"
+                stroke-width="2.5"
               />
+              <text
+                x="24"
+                y="33"
+                text-anchor="middle"
+                font-family="Inter,system-ui,sans-serif"
+                font-weight="700"
+                font-size="24"
+                fill="#fafafa"
+                letter-spacing="-1"
+              >
+                BL
+              </text>
             </svg>
           </div>
           <h1>The Burnay Lab</h1>
@@ -1531,10 +1576,9 @@
         <main class="main-panel">
           <div id="welcome-panel" class="panel active">
             <div class="welcome-content">
-              <svg viewBox="0 0 24 24">
-                <path
-                  d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19 14.5M14.25 3.104c.251.023.501.05.75.082M19 14.5l-1.217.848a3 3 0 0 1-2.12.602L12 15.75l-3.663.2a3 3 0 0 1-2.12-.602L5 14.5m14 0V19a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-4.5"
-                />
+              <svg viewBox="0 0 48 48" width="48" height="48" fill="none" style="stroke:var(--text-muted)">
+                <rect x="1" y="1" width="46" height="46" rx="10" stroke="currentColor" stroke-width="1.5"/>
+                <text x="24" y="33" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-weight="700" font-size="24" fill="currentColor" letter-spacing="-1">BL</text>
               </svg>
               <h2>Welcome</h2>
               <p id="welcome-message">
