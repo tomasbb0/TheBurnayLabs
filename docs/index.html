@@ -1499,9 +1499,10 @@
         opacity: 0;
         animation: fadeInUp 0.5s ease-out 3.2s forwards;
       }
-      .login-header .by-line {
+      #login-screen > .by-line {
         opacity: 0;
-        animation: fadeInUp 0.5s ease-out 3.4s forwards;
+        animation: fadeInUp 0.5s ease-out 4.0s forwards;
+        text-align: center;
       }
       #login-form {
         opacity: 0;
@@ -1561,12 +1562,6 @@
         </div>
         <h1>The Burnay Lab</h1>
         <p class="subtitle">Education Research &amp; Mentoring Studio</p>
-        <p class="by-line">
-          By
-          <a href="https://www.linkedin.com/in/tomasmbatalha" target="_blank"
-            >Tomás Burnay Batalha</a
-          >
-        </p>
       </div>
       <form id="login-form">
         <div class="form-group">
@@ -1583,6 +1578,12 @@
         <button type="submit" class="btn">Sign In</button>
         <div id="login-error" class="error-message"></div>
       </form>
+      <p class="by-line">
+        By
+        <a href="https://www.linkedin.com/in/tomasmbatalha" target="_blank"
+          >Tomás Burnay Batalha</a
+        >
+      </p>
     </div>
 
     <!-- Dashboard Screen -->
