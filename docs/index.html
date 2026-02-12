@@ -18,7 +18,12 @@
       // Early theme restore to prevent flash
       (function () {
         var t = localStorage.getItem("bl_theme");
-        if (t === "light")
+        if (
+          t === "light" ||
+          (!t &&
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: light)").matches)
+        )
           document.documentElement.setAttribute("data-theme", "light");
       })();
     </script>
@@ -2727,10 +2732,15 @@
           }
         }
       }
-      // Restore saved theme
+      // Restore saved theme or detect system preference
       (function () {
         var saved = localStorage.getItem("bl_theme");
-        if (saved === "light") {
+        var isLight =
+          saved === "light" ||
+          (!saved &&
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: light)").matches);
+        if (isLight) {
           document.documentElement.setAttribute("data-theme", "light");
           updateThemeIcon("light");
         }
