@@ -3456,10 +3456,28 @@
             </button>
             <button class="nav-tab" data-tab="classes">
               <svg viewBox="0 0 24 24">
-                <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z" clip-rule="evenodd"/>
+                <path
+                  fill-rule="evenodd"
+                  d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z"
+                  clip-rule="evenodd"
+                />
               </svg>
               Classes
-              <span class="tab-eye-btn" onclick="event.stopPropagation(); toggleTabEye('classes')" title="Toggle visibility"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.224-10.676-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd"/></svg></span>
+              <span
+                class="tab-eye-btn"
+                onclick="
+                  event.stopPropagation();
+                  toggleTabEye('classes');
+                "
+                title="Toggle visibility"
+                ><svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                  <path
+                    fill-rule="evenodd"
+                    d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.224-10.676-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z"
+                    clip-rule="evenodd"
+                  /></svg
+              ></span>
             </button>
           </div>
         </aside>
@@ -3644,18 +3662,40 @@
           </div>
           <div id="classes-panel" class="panel">
             <div class="classes-subnav" id="classes-subnav">
-              <button class="classes-subnav-btn active" data-view="next" onclick="switchClassView('next')">
+              <button
+                class="classes-subnav-btn active"
+                data-view="next"
+                onclick="switchClassView('next')"
+              >
                 <span class="subnav-emoji">📌</span>Next Class
               </button>
-              <button class="classes-subnav-btn" data-view="previous" onclick="switchClassView('previous')">
+              <button
+                class="classes-subnav-btn"
+                data-view="previous"
+                onclick="switchClassView('previous')"
+              >
                 <span class="subnav-emoji">📋</span>Previous
               </button>
-              <button class="classes-subnav-btn" data-view="future" onclick="switchClassView('future')">
+              <button
+                class="classes-subnav-btn"
+                data-view="future"
+                onclick="switchClassView('future')"
+              >
                 <span class="subnav-emoji">📅</span>Future
               </button>
             </div>
-            <div id="classes-add-row" class="add-item-card" style="margin-bottom: 12px">
-              <button id="add-class-btn" class="btn-small" onclick="openAddClass()">+ Schedule Class</button>
+            <div
+              id="classes-add-row"
+              class="add-item-card"
+              style="margin-bottom: 12px"
+            >
+              <button
+                id="add-class-btn"
+                class="btn-small"
+                onclick="openAddClass()"
+              >
+                + Schedule Class
+              </button>
             </div>
             <div id="classes-content"></div>
           </div>
@@ -6757,7 +6797,8 @@
           .get()
           .then(function (snap) {
             if (snap.empty) {
-              content.innerHTML = '<div class="classes-empty"><div class="classes-empty-emoji">📅</div><div class="classes-empty-text">No classes scheduled yet</div></div>';
+              content.innerHTML =
+                '<div class="classes-empty"><div class="classes-empty-emoji">📅</div><div class="classes-empty-text">No classes scheduled yet</div></div>';
               return;
             }
 
@@ -6771,7 +6812,8 @@
             });
 
             // Categorize
-            var past = [], upcoming = [];
+            var past = [],
+              upcoming = [];
             allClasses.forEach(function (c) {
               if (c.date < todayStr) {
                 past.push(c);
@@ -6781,10 +6823,14 @@
             });
 
             // Today's classes go into upcoming
-            var todayClasses = allClasses.filter(function (c) { return c.date === todayStr; });
+            var todayClasses = allClasses.filter(function (c) {
+              return c.date === todayStr;
+            });
 
             // Sort past descending (most recent first)
-            past.sort(function (a, b) { return b.date.localeCompare(a.date); });
+            past.sort(function (a, b) {
+              return b.date.localeCompare(a.date);
+            });
             // upcoming is already ascending
 
             var nextClass = upcoming.length > 0 ? upcoming[0] : null;
@@ -6801,19 +6847,44 @@
             }
           })
           .catch(function (e) {
-            content.innerHTML = '<div class="empty-state">Error loading classes: ' + e.message + '</div>';
+            content.innerHTML =
+              '<div class="empty-state">Error loading classes: ' +
+              e.message +
+              "</div>";
           });
       }
 
       function renderNextClassView(container, nextClass, isAdmin) {
         if (!nextClass) {
-          container.innerHTML = '<div class="classes-empty"><div class="classes-empty-emoji">🎓</div><div class="classes-empty-text">No upcoming class scheduled!</div></div>';
+          container.innerHTML =
+            '<div class="classes-empty"><div class="classes-empty-emoji">🎓</div><div class="classes-empty-text">No upcoming class scheduled!</div></div>';
           return;
         }
 
         var dateObj = new Date(nextClass.date + "T00:00:00");
-        var dayNames = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
-        var monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+        var dayNames = [
+          "Domingo",
+          "Segunda",
+          "Terça",
+          "Quarta",
+          "Quinta",
+          "Sexta",
+          "Sábado",
+        ];
+        var monthNames = [
+          "Jan",
+          "Fev",
+          "Mar",
+          "Abr",
+          "Mai",
+          "Jun",
+          "Jul",
+          "Ago",
+          "Set",
+          "Out",
+          "Nov",
+          "Dez",
+        ];
         var dayName = dayNames[dateObj.getDay()];
         var dayNum = dateObj.getDate();
         var monthName = monthNames[dateObj.getMonth()];
@@ -6833,48 +6904,86 @@
 
         var html = '<div class="class-next-hero">';
         html += '<div class="hero-emoji">📚</div>';
-        html += '<div class="hero-date">' + dayName + ', ' + dayNum + ' ' + monthName + '</div>';
-        if (nextClass.time) html += '<div class="hero-time">🕐 ' + nextClass.time + '</div>';
-        html += '<div class="hero-countdown">' + countdownText + '</div>';
+        html +=
+          '<div class="hero-date">' +
+          dayName +
+          ", " +
+          dayNum +
+          " " +
+          monthName +
+          "</div>";
+        if (nextClass.time)
+          html += '<div class="hero-time">🕐 ' + nextClass.time + "</div>";
+        html += '<div class="hero-countdown">' + countdownText + "</div>";
 
         // Details
-        if (nextClass.topics || nextClass.objectives || nextClass.materials || nextClass.notes) {
+        if (
+          nextClass.topics ||
+          nextClass.objectives ||
+          nextClass.materials ||
+          nextClass.notes
+        ) {
           html += '<div class="class-next-details">';
           if (nextClass.topics) {
-            html += '<div class="class-card-field"><span class="class-card-field-icon">📝</span><div><strong>Topics:</strong> <div class="class-card-tags">';
+            html +=
+              '<div class="class-card-field"><span class="class-card-field-icon">📝</span><div><strong>Topics:</strong> <div class="class-card-tags">';
             nextClass.topics.split(",").forEach(function (t) {
-              html += '<span class="class-card-tag">' + t.trim() + '</span>';
+              html += '<span class="class-card-tag">' + t.trim() + "</span>";
             });
-            html += '</div></div></div>';
+            html += "</div></div></div>";
           }
           if (nextClass.objectives) {
-            html += '<div class="class-card-field"><span class="class-card-field-icon">🎯</span><div><strong>Objectives:</strong> ' + nextClass.objectives + '</div></div>';
+            html +=
+              '<div class="class-card-field"><span class="class-card-field-icon">🎯</span><div><strong>Objectives:</strong> ' +
+              nextClass.objectives +
+              "</div></div>";
           }
           if (nextClass.materials) {
-            html += '<div class="class-card-field"><span class="class-card-field-icon">📦</span><div><strong>Materials:</strong> ' + nextClass.materials + '</div></div>';
+            html +=
+              '<div class="class-card-field"><span class="class-card-field-icon">📦</span><div><strong>Materials:</strong> ' +
+              nextClass.materials +
+              "</div></div>";
           }
           if (nextClass.notes) {
-            html += '<div class="class-card-field"><span class="class-card-field-icon">💡</span><div><strong>Notes:</strong> ' + nextClass.notes + '</div></div>';
+            html +=
+              '<div class="class-card-field"><span class="class-card-field-icon">💡</span><div><strong>Notes:</strong> ' +
+              nextClass.notes +
+              "</div></div>";
           }
-          html += '</div>';
+          html += "</div>";
         }
 
         if (isAdmin) {
-          html += '<div style="margin-top: 12px; display: flex; gap: 8px; justify-content: center">';
-          html += '<button class="btn-small" onclick="editClass(\'' + nextClass._id + '\')">✏️ Edit</button>';
-          html += '<button class="btn-small" onclick="deleteClass(\'' + nextClass._id + '\')" style="color: var(--red)">🗑 Delete</button>';
-          html += '</div>';
+          html +=
+            '<div style="margin-top: 12px; display: flex; gap: 8px; justify-content: center">';
+          html +=
+            '<button class="btn-small" onclick="editClass(\'' +
+            nextClass._id +
+            "')\">✏️ Edit</button>";
+          html +=
+            '<button class="btn-small" onclick="deleteClass(\'' +
+            nextClass._id +
+            '\')" style="color: var(--red)">🗑 Delete</button>';
+          html += "</div>";
         }
 
-        html += '</div>';
+        html += "</div>";
         container.innerHTML = html;
       }
 
       function renderClassList(container, classes, type, isAdmin) {
         if (classes.length === 0) {
           var emptyEmoji = type === "past" ? "📋" : "📅";
-          var emptyText = type === "past" ? "No previous classes yet" : "No future classes scheduled";
-          container.innerHTML = '<div class="classes-empty"><div class="classes-empty-emoji">' + emptyEmoji + '</div><div class="classes-empty-text">' + emptyText + '</div></div>';
+          var emptyText =
+            type === "past"
+              ? "No previous classes yet"
+              : "No future classes scheduled";
+          container.innerHTML =
+            '<div class="classes-empty"><div class="classes-empty-emoji">' +
+            emptyEmoji +
+            '</div><div class="classes-empty-text">' +
+            emptyText +
+            "</div></div>";
           return;
         }
 
@@ -6891,40 +7000,70 @@
           var badgeText = type === "past" ? "Completed" : "Upcoming";
 
           var html = '<div class="class-card-header">';
-          html += '<div class="class-card-date">' + SVG.calendar + ' ' + dayName + ' ' + dateDisplay;
-          if (c.time) html += ' <small>🕐 ' + c.time + '</small>';
-          html += '</div>';
-          html += '<span class="class-card-badge ' + badgeClass + '">' + badgeText + '</span>';
-          html += '</div>';
+          html +=
+            '<div class="class-card-date">' +
+            SVG.calendar +
+            " " +
+            dayName +
+            " " +
+            dateDisplay;
+          if (c.time) html += " <small>🕐 " + c.time + "</small>";
+          html += "</div>";
+          html +=
+            '<span class="class-card-badge ' +
+            badgeClass +
+            '">' +
+            badgeText +
+            "</span>";
+          html += "</div>";
           html += '<div class="class-card-body">';
 
           if (c.topics) {
-            html += '<div class="class-card-field"><span class="class-card-field-icon">📝</span><div><strong>Topics:</strong> <div class="class-card-tags">';
+            html +=
+              '<div class="class-card-field"><span class="class-card-field-icon">📝</span><div><strong>Topics:</strong> <div class="class-card-tags">';
             c.topics.split(",").forEach(function (t) {
-              html += '<span class="class-card-tag">' + t.trim() + '</span>';
+              html += '<span class="class-card-tag">' + t.trim() + "</span>";
             });
-            html += '</div></div></div>';
+            html += "</div></div></div>";
           }
           if (c.objectives) {
-            html += '<div class="class-card-field"><span class="class-card-field-icon">🎯</span><div><strong>Objectives:</strong> ' + c.objectives + '</div></div>';
+            html +=
+              '<div class="class-card-field"><span class="class-card-field-icon">🎯</span><div><strong>Objectives:</strong> ' +
+              c.objectives +
+              "</div></div>";
           }
           if (c.materials) {
-            html += '<div class="class-card-field"><span class="class-card-field-icon">📦</span><div><strong>Materials:</strong> ' + c.materials + '</div></div>';
+            html +=
+              '<div class="class-card-field"><span class="class-card-field-icon">📦</span><div><strong>Materials:</strong> ' +
+              c.materials +
+              "</div></div>";
           }
           if (c.notes) {
-            html += '<div class="class-card-field"><span class="class-card-field-icon">💡</span><div><strong>Notes:</strong> ' + c.notes + '</div></div>';
+            html +=
+              '<div class="class-card-field"><span class="class-card-field-icon">💡</span><div><strong>Notes:</strong> ' +
+              c.notes +
+              "</div></div>";
           }
           if (type === "past" && c.summary) {
-            html += '<div class="class-card-field"><span class="class-card-field-icon">📖</span><div><strong>Summary:</strong> ' + c.summary + '</div></div>';
+            html +=
+              '<div class="class-card-field"><span class="class-card-field-icon">📖</span><div><strong>Summary:</strong> ' +
+              c.summary +
+              "</div></div>";
           }
 
-          html += '</div>';
+          html += "</div>";
 
           if (isAdmin) {
             html += '<div class="class-card-actions">';
-            html += '<button class="btn-small" onclick="editClass(\'' + c._id + '\')">✏️ Edit</button>';
-            html += '<button class="btn-small" onclick="deleteClass(\'' + c._id + '\')" style="color: var(--red)">🗑 Delete</button>';
-            html += '</div>';
+            html +=
+              '<button class="btn-small" onclick="editClass(\'' +
+              c._id +
+              "')\">✏️ Edit</button>";
+            html +=
+              '<button class="btn-small" onclick="deleteClass(\'' +
+              c._id +
+              '\')" style="color: var(--red)">🗑 Delete</button>';
+            html += "</div>";
           }
 
           card.innerHTML = html;
@@ -6933,75 +7072,119 @@
       }
 
       function openAddClass() {
-        if (!selectedStudent) { alert("Select a student first"); return; }
+        if (!selectedStudent) {
+          alert("Select a student first");
+          return;
+        }
         var today = new Date().toISOString().split("T")[0];
-        openModal("Schedule a Class", '<form id="class-form">' +
-          '<div class="form-group"><label>Date</label><input type="date" name="date" value="' + today + '" required></div>' +
-          '<div class="form-group"><label>Time</label><input type="time" name="time"></div>' +
-          '<div class="form-group"><label>Topics (comma-separated)</label><input type="text" name="topics" placeholder="e.g. Colors, Numbers, Greetings"></div>' +
-          '<div class="form-group"><label>Objectives</label><textarea name="objectives" rows="2" placeholder="What will the student learn?"></textarea></div>' +
-          '<div class="form-group"><label>Materials needed</label><input type="text" name="materials" placeholder="e.g. Flashcards, worksheets"></div>' +
-          '<div class="form-group"><label>Notes</label><textarea name="notes" rows="2" placeholder="Any preparation notes..."></textarea></div>' +
-          '<button type="submit" class="btn">Schedule Class</button></form>');
+        openModal(
+          "Schedule a Class",
+          '<form id="class-form">' +
+            '<div class="form-group"><label>Date</label><input type="date" name="date" value="' +
+            today +
+            '" required></div>' +
+            '<div class="form-group"><label>Time</label><input type="time" name="time"></div>' +
+            '<div class="form-group"><label>Topics (comma-separated)</label><input type="text" name="topics" placeholder="e.g. Colors, Numbers, Greetings"></div>' +
+            '<div class="form-group"><label>Objectives</label><textarea name="objectives" rows="2" placeholder="What will the student learn?"></textarea></div>' +
+            '<div class="form-group"><label>Materials needed</label><input type="text" name="materials" placeholder="e.g. Flashcards, worksheets"></div>' +
+            '<div class="form-group"><label>Notes</label><textarea name="notes" rows="2" placeholder="Any preparation notes..."></textarea></div>' +
+            '<button type="submit" class="btn">Schedule Class</button></form>',
+        );
 
         document.getElementById("class-form").onsubmit = function (e) {
           e.preventDefault();
           var form = new FormData(this);
-          db.collection("students").doc(selectedStudent.id).collection("classes").add({
-            date: form.get("date"),
-            time: form.get("time") || "",
-            topics: form.get("topics") || "",
-            objectives: form.get("objectives") || "",
-            materials: form.get("materials") || "",
-            notes: form.get("notes") || "",
-            summary: "",
-            createdAt: new Date(),
-          }).then(function () {
-            closeModal();
-            loadClasses();
-          });
-        };
-      }
-
-      function editClass(classId) {
-        if (!selectedStudent) return;
-        db.collection("students").doc(selectedStudent.id).collection("classes").doc(classId).get().then(function (doc) {
-          if (!doc.exists) return;
-          var c = doc.data();
-          openModal("Edit Class", '<form id="class-edit-form">' +
-            '<div class="form-group"><label>Date</label><input type="date" name="date" value="' + (c.date || '') + '" required></div>' +
-            '<div class="form-group"><label>Time</label><input type="time" name="time" value="' + (c.time || '') + '"></div>' +
-            '<div class="form-group"><label>Topics (comma-separated)</label><input type="text" name="topics" value="' + (c.topics || '') + '"></div>' +
-            '<div class="form-group"><label>Objectives</label><textarea name="objectives" rows="2">' + (c.objectives || '') + '</textarea></div>' +
-            '<div class="form-group"><label>Materials</label><input type="text" name="materials" value="' + (c.materials || '') + '"></div>' +
-            '<div class="form-group"><label>Notes</label><textarea name="notes" rows="2">' + (c.notes || '') + '</textarea></div>' +
-            '<div class="form-group"><label>Class Summary (after class)</label><textarea name="summary" rows="2" placeholder="How did the class go?">' + (c.summary || '') + '</textarea></div>' +
-            '<button type="submit" class="btn">Save Changes</button></form>');
-
-          document.getElementById("class-edit-form").onsubmit = function (e) {
-            e.preventDefault();
-            var form = new FormData(this);
-            db.collection("students").doc(selectedStudent.id).collection("classes").doc(classId).update({
+          db.collection("students")
+            .doc(selectedStudent.id)
+            .collection("classes")
+            .add({
               date: form.get("date"),
               time: form.get("time") || "",
               topics: form.get("topics") || "",
               objectives: form.get("objectives") || "",
               materials: form.get("materials") || "",
               notes: form.get("notes") || "",
-              summary: form.get("summary") || "",
-            }).then(function () {
+              summary: "",
+              createdAt: new Date(),
+            })
+            .then(function () {
               closeModal();
               loadClasses();
             });
-          };
-        });
+        };
+      }
+
+      function editClass(classId) {
+        if (!selectedStudent) return;
+        db.collection("students")
+          .doc(selectedStudent.id)
+          .collection("classes")
+          .doc(classId)
+          .get()
+          .then(function (doc) {
+            if (!doc.exists) return;
+            var c = doc.data();
+            openModal(
+              "Edit Class",
+              '<form id="class-edit-form">' +
+                '<div class="form-group"><label>Date</label><input type="date" name="date" value="' +
+                (c.date || "") +
+                '" required></div>' +
+                '<div class="form-group"><label>Time</label><input type="time" name="time" value="' +
+                (c.time || "") +
+                '"></div>' +
+                '<div class="form-group"><label>Topics (comma-separated)</label><input type="text" name="topics" value="' +
+                (c.topics || "") +
+                '"></div>' +
+                '<div class="form-group"><label>Objectives</label><textarea name="objectives" rows="2">' +
+                (c.objectives || "") +
+                "</textarea></div>" +
+                '<div class="form-group"><label>Materials</label><input type="text" name="materials" value="' +
+                (c.materials || "") +
+                '"></div>' +
+                '<div class="form-group"><label>Notes</label><textarea name="notes" rows="2">' +
+                (c.notes || "") +
+                "</textarea></div>" +
+                '<div class="form-group"><label>Class Summary (after class)</label><textarea name="summary" rows="2" placeholder="How did the class go?">' +
+                (c.summary || "") +
+                "</textarea></div>" +
+                '<button type="submit" class="btn">Save Changes</button></form>',
+            );
+
+            document.getElementById("class-edit-form").onsubmit = function (e) {
+              e.preventDefault();
+              var form = new FormData(this);
+              db.collection("students")
+                .doc(selectedStudent.id)
+                .collection("classes")
+                .doc(classId)
+                .update({
+                  date: form.get("date"),
+                  time: form.get("time") || "",
+                  topics: form.get("topics") || "",
+                  objectives: form.get("objectives") || "",
+                  materials: form.get("materials") || "",
+                  notes: form.get("notes") || "",
+                  summary: form.get("summary") || "",
+                })
+                .then(function () {
+                  closeModal();
+                  loadClasses();
+                });
+            };
+          });
       }
 
       function deleteClass(classId) {
         if (!confirm("Delete this class?")) return;
-        db.collection("students").doc(selectedStudent.id).collection("classes").doc(classId).delete().then(function () {
-          loadClasses();
-        });
+        db.collection("students")
+          .doc(selectedStudent.id)
+          .collection("classes")
+          .doc(classId)
+          .delete()
+          .then(function () {
+            loadClasses();
+          });
       }
 
       // ========== TAB VISIBILITY PER STUDENT ==========
