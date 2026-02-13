@@ -476,7 +476,7 @@
         height: 80px;
         object-fit: cover;
         border-radius: 8px;
-        background: rgba(0,0,0,.15);
+        background: rgba(0, 0, 0, 0.15);
       }
       .act-emoji {
         font-size: 2.8rem;
@@ -1041,24 +1041,150 @@
     <script>
       // ======= DATA =======
       var CMDS = [
-        {id:"jump",pt:"Salta!",en:"Jump!",emoji:"🦘",c:"c-green",gif:"gifs/jump.gif"},
-        {id:"clap",pt:"Bate palmas!",en:"Clap!",emoji:"👏",c:"c-blue",gif:"gifs/clap.gif"},
-        {id:"dance",pt:"Dança!",en:"Dance!",emoji:"💃",c:"c-pink",gif:"gifs/dance.gif"},
-        {id:"sit",pt:"Senta-te!",en:"Sit down!",emoji:"🪑",c:"c-orange",gif:"gifs/sit.gif"},
-        {id:"spin",pt:"Roda!",en:"Spin!",emoji:"🌀",c:"c-purple",gif:"gifs/spin.gif"},
-        {id:"wave",pt:"Acena!",en:"Wave!",emoji:"👋",c:"c-teal",gif:"gifs/wave.gif"},
-        {id:"laugh",pt:"Ri-te!",en:"Laugh!",emoji:"😂",c:"c-orange",gif:"gifs/laugh.gif"},
-        {id:"sing",pt:"Canta!",en:"Sing!",emoji:"🎤",c:"c-pink",gif:"gifs/sing.gif"},
-        {id:"whisper",pt:"Sussurra!",en:"Whisper!",emoji:"🤫",c:"c-purple",gif:"gifs/whisper.gif"},
-        {id:"nose",pt:"Toca no nariz!",en:"Touch your nose!",emoji:"👃",c:"c-green",gif:"gifs/nose.gif"},
-        {id:"eyes",pt:"Fecha os olhos!",en:"Close your eyes!",emoji:"😌",c:"c-blue",gif:"gifs/eyes.gif"},
-        {id:"hand",pt:"Levanta a mão!",en:"Raise your hand!",emoji:"✋",c:"c-orange",gif:"gifs/hand.gif"},
-        {id:"stomp",pt:"Bate o pé!",en:"Stomp!",emoji:"🦶",c:"c-red",gif:"gifs/stomp.gif"},
-        {id:"fly",pt:"Voa!",en:"Fly!",emoji:"🦅",c:"c-purple",gif:"gifs/fly.gif"},
-        {id:"freeze",pt:"Congela!",en:"Freeze!",emoji:"🧊",c:"c-blue",gif:"gifs/freeze.gif"},
-        {id:"run",pt:"Corre!",en:"Run!",emoji:"🏃",c:"c-green",gif:"gifs/run.gif"},
-        {id:"stretch",pt:"Estica-te!",en:"Stretch!",emoji:"🧘",c:"c-pink",gif:"gifs/stretch.gif"},
-        {id:"blow",pt:"Sopra!",en:"Blow!",emoji:"🌬️",c:"c-teal",gif:"gifs/blow.gif"}
+        {
+          id: "jump",
+          pt: "Salta!",
+          en: "Jump!",
+          emoji: "🦘",
+          c: "c-green",
+          gif: "gifs/jump.gif",
+        },
+        {
+          id: "clap",
+          pt: "Bate palmas!",
+          en: "Clap!",
+          emoji: "👏",
+          c: "c-blue",
+          gif: "gifs/clap.gif",
+        },
+        {
+          id: "dance",
+          pt: "Dança!",
+          en: "Dance!",
+          emoji: "💃",
+          c: "c-pink",
+          gif: "gifs/dance.gif",
+        },
+        {
+          id: "sit",
+          pt: "Senta-te!",
+          en: "Sit down!",
+          emoji: "🪑",
+          c: "c-orange",
+          gif: "gifs/sit.gif",
+        },
+        {
+          id: "spin",
+          pt: "Roda!",
+          en: "Spin!",
+          emoji: "🌀",
+          c: "c-purple",
+          gif: "gifs/spin.gif",
+        },
+        {
+          id: "wave",
+          pt: "Acena!",
+          en: "Wave!",
+          emoji: "👋",
+          c: "c-teal",
+          gif: "gifs/wave.gif",
+        },
+        {
+          id: "laugh",
+          pt: "Ri-te!",
+          en: "Laugh!",
+          emoji: "😂",
+          c: "c-orange",
+          gif: "gifs/laugh.gif",
+        },
+        {
+          id: "sing",
+          pt: "Canta!",
+          en: "Sing!",
+          emoji: "🎤",
+          c: "c-pink",
+          gif: "gifs/sing.gif",
+        },
+        {
+          id: "whisper",
+          pt: "Sussurra!",
+          en: "Whisper!",
+          emoji: "🤫",
+          c: "c-purple",
+          gif: "gifs/whisper.gif",
+        },
+        {
+          id: "nose",
+          pt: "Toca no nariz!",
+          en: "Touch your nose!",
+          emoji: "👃",
+          c: "c-green",
+          gif: "gifs/nose.gif",
+        },
+        {
+          id: "eyes",
+          pt: "Fecha os olhos!",
+          en: "Close your eyes!",
+          emoji: "😌",
+          c: "c-blue",
+          gif: "gifs/eyes.gif",
+        },
+        {
+          id: "hand",
+          pt: "Levanta a mão!",
+          en: "Raise your hand!",
+          emoji: "✋",
+          c: "c-orange",
+          gif: "gifs/hand.gif",
+        },
+        {
+          id: "stomp",
+          pt: "Bate o pé!",
+          en: "Stomp!",
+          emoji: "🦶",
+          c: "c-red",
+          gif: "gifs/stomp.gif",
+        },
+        {
+          id: "fly",
+          pt: "Voa!",
+          en: "Fly!",
+          emoji: "🦅",
+          c: "c-purple",
+          gif: "gifs/fly.gif",
+        },
+        {
+          id: "freeze",
+          pt: "Congela!",
+          en: "Freeze!",
+          emoji: "🧊",
+          c: "c-blue",
+          gif: "gifs/freeze.gif",
+        },
+        {
+          id: "run",
+          pt: "Corre!",
+          en: "Run!",
+          emoji: "🏃",
+          c: "c-green",
+          gif: "gifs/run.gif",
+        },
+        {
+          id: "stretch",
+          pt: "Estica-te!",
+          en: "Stretch!",
+          emoji: "🧘",
+          c: "c-pink",
+          gif: "gifs/stretch.gif",
+        },
+        {
+          id: "blow",
+          pt: "Sopra!",
+          en: "Blow!",
+          emoji: "🌬️",
+          c: "c-teal",
+          gif: "gifs/blow.gif",
+        },
       ];
 
       // ======= STATE =======
@@ -1363,7 +1489,7 @@
           : "";
         document.getElementById("b-cmd").textContent =
           curCmd.emoji + " " + curCmd.pt;
-        document.getElementById("b-en").textContent = curCmd.en;
+        document.getElementById("b-en").textContent = "";
 
         say(spoken);
         buildBtns();
@@ -1386,10 +1512,17 @@
           var b = document.createElement("button");
           b.className = "act " + cmd.c;
           b.innerHTML =
-            '<img class="act-gif" src="' + cmd.gif + '" alt="' + cmd.en + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
-            '<span class="act-emoji" style="display:none">' + cmd.emoji + '</span>' +
-            '<span class="act-label">' + cmd.pt + '</span>' +
-            '<span class="act-hint">' + cmd.en + '</span>';
+            '<img class="act-gif" src="' +
+            cmd.gif +
+            '" alt="' +
+            cmd.en +
+            "\" onerror=\"this.style.display='none';this.nextElementSibling.style.display='block'\">" +
+            '<span class="act-emoji" style="display:none">' +
+            cmd.emoji +
+            "</span>" +
+            '<span class="act-label">' +
+            cmd.en +
+            "</span>";
           b.onclick = function () {
             answer(cmd.id);
           };
@@ -1399,7 +1532,7 @@
         var nb = document.createElement("button");
         nb.className = "act c-red";
         nb.innerHTML =
-          '<img class="act-gif" src="gifs/nothing.gif" alt="Do nothing" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'"><span class="act-emoji" style="display:none">🚫</span><span class="act-label">Nada!</span><span class="act-hint">Do nothing!</span>';
+          '<img class="act-gif" src="gifs/nothing.gif" alt="Do nothing" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'"><span class="act-emoji" style="display:none">🚫</span><span class="act-label">Do nothing!</span>';
         nb.onclick = function () {
           answer("nothing");
         };
