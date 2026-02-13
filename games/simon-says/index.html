@@ -314,10 +314,11 @@
         background: rgba(26, 17, 40, 0.5);
         border-radius: 20px;
         border: 1px solid rgba(167, 139, 250, 0.08);
-        padding: 24px 20px;
+        padding: 28px 20px;
         margin-bottom: 12px;
         position: relative;
         overflow: hidden;
+        min-height: 220px;
       }
       .simon-bg-glow {
         position: absolute;
@@ -1011,30 +1012,25 @@
         }
       }
 
-      // ======= VOICE — Portugal Portuguese (pt-PT) =======
+      // ======= VOICE — Best Portuguese voice =======
+      // Strategy: Use Google Translate TTS for natural-sounding pt-PT voice
+      // Falls back to Web Speech API if audio fails
+
       var ptVoice = null;
       function findPtVoice() {
         if (!window.speechSynthesis) return;
         var voices = speechSynthesis.getVoices();
-        // Strict priority order:
-        // 1. pt-PT voice with "Joana" (best macOS/iOS pt-PT)
-        // 2. Any pt-PT voice
-        // 3. Generic "pt" (not pt-BR)
-        // 4. pt-BR as last resort
         var best = null, ptPT = null, ptGeneric = null, ptBR = null;
         for (var i = 0; i < voices.length; i++) {
           var v = voices[i];
           if (v.lang === "pt-PT" || v.lang === "pt_PT") {
-            if (!best && /joana|luciana|catarina|portugal/i.test(v.name)) best = v;
+            // Prefer premium/enhanced voices
+            if (!best && /premium|enhanced|neural|natural|joana|catarina/i.test(v.name)) best = v;
             if (!ptPT) ptPT = v;
-          } else if (v.lang === "pt" && !ptGeneric) {
-            ptGeneric = v;
-          } else if ((v.lang === "pt-BR" || v.lang === "pt_BR") && !ptBR) {
-            ptBR = v;
-          }
+          } else if (v.lang === "pt" && !ptGeneric) ptGeneric = v;
+          else if ((v.lang === "pt-BR" || v.lang === "pt_BR") && !ptBR) ptBR = v;
         }
         ptVoice = best || ptPT || ptGeneric || ptBR || null;
-        if (ptVoice) console.log("🗣 Voice:", ptVoice.name, ptVoice.lang);
       }
       if (window.speechSynthesis) {
         speechSynthesis.getVoices();
@@ -1045,30 +1041,52 @@
       }
 
       function say(text, cb) {
-        if (!window.speechSynthesis) {
-          if (cb) cb();
-          return;
-        }
-        speechSynthesis.cancel();
-        var u = new SpeechSynthesisUtterance(text);
-        u.lang = "pt-PT";
-        u.rate = 0.82;
-        u.pitch = 1.05;
-        u.volume = 1;
-        if (ptVoice) u.voice = ptVoice;
         lastSpeak = text;
         var wiz = document.getElementById("wizard");
         wiz.classList.add("talk");
-        u.onend = function () {
+        var done = false;
+        function finish() {
+          if (done) return; done = true;
           wiz.classList.remove("talk");
           if (cb) cb();
-        };
-        u.onerror = function () {
-          wiz.classList.remove("talk");
-          if (cb) cb();
-        };
+        }
+
+        // Try Google Translate TTS (natural voice, pt-PT)
+        try {
+          var encoded = encodeURIComponent(text);
+          var url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-PT&client=tw-ob&q=" + encoded;
+          var audio = new Audio(url);
+          audio.volume = 1;
+          audio.onended = finish;
+          audio.onerror = function() {
+            // Fallback to Web Speech API
+            sayFallback(text, finish);
+          };
+          audio.play().catch(function() {
+            sayFallback(text, finish);
+          });
+        } catch(e) {
+          sayFallback(text, finish);
+        }
+
+        // Safety timeout
+        setTimeout(finish, 6000);
+      }
+
+      function sayFallback(text, cb) {
+        if (!window.speechSynthesis) { if (cb) cb(); return; }
+        speechSynthesis.cancel();
+        var u = new SpeechSynthesisUtterance(text);
+        u.lang = "pt-PT";
+        u.rate = 0.85;
+        u.pitch = 1.05;
+        u.volume = 1;
+        if (ptVoice) u.voice = ptVoice;
+        u.onend = function() { if (cb) cb(); };
+        u.onerror = function() { if (cb) cb(); };
         speechSynthesis.speak(u);
       }
+
       function replay() {
         if (!lastSpeak) return;
         var btn = document.getElementById("replay-btn");
