@@ -286,7 +286,7 @@ async function addHomework() {
     {
       title: "Build Your Rocket Game 🚀",
       type: "app",
-      url: "https://tomasbb0.github.io/TheBurnayLab/games/build-your-rocket/",
+      url: "https://tomasbb0.github.io/TheBurnayLabs/games/build-your-rocket/",
       description:
         "Vocabulary game — answer Portuguese questions to build a rocket!",
       notes: "Assigned as homework. Levels 1-3 cover basics.",
@@ -295,7 +295,7 @@ async function addHomework() {
     {
       title: "Build Your Dinosaur Game 🦕",
       type: "app",
-      url: "https://tomasbb0.github.io/TheBurnayLab/games/build-your-dinosaur/",
+      url: "https://tomasbb0.github.io/TheBurnayLabs/games/build-your-dinosaur/",
       description:
         "Vocabulary game — answer Portuguese questions to build a dinosaur!",
       notes: "Fun reward game after completing rocket.",

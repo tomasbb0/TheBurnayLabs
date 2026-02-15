@@ -2925,6 +2925,210 @@
       ::-webkit-scrollbar-thumb:hover {
         background: rgba(255, 255, 255, 0.15);
       }
+
+      /* ===== DRAGGABLE TABS ===== */
+      .nav-tab.tab-dragging {
+        opacity: 0.4;
+        transform: scale(0.95);
+      }
+      .nav-tab.tab-drag-over {
+        border-left: 2px solid var(--green);
+      }
+
+      /* ===== CURRICULUM PLANNER ===== */
+      .curriculum-overall {
+        padding: 20px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        margin-bottom: 16px;
+        text-align: center;
+      }
+      .curriculum-overall h3 {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+      .curriculum-overall-sub {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 12px;
+      }
+      .curriculum-overall-bar {
+        height: 10px;
+        background: var(--bg-elevated);
+        border-radius: 5px;
+        overflow: hidden;
+        margin-bottom: 6px;
+      }
+      .curriculum-overall-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #22c55e, #3b82f6, #a855f7);
+        border-radius: 5px;
+        transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .curriculum-overall-pct {
+        font-size: 13px;
+        color: var(--text-secondary);
+        font-weight: 600;
+      }
+      .curriculum-row {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 14px 16px;
+        margin-bottom: 10px;
+        transition: var(--transition);
+      }
+      .curriculum-row:hover {
+        border-color: var(--border-hover);
+      }
+      .curriculum-row-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .curriculum-icon {
+        font-size: 20px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg-elevated);
+        border-radius: var(--radius);
+        flex-shrink: 0;
+      }
+      .curriculum-row-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .curriculum-row-name {
+        font-weight: 700;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 4px;
+      }
+      .curriculum-row-progress {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .curriculum-pbar {
+        flex: 1;
+        height: 5px;
+        background: var(--bg-elevated);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .curriculum-pfill {
+        height: 100%;
+        border-radius: 3px;
+        transition: width 0.6s ease;
+      }
+      .curriculum-ptext {
+        font-size: 11px;
+        color: var(--text-muted);
+        min-width: 36px;
+        text-align: right;
+      }
+      .curriculum-levels {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .curriculum-level {
+        padding: 6px 10px;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        user-select: none;
+      }
+      .curriculum-level:hover {
+        transform: translateY(-1px);
+        border-color: var(--border-hover);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      }
+      .curriculum-level:active {
+        transform: scale(0.97);
+      }
+      .curriculum-level.cl-complete {
+        border-color: var(--green);
+        background: rgba(34,197,94,0.08);
+      }
+      .curriculum-level.cl-progress {
+        border-style: dashed;
+        border-color: var(--yellow);
+        background: rgba(234,179,8,0.06);
+      }
+      .curriculum-level-st {
+        font-size: 13px;
+        line-height: 1;
+      }
+      .curriculum-level-name {
+        font-weight: 500;
+        white-space: nowrap;
+      }
+      .curriculum-level-sub {
+        font-size: 10px;
+        color: var(--text-muted);
+        display: block;
+        margin-top: 1px;
+      }
+      .curriculum-legend {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        margin-bottom: 16px;
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+      .curriculum-legend span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      /* ===== GAME STATS ===== */
+      .game-stats-row {
+        display: flex;
+        gap: 12px;
+        margin-top: 8px;
+        flex-wrap: wrap;
+      }
+      .game-stat {
+        font-size: 11px;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .game-stat strong {
+        color: var(--text-secondary);
+        font-weight: 600;
+      }
+      .game-sessions-btn {
+        font-size: 11px;
+        padding: 3px 8px;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .game-sessions-btn:hover {
+        border-color: var(--border-hover);
+        color: var(--text-primary);
+      }
     </style>
   </head>
   <body class="login-view">
@@ -3555,6 +3759,70 @@
               </div>
               <div class="empty-state">No games assigned</div>
             </div>
+            <div
+              style="
+                margin-top: 16px;
+                padding: 14px 16px;
+                background: var(--bg-secondary);
+                border: 1px solid var(--border);
+                border-radius: var(--radius-lg);
+                cursor: pointer;
+              "
+              onclick="
+                this.querySelector('.ipad-help-body').style.display =
+                  this.querySelector('.ipad-help-body').style.display === 'none'
+                    ? 'block'
+                    : 'none'
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  font-size: 13px;
+                  font-weight: 700;
+                "
+              >
+                📱 Playing on iPad?
+                <span style="font-size: 11px; opacity: 0.5; font-weight: 400"
+                  >(tap to expand)</span
+                >
+              </div>
+              <div
+                class="ipad-help-body"
+                style="
+                  display: none;
+                  margin-top: 12px;
+                  font-size: 12px;
+                  line-height: 1.8;
+                  color: var(--text-secondary);
+                "
+              >
+                <p style="margin-bottom: 8px">
+                  For the best experience on iPad, add games as
+                  <b>Web Apps</b> to the Home Screen:
+                </p>
+                <ol style="padding-left: 20px; margin-bottom: 12px">
+                  <li>Open the game link in <b>Safari</b> (not Chrome)</li>
+                  <li>
+                    Tap the <b>Share button</b> (square with arrow ↑) at the top
+                  </li>
+                  <li>Scroll down and tap <b>"Add to Home Screen"</b></li>
+                  <li>
+                    Give it a name (e.g. "Spelling Stars") and tap <b>Add</b>
+                  </li>
+                </ol>
+                <p style="margin-bottom: 6px">
+                  Now the game opens full-screen like a real app — no address
+                  bar, no distractions! 🎉
+                </p>
+                <p style="opacity: 0.5; font-size: 11px">
+                  Works for: Spelling Stars, Simon Says, and all Build-Your
+                  games.
+                </p>
+              </div>
+            </div>
           </div>
           <div id="tests-panel" class="panel">
             <div id="tests-list" class="items-list">
@@ -3622,34 +3890,29 @@
             </div>
           </div>
           <div id="planner-panel" class="panel">
-            <div
-              id="planner-header"
-              style="
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                margin-bottom: 16px;
-              "
-            >
-              <button class="btn-small" id="planner-prev">&larr; Prev</button>
-              <h3
-                id="planner-month"
-                style="font-size: 16px; font-weight: 600"
-              ></h3>
-              <button class="btn-small" id="planner-next">Next &rarr;</button>
+            <div class="curriculum-legend">
+              <span>⬜ Not Started</span>
+              <span>🔵 In Progress</span>
+              <span>✅ Complete</span>
+              <span style="font-size: 11px; opacity: 0.6">Click to cycle</span>
             </div>
-            <div id="planner-calendar" class="planner-week"></div>
-            <div style="margin-top: 16px">
-              <div class="add-item-card">
-                <button id="add-lesson-btn" class="btn-small">
-                  + Add Lesson
-                </button>
+            <div class="curriculum-overall" id="curriculum-overall">
+              <h3>Learning Journey</h3>
+              <div class="curriculum-overall-sub" id="curriculum-overall-sub">
+                Loading...
               </div>
-              <div id="planner-lessons"></div>
-              <div class="empty-state" id="planner-empty">
-                No lessons planned this week
+              <div class="curriculum-overall-bar">
+                <div
+                  class="curriculum-overall-fill"
+                  id="curriculum-overall-fill"
+                  style="width: 0%"
+                ></div>
+              </div>
+              <div class="curriculum-overall-pct" id="curriculum-overall-pct">
+                0%
               </div>
             </div>
+            <div id="curriculum-grid"></div>
           </div>
           <div id="classbook-panel" class="panel">
             <div class="search-bar" id="classbook-search">
@@ -5994,53 +6257,60 @@
           });
       }
 
-      document.getElementById("planner-prev").onclick = function () {
-        plannerDate.setDate(plannerDate.getDate() - 7);
-        renderPlanner();
-      };
-      document.getElementById("planner-next").onclick = function () {
-        plannerDate.setDate(plannerDate.getDate() + 7);
-        renderPlanner();
-      };
-
-      document.getElementById("add-lesson-btn").onclick = function () {
-        if (!selectedStudent) {
-          alert("Select a student first");
-          return;
-        }
-        var today = new Date().toISOString().split("T")[0];
-        openModal(
-          "Add Lesson",
-          '<form id="lesson-form">' +
-            '<div class="form-group"><label>Date</label><input type="date" name="date" value="' +
-            today +
-            '" required></div>' +
-            '<div class="form-group"><label>Time</label><input type="time" name="time"></div>' +
-            '<div class="form-group"><label>Title</label><input type="text" name="title" required placeholder="e.g. Colors & Shapes"></div>' +
-            '<div class="form-group"><label>Topics (comma-separated)</label><input type="text" name="topics" placeholder="Colors, Numbers, Shapes"></div>' +
-            '<div class="form-group"><label>Notes</label><textarea name="notes" rows="3" placeholder="Lesson plan notes..."></textarea></div>' +
-            '<button type="submit" class="btn">Add Lesson</button></form>',
-        );
-        document.getElementById("lesson-form").onsubmit = function (e) {
-          e.preventDefault();
-          var form = new FormData(this);
-          db.collection("students")
-            .doc(selectedStudent.id)
-            .collection("lessons")
-            .add({
-              date: form.get("date"),
-              time: form.get("time"),
-              title: form.get("title"),
-              topics: form.get("topics"),
-              notes: form.get("notes"),
-              createdAt: new Date(),
-            })
-            .then(function () {
-              closeModal();
-              loadPlannerLessons();
-            });
+      // Legacy planner bindings (calendar replaced by curriculum grid)
+      if (document.getElementById("planner-prev")) {
+        document.getElementById("planner-prev").onclick = function () {
+          plannerDate.setDate(plannerDate.getDate() - 7);
+          renderPlanner();
         };
-      };
+      }
+      if (document.getElementById("planner-next")) {
+        document.getElementById("planner-next").onclick = function () {
+          plannerDate.setDate(plannerDate.getDate() + 7);
+          renderPlanner();
+        };
+      }
+
+      if (document.getElementById("add-lesson-btn")) {
+        document.getElementById("add-lesson-btn").onclick = function () {
+          if (!selectedStudent) {
+            alert("Select a student first");
+            return;
+          }
+          var today = new Date().toISOString().split("T")[0];
+          openModal(
+            "Add Lesson",
+            '<form id="lesson-form">' +
+              '<div class="form-group"><label>Date</label><input type="date" name="date" value="' +
+              today +
+              '" required></div>' +
+              '<div class="form-group"><label>Time</label><input type="time" name="time"></div>' +
+              '<div class="form-group"><label>Title</label><input type="text" name="title" required placeholder="e.g. Colors & Shapes"></div>' +
+              '<div class="form-group"><label>Topics (comma-separated)</label><input type="text" name="topics" placeholder="Colors, Numbers, Shapes"></div>' +
+              '<div class="form-group"><label>Notes</label><textarea name="notes" rows="3" placeholder="Lesson plan notes..."></textarea></div>' +
+              '<button type="submit" class="btn">Add Lesson</button></form>',
+          );
+          document.getElementById("lesson-form").onsubmit = function (e) {
+            e.preventDefault();
+            var form = new FormData(this);
+            db.collection("students")
+              .doc(selectedStudent.id)
+              .collection("lessons")
+              .add({
+                date: form.get("date"),
+                time: form.get("time"),
+                title: form.get("title"),
+                topics: form.get("topics"),
+                notes: form.get("notes"),
+                createdAt: new Date(),
+              })
+              .then(function () {
+                closeModal();
+                loadPlannerLessons();
+              });
+          };
+        };
+      } // end add-lesson-btn guard
 
       // ========== PROGRESS CHARTS ==========
       function loadProgressCharts() {
@@ -6692,7 +6962,7 @@
         loadVocab();
         loadHomework();
         loadClassBook();
-        renderPlanner();
+        loadCurriculum();
         loadProgressCharts();
         // Enable drag reorder after a short delay for DOM to update
         setTimeout(function () {
@@ -7308,6 +7578,527 @@
         if (selectedStudent) {
           applyTabVisibility(selectedStudent.name);
         }
+      }
+
+      // ========== DRAGGABLE TAB REORDER ==========
+      (function initTabDrag() {
+        var defaultOrder = [
+          "diagnostics",
+          "games",
+          "progress",
+          "classlog",
+          "vocab",
+          "homework",
+          "planner",
+          "classbook",
+          "classes",
+          "tests",
+          "links",
+        ];
+        function getTabOrder() {
+          try {
+            var saved = localStorage.getItem("bl_tab_order");
+            if (saved) return JSON.parse(saved);
+          } catch (e) {}
+          return defaultOrder;
+        }
+        function saveTabOrder(order) {
+          localStorage.setItem("bl_tab_order", JSON.stringify(order));
+        }
+        function applyOrder() {
+          var nav = document.getElementById("student-nav");
+          if (!nav) return;
+          var order = getTabOrder();
+          var tabs = Array.from(nav.querySelectorAll(".nav-tab"));
+          var tabMap = {};
+          tabs.forEach(function (t) {
+            tabMap[t.dataset.tab] = t;
+          });
+          // Put tabs in order after the filter row
+          var filterRow = document.getElementById("tab-filter-row");
+          order.forEach(function (tabId) {
+            if (tabMap[tabId]) nav.appendChild(tabMap[tabId]);
+          });
+          // Append any tabs not in the saved order
+          tabs.forEach(function (t) {
+            if (order.indexOf(t.dataset.tab) === -1) nav.appendChild(t);
+          });
+        }
+        // Apply on load
+        applyOrder();
+        // Drag handlers
+        var dragTab = null;
+        document.addEventListener("dragstart", function (e) {
+          if (e.target.classList && e.target.classList.contains("nav-tab")) {
+            dragTab = e.target;
+            e.target.classList.add("tab-dragging");
+            e.dataTransfer.effectAllowed = "move";
+          }
+        });
+        document.addEventListener("dragend", function (e) {
+          if (dragTab) {
+            dragTab.classList.remove("tab-dragging");
+            document.querySelectorAll(".tab-drag-over").forEach(function (el) {
+              el.classList.remove("tab-drag-over");
+            });
+            dragTab = null;
+          }
+        });
+        document.addEventListener("dragover", function (e) {
+          if (!dragTab) return;
+          var target = e.target.closest(".nav-tab");
+          if (target && target !== dragTab) {
+            e.preventDefault();
+            document.querySelectorAll(".tab-drag-over").forEach(function (el) {
+              el.classList.remove("tab-drag-over");
+            });
+            target.classList.add("tab-drag-over");
+          }
+        });
+        document.addEventListener("drop", function (e) {
+          if (!dragTab) return;
+          var target = e.target.closest(".nav-tab");
+          if (target && target !== dragTab) {
+            e.preventDefault();
+            var nav = document.getElementById("student-nav");
+            nav.insertBefore(dragTab, target);
+            // Save new order
+            var newOrder = [];
+            nav.querySelectorAll(".nav-tab").forEach(function (t) {
+              newOrder.push(t.dataset.tab);
+            });
+            saveTabOrder(newOrder);
+          }
+          document.querySelectorAll(".tab-drag-over").forEach(function (el) {
+            el.classList.remove("tab-drag-over");
+          });
+        });
+        // Make tabs draggable
+        document.querySelectorAll(".nav-tab").forEach(function (t) {
+          t.setAttribute("draggable", "true");
+        });
+      })();
+
+      // ========== CURRICULUM PLANNER ==========
+      var CURRICULUM_DATA = [
+        {
+          id: "vocab",
+          name: "Vocabulário",
+          icon: "🔤",
+          color: "#22c55e",
+          levels: [
+            { id: "colors", name: "Cores", en: "Colors" },
+            { id: "numbers", name: "Números", en: "Numbers 1-10" },
+            { id: "family", name: "Família", en: "Family" },
+            { id: "greetings", name: "Saudações", en: "Greetings" },
+            { id: "animals", name: "Animais", en: "Animals" },
+            { id: "food", name: "Comida", en: "Food & Drinks" },
+            { id: "body", name: "Corpo", en: "Body Parts" },
+            { id: "clothes", name: "Roupa", en: "Clothes" },
+            { id: "house", name: "Casa", en: "Home Objects" },
+            { id: "actions", name: "Ações", en: "Actions/Verbs" },
+          ],
+        },
+        {
+          id: "listening",
+          name: "Compreensão",
+          icon: "👂",
+          color: "#3b82f6",
+          levels: [
+            { id: "words", name: "Palavras", en: "Recognizes single words" },
+            { id: "1cmd", name: "1 Comando", en: "1-step commands" },
+            { id: "2cmd", name: "2 Comandos", en: "2-step commands" },
+            { id: "questions", name: "Perguntas", en: "Understands questions" },
+            { id: "stories", name: "Histórias", en: "Short stories" },
+          ],
+        },
+        {
+          id: "speaking",
+          name: "Fala",
+          icon: "🗣️",
+          color: "#f59e0b",
+          levels: [
+            { id: "repeat", name: "Repetir", en: "Repeats words" },
+            { id: "name", name: "Nomear", en: "Names objects" },
+            { id: "yesno", name: "Sim/Não", en: "Yes/No answers" },
+            { id: "phrases", name: "Frases", en: "2-3 word phrases" },
+            { id: "describe", name: "Descrever", en: "Describes things" },
+          ],
+        },
+        {
+          id: "reading",
+          name: "Leitura",
+          icon: "📖",
+          color: "#a855f7",
+          levels: [
+            { id: "vowels", name: "Vogais", en: "Recognizes vowels" },
+            { id: "consonants", name: "Consoantes", en: "Consonants" },
+            { id: "syllables", name: "Sílabas", en: "CV syllables" },
+            { id: "2syl", name: "Palavras", en: "2-syllable words" },
+            { id: "sentences", name: "Frases", en: "Short sentences" },
+          ],
+        },
+        {
+          id: "writing",
+          name: "Escrita",
+          icon: "✏️",
+          color: "#ec4899",
+          levels: [
+            { id: "trace", name: "Traçar", en: "Traces letters" },
+            { id: "vowels", name: "Vogais", en: "Writes vowels" },
+            { id: "copy", name: "Copiar", en: "Copies words" },
+            { id: "spell", name: "Soletrar", en: "Writes from memory" },
+            { id: "dictation", name: "Ditado", en: "Dictation" },
+          ],
+        },
+        {
+          id: "grammar",
+          name: "Gramática",
+          icon: "🔧",
+          color: "#06b6d4",
+          levels: [
+            { id: "articles", name: "Artigos", en: "o, a, os, as" },
+            { id: "gender", name: "Género", en: "Gender agreement" },
+            { id: "verbs", name: "Verbos", en: "é, tem, está" },
+            { id: "svo", name: "Frases SVO", en: "Subject-Verb-Object" },
+            { id: "questions", name: "Perguntas", en: "O que? Onde? Quem?" },
+          ],
+        },
+        {
+          id: "culture",
+          name: "Cultura",
+          icon: "🎭",
+          color: "#f97316",
+          levels: [
+            { id: "songs", name: "Canções", en: "Songs & rhymes" },
+            {
+              id: "traditions",
+              name: "Tradições",
+              en: "Traditions & holidays",
+            },
+            { id: "food", name: "Gastronomia", en: "Food culture" },
+            { id: "geography", name: "Geografia", en: "Geography" },
+            { id: "stories", name: "Contos", en: "Portuguese stories" },
+          ],
+        },
+      ];
+
+      var curriculumState = {}; // { "vocab:colors": "complete", "listening:words": "in-progress", ... }
+
+      function loadCurriculum() {
+        if (!selectedStudent) return;
+        db.collection("students")
+          .doc(selectedStudent.id)
+          .collection("curriculum")
+          .doc("progress")
+          .get()
+          .then(function (doc) {
+            curriculumState = doc.exists ? doc.data() || {} : {};
+            renderCurriculum();
+          })
+          .catch(function () {
+            curriculumState = {};
+            renderCurriculum();
+          });
+      }
+
+      function saveCurriculum() {
+        if (!selectedStudent) return;
+        db.collection("students")
+          .doc(selectedStudent.id)
+          .collection("curriculum")
+          .doc("progress")
+          .set(curriculumState);
+      }
+
+      function toggleCurrLevel(compId, levelId) {
+        var key = compId + ":" + levelId;
+        var current = curriculumState[key] || "not-started";
+        if (current === "not-started") curriculumState[key] = "in-progress";
+        else if (current === "in-progress") curriculumState[key] = "complete";
+        else curriculumState[key] = "not-started";
+        saveCurriculum();
+        renderCurriculum();
+      }
+
+      function renderCurriculum() {
+        var grid = document.getElementById("curriculum-grid");
+        if (!grid) return;
+        grid.innerHTML = "";
+
+        var totalLevels = 0;
+        var totalComplete = 0;
+        var totalInProgress = 0;
+
+        CURRICULUM_DATA.forEach(function (comp) {
+          var complete = 0;
+          var inProgress = 0;
+          comp.levels.forEach(function (lv) {
+            totalLevels++;
+            var st = curriculumState[comp.id + ":" + lv.id] || "not-started";
+            if (st === "complete") {
+              complete++;
+              totalComplete++;
+            } else if (st === "in-progress") {
+              inProgress++;
+              totalInProgress++;
+            }
+          });
+          var pct =
+            comp.levels.length > 0
+              ? Math.round((complete / comp.levels.length) * 100)
+              : 0;
+
+          var row = document.createElement("div");
+          row.className = "curriculum-row";
+
+          var levelsHtml = comp.levels
+            .map(function (lv) {
+              var st = curriculumState[comp.id + ":" + lv.id] || "not-started";
+              var icon =
+                st === "complete" ? "✅" : st === "in-progress" ? "🔵" : "⬜";
+              var cls =
+                st === "complete"
+                  ? "cl-complete"
+                  : st === "in-progress"
+                    ? "cl-progress"
+                    : "";
+              return (
+                '<div class="curriculum-level ' +
+                cls +
+                '" onclick="toggleCurrLevel(\'' +
+                comp.id +
+                "','" +
+                lv.id +
+                '\')" title="' +
+                lv.en +
+                '">' +
+                '<span class="curriculum-level-st">' +
+                icon +
+                "</span>" +
+                '<div><span class="curriculum-level-name">' +
+                lv.name +
+                "</span>" +
+                '<span class="curriculum-level-sub">' +
+                lv.en +
+                "</span></div></div>"
+              );
+            })
+            .join("");
+
+          row.innerHTML =
+            '<div class="curriculum-row-header">' +
+            '<div class="curriculum-icon">' +
+            comp.icon +
+            "</div>" +
+            '<div class="curriculum-row-info">' +
+            '<div class="curriculum-row-name">' +
+            comp.name +
+            "</div>" +
+            '<div class="curriculum-row-progress">' +
+            '<div class="curriculum-pbar"><div class="curriculum-pfill" style="width:' +
+            pct +
+            "%;background:" +
+            comp.color +
+            '"></div></div>' +
+            '<span class="curriculum-ptext">' +
+            complete +
+            "/" +
+            comp.levels.length +
+            "</span>" +
+            "</div>" +
+            "</div>" +
+            "</div>" +
+            '<div class="curriculum-levels">' +
+            levelsHtml +
+            "</div>";
+
+          grid.appendChild(row);
+        });
+
+        // Update overall
+        var overallPct =
+          totalLevels > 0 ? Math.round((totalComplete / totalLevels) * 100) : 0;
+        var fill = document.getElementById("curriculum-overall-fill");
+        var pctEl = document.getElementById("curriculum-overall-pct");
+        var subEl = document.getElementById("curriculum-overall-sub");
+        if (fill) fill.style.width = overallPct + "%";
+        if (pctEl) pctEl.textContent = overallPct + "% complete";
+        if (subEl)
+          subEl.textContent =
+            totalComplete +
+            " complete · " +
+            totalInProgress +
+            " in progress · " +
+            (totalLevels - totalComplete - totalInProgress) +
+            " remaining";
+      }
+
+      // ========== GAME PLAY STATS ==========
+      function trackGamePlay(gameDocId) {
+        if (!selectedStudent) return;
+        var ref = db
+          .collection("students")
+          .doc(selectedStudent.id)
+          .collection("games")
+          .doc(gameDocId);
+        ref.get().then(function (doc) {
+          var data = doc.data() || {};
+          var playCount = (data.playCount || 0) + 1;
+          ref
+            .update({
+              playCount: playCount,
+              lastPlayed: new Date().toISOString(),
+            })
+            .catch(function () {});
+        });
+      }
+
+      function logGameSession(gameDocId) {
+        var html =
+          '<form id="game-session-form">' +
+          '<div class="form-group"><label>Result</label>' +
+          '<select id="gs-result"><option value="completed">✅ Completed</option><option value="partial">🔵 Partial</option><option value="struggled">❌ Struggled</option></select></div>' +
+          '<div class="form-group"><label>Stars (1-3)</label>' +
+          '<input type="number" id="gs-stars" min="1" max="3" value="3"></div>' +
+          '<div class="form-group"><label>Notes</label>' +
+          '<input type="text" id="gs-notes" placeholder="How did it go?"></div>' +
+          '<button type="submit" class="btn">Save Session</button></form>';
+        openModal("Log Game Session", html);
+        document.getElementById("game-session-form").onsubmit = function (e) {
+          e.preventDefault();
+          var session = {
+            result: document.getElementById("gs-result").value,
+            stars: parseInt(document.getElementById("gs-stars").value) || 0,
+            notes: document.getElementById("gs-notes").value,
+            date: new Date().toISOString(),
+          };
+          db.collection("students")
+            .doc(selectedStudent.id)
+            .collection("games")
+            .doc(gameDocId)
+            .collection("sessions")
+            .add(session)
+            .then(function () {
+              // Update aggregate stats
+              return db
+                .collection("students")
+                .doc(selectedStudent.id)
+                .collection("games")
+                .doc(gameDocId)
+                .collection("sessions")
+                .get();
+            })
+            .then(function (snap) {
+              var total = snap.size;
+              var completed = 0;
+              var totalStars = 0;
+              snap.forEach(function (s) {
+                var d = s.data();
+                if (d.result === "completed") completed++;
+                totalStars += d.stars || 0;
+              });
+              return db
+                .collection("students")
+                .doc(selectedStudent.id)
+                .collection("games")
+                .doc(gameDocId)
+                .update({
+                  sessionCount: total,
+                  completedCount: completed,
+                  avgStars:
+                    total > 0 ? Math.round((totalStars / total) * 10) / 10 : 0,
+                });
+            })
+            .then(function () {
+              closeModal();
+              loadStudentData();
+            });
+        };
+      }
+
+      // Patch game card rendering to include stats
+      var _origLoadStudentDataV2 = loadStudentData;
+      loadStudentData = function () {
+        _origLoadStudentDataV2();
+        // Enhance game cards with stats after a delay
+        setTimeout(function () {
+          enhanceGameCards();
+        }, 800);
+      };
+
+      function enhanceGameCards() {
+        var cards = document.querySelectorAll("#games-list .item-card");
+        cards.forEach(function (card) {
+          // Find the play button to extract game info
+          var playBtn = card.querySelector("a.btn-small");
+          if (!playBtn) return;
+          // Already enhanced?
+          if (card.querySelector(".game-stats-row")) return;
+          // Find doc ID from delete or complete button
+          var deleteBtn = card.querySelector(".delete-btn");
+          var completeBtn = card.querySelector(
+            "button[onclick*='toggleGameComplete']",
+          );
+          var docId = null;
+          if (deleteBtn) {
+            var match = deleteBtn
+              .getAttribute("onclick")
+              .match(/'games',\s*'([^']+)'/);
+            if (match) docId = match[1];
+          }
+          if (!docId && completeBtn) {
+            var match2 = completeBtn
+              .getAttribute("onclick")
+              .match(/toggleGameComplete\('([^']+)'/);
+            if (match2) docId = match2[1];
+          }
+          if (!docId) return;
+
+          // Intercept play button click to track
+          var origHref = playBtn.href;
+          playBtn.onclick = function () {
+            trackGamePlay(docId);
+          };
+
+          // Load and display stats
+          db.collection("students")
+            .doc(selectedStudent.id)
+            .collection("games")
+            .doc(docId)
+            .get()
+            .then(function (gdoc) {
+              var data = gdoc.data() || {};
+              var statsRow = document.createElement("div");
+              statsRow.className = "game-stats-row";
+              var playCount = data.playCount || 0;
+              var sessionCount = data.sessionCount || 0;
+              var avgStars = data.avgStars || 0;
+              var lastPlayed = data.lastPlayed
+                ? new Date(data.lastPlayed).toLocaleDateString()
+                : "Never";
+              statsRow.innerHTML =
+                '<span class="game-stat">🎮 <strong>' +
+                playCount +
+                "</strong> plays</span>" +
+                '<span class="game-stat">📊 <strong>' +
+                sessionCount +
+                "</strong> sessions</span>" +
+                (avgStars > 0
+                  ? '<span class="game-stat">⭐ <strong>' +
+                    avgStars +
+                    "</strong>/3</span>"
+                  : "") +
+                '<span class="game-stat">📅 ' +
+                lastPlayed +
+                "</span>" +
+                '<button class="game-sessions-btn" onclick="logGameSession(\'' +
+                docId +
+                "')\">+ Log Session</button>";
+              var content = card.querySelector(".item-content");
+              if (content) content.appendChild(statsRow);
+            });
+        });
       }
     </script>
   </body>

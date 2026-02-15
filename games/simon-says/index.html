@@ -2,7 +2,16 @@
 <html lang="pt">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Simon Says" />
     <title>Simon Says — Portuguese!</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
@@ -1454,6 +1463,54 @@
           c: "c-teal",
           gif: "gifs/blow.gif",
         },
+        {
+          id: "look",
+          pt: "Olha!",
+          en: "Look!",
+          emoji: "👁️",
+          c: "c-blue",
+          gif: "gifs/nothing.gif",
+        },
+        {
+          id: "listen",
+          pt: "Ouve!",
+          en: "Listen!",
+          emoji: "👂",
+          c: "c-purple",
+          gif: "gifs/nothing.gif",
+        },
+        {
+          id: "eat",
+          pt: "Come!",
+          en: "Eat!",
+          emoji: "🍽️",
+          c: "c-orange",
+          gif: "gifs/nothing.gif",
+        },
+        {
+          id: "drink",
+          pt: "Bebe!",
+          en: "Drink!",
+          emoji: "🥤",
+          c: "c-teal",
+          gif: "gifs/nothing.gif",
+        },
+        {
+          id: "sleep",
+          pt: "Dorme!",
+          en: "Sleep!",
+          emoji: "😴",
+          c: "c-purple",
+          gif: "gifs/nothing.gif",
+        },
+        {
+          id: "play",
+          pt: "Brinca!",
+          en: "Play!",
+          emoji: "🎮",
+          c: "c-green",
+          gif: "gifs/nothing.gif",
+        },
       ];
 
       // ======= STATE =======
@@ -2064,6 +2121,90 @@
             '<g style="animation:sfBlowAir 1.5s ease-out 0.5s infinite">' +
             '<ellipse cx="65" cy="24" rx="3" ry="2" fill="#4FC3F7" opacity="0.3"/>' +
             "</g>",
+          look:
+            head +
+            '<circle cx="45" cy="20" r="4" fill="#333"/>' +
+            '<circle cx="55" cy="20" r="4" fill="#333"/>' +
+            smile +
+            body +
+            '<line x1="50" y1="65" x2="38" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="62" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="45" x2="30" y2="55" class="sf-arm"/>' +
+            '<line x1="50" y1="45" x2="72" y2="35" class="sf-arm"/>' +
+            '<g style="animation:sfPulse 0.8s ease infinite">' +
+            '<circle cx="45" cy="20" r="5" fill="none" stroke="#4FC3F7" stroke-width="1" opacity="0.6"/>' +
+            '<circle cx="55" cy="20" r="5" fill="none" stroke="#4FC3F7" stroke-width="1" opacity="0.6"/>' +
+            "</g>" +
+            '<text x="75" y="32" style="font-size:10px;animation:sfPulse 1s ease infinite">👁️</text>',
+          listen:
+            head +
+            eyeL +
+            eyeR +
+            smile +
+            body +
+            '<line x1="50" y1="65" x2="38" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="62" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="45" x2="30" y2="55" class="sf-arm"/>' +
+            '<g style="animation:sfBob 0.6s ease infinite">' +
+            '<line x1="50" y1="45" x2="65" y2="22" class="sf-arm"/>' +
+            '<ellipse cx="65" cy="20" rx="6" ry="8" fill="#FFD93D" stroke="#333" stroke-width="1" opacity="0.7"/>' +
+            "</g>" +
+            '<text x="72" y="18" style="font-size:8px;animation:sfPulse 1s ease 0.3s infinite">👂</text>',
+          eat:
+            head +
+            eyeL +
+            eyeR +
+            '<path d="M44 27 Q50 32 56 27" class="sf-mouth" stroke-width="2"/>' +
+            body +
+            '<line x1="50" y1="65" x2="38" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="62" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="45" x2="30" y2="55" class="sf-arm"/>' +
+            '<g style="animation:sfBob 0.5s ease infinite">' +
+            '<line x1="50" y1="45" x2="58" y2="28" class="sf-arm"/>' +
+            '<rect x="55" y="22" width="10" height="2" rx="1" fill="#999"/>' +
+            "</g>" +
+            '<text x="66" y="22" style="font-size:8px;animation:sfPulse 0.8s ease infinite">🍽️</text>',
+          drink:
+            head +
+            eyeL +
+            eyeR +
+            '<ellipse cx="50" cy="27" rx="3" ry="2" fill="#333" opacity="0.5"/>' +
+            body +
+            '<line x1="50" y1="65" x2="38" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="62" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="45" x2="30" y2="55" class="sf-arm"/>' +
+            '<g style="animation:sfBob 0.6s ease infinite">' +
+            '<line x1="50" y1="45" x2="55" y2="24" class="sf-arm"/>' +
+            '<rect x="52" y="18" width="8" height="12" rx="2" fill="#4FC3F7" stroke="#333" stroke-width="1" opacity="0.7"/>' +
+            "</g>",
+          sleep:
+            '<g style="animation:sfBob 2s ease-in-out infinite">' +
+            head +
+            '<line x1="42" y1="20" x2="48" y2="20" class="sf-body" stroke-width="2"/>' +
+            '<line x1="52" y1="20" x2="58" y2="20" class="sf-body" stroke-width="2"/>' +
+            '<path d="M44 27 Q50 25 56 27" class="sf-mouth"/>' +
+            body +
+            "</g>" +
+            '<line x1="50" y1="65" x2="38" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="62" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="45" x2="30" y2="55" class="sf-arm"/>' +
+            '<line x1="50" y1="45" x2="70" y2="55" class="sf-arm"/>' +
+            '<text x="65" y="12" style="font-size:10px;animation:sfNoteFloat 2s ease infinite">💤</text>' +
+            '<text x="72" y="8" style="font-size:7px;animation:sfNoteFloat 2s ease 0.7s infinite">💤</text>',
+          play:
+            '<g style="animation:sfShake 0.4s ease infinite">' +
+            head +
+            eyeL +
+            eyeR +
+            '<path d="M42 26 Q50 35 58 26" class="sf-mouth" stroke-width="2.5"/>' +
+            body +
+            '<line x1="50" y1="65" x2="38" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="62" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="45" x2="28" y2="35" class="sf-arm"/>' +
+            '<line x1="50" y1="45" x2="72" y2="35" class="sf-arm"/>' +
+            "</g>" +
+            '<text x="24" y="30" style="font-size:8px;animation:sfPulse 0.5s ease infinite">🎮</text>' +
+            '<text x="50" y="5" text-anchor="middle" style="font-size:8px;animation:sfPulse 0.8s ease 0.3s infinite">⭐</text>',
           nothing:
             head +
             eyeL +
