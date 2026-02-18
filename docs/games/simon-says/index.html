@@ -1567,20 +1567,24 @@
       var voicesReady = false;
 
       function scoreVoice(v) {
-        var s = 0, name = v.name.toLowerCase(), lang = v.lang || '';
+        var s = 0,
+          name = v.name.toLowerCase(),
+          lang = v.lang || "";
         if (/premium/.test(name)) s += 200;
         if (/enhanced/.test(name)) s += 150;
         if (/google/.test(name)) s += 120;
         if (/neural/.test(name)) s += 100;
         if (/natural/.test(name)) s += 80;
-        if (/joana/.test(name)) s += 30;
-        if (/catarina/.test(name)) s += 25;
-        if (/luciana/.test(name)) s += 20;
+        if (/eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley/i.test(name)) s -= 300;
+        var hasQuality = /premium|enhanced|google|neural|natural/i.test(name);
+        if (/joana/.test(name)) s += hasQuality ? 30 : -50;
+        if (/catarina/.test(name)) s += hasQuality ? 25 : -40;
+        if (/luciana/.test(name)) s += hasQuality ? 20 : -30;
         if (/compact|espeak|mbrola/.test(name)) s -= 500;
-        if (lang === 'pt-PT' || lang === 'pt_PT') s += 40;
-        else if (lang === 'pt-BR' || lang === 'pt_BR') s += 20;
-        else if (lang.startsWith('pt')) s += 10;
-        if (!v.localService) s += 30;
+        if (lang === "pt-PT" || lang === "pt_PT") s += 40;
+        else if (lang === "pt-BR" || lang === "pt_BR") s += 20;
+        else if (lang.startsWith("pt")) s += 10;
+        if (!v.localService) s += 50;
         return s;
       }
 
@@ -1592,21 +1596,35 @@
         var candidates = [];
         for (var i = 0; i < voices.length; i++) {
           var v = voices[i];
-          var lang = v.lang || '';
-          if (lang === 'pt-PT' || lang === 'pt_PT' || lang === 'pt-BR' ||
-              lang === 'pt_BR' || lang === 'pt' || lang.startsWith('pt-') ||
-              lang.startsWith('pt_')) {
+          var lang = v.lang || "";
+          if (
+            lang === "pt-PT" ||
+            lang === "pt_PT" ||
+            lang === "pt-BR" ||
+            lang === "pt_BR" ||
+            lang === "pt" ||
+            lang.startsWith("pt-") ||
+            lang.startsWith("pt_")
+          ) {
             candidates.push({ voice: v, score: scoreVoice(v) });
           }
         }
-        candidates.sort(function(a, b) { return b.score - a.score; });
+        candidates.sort(function (a, b) {
+          return b.score - a.score;
+        });
         if (candidates.length > 0) {
           ptVoice = candidates[0].voice;
-          console.log('[SimonSays] Voice: "' + ptVoice.name +
-            '" (' + ptVoice.lang + ') score=' + candidates[0].score);
+          console.log(
+            '[SimonSays] Voice: "' +
+              ptVoice.name +
+              '" (' +
+              ptVoice.lang +
+              ") score=" +
+              candidates[0].score,
+          );
         } else {
           ptVoice = null;
-          console.warn('[SimonSays] No Portuguese voice found');
+          console.warn("[SimonSays] No Portuguese voice found");
         }
       }
       if (window.speechSynthesis) {

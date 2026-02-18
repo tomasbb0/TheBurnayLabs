@@ -1562,17 +1562,20 @@
         // Neural / Natural keywords
         if (/neural/.test(name)) s += 100;
         if (/natural/.test(name)) s += 80;
-        // Prefer specific high-quality named voices
-        if (/joana/.test(name)) s += 30;
-        if (/catarina/.test(name)) s += 25;
-        if (/luciana/.test(name)) s += 20; // pt-BR but natural
+        // macOS novelty/character voices — very robotic, penalize
+        if (/eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley/i.test(name)) s -= 300;
+        // Basic named voices WITHOUT quality keywords are still robotic
+        var hasQuality = /premium|enhanced|google|neural|natural/i.test(name);
+        if (/joana/.test(name)) s += hasQuality ? 30 : -50;
+        if (/catarina/.test(name)) s += hasQuality ? 25 : -40;
+        if (/luciana/.test(name)) s += hasQuality ? 20 : -30;
         // Penalize compact/low-quality voices heavily
         if (/compact|espeak|mbrola/.test(name)) s -= 500;
         // Prefer pt-PT over pt-BR over generic pt
         if (lang === "pt-PT" || lang === "pt_PT") s += 40;
         else if (lang === "pt-BR" || lang === "pt_BR") s += 20;
         else if (lang.startsWith("pt")) s += 10;
-        // Non-local voices get a small boost (network voices tend to be better)
+        // Non-local voices get a BIG boost (network voices tend to be much better)
         if (!v.localService) s += 30;
         return s;
       }
@@ -1634,13 +1637,25 @@
       if (window.speechSynthesis) {
         speechSynthesis.onvoiceschanged = findPtVoice;
         findPtVoice();
-        // Some browsers need a retry after a short delay
+        // Some browsers need retries as voices load async
         setTimeout(findPtVoice, 500);
+        setTimeout(findPtVoice, 1500);
+        setTimeout(findPtVoice, 3000);
       }
 
       function speakWord() {
         if (!window.speechSynthesis) return;
-        if (!voicesReady) findPtVoice();
+        if (!voicesReady || !ptVoice) findPtVoice();
+        // Debug: log available voices on first speak if no PT voice found
+        if (!ptVoice) {
+          var allV = speechSynthesis.getVoices();
+          console.warn(
+            "[SpellingStars] NO PT voice found! Available voices:",
+            allV.map(function (v) {
+              return v.name + " (" + v.lang + ")";
+            }),
+          );
+        }
         try {
           speechSynthesis.cancel();
           var cat = CATEGORIES[currentCat];
@@ -1648,12 +1663,17 @@
           var w = cat.words[currentWordIdx];
           if (!w) return;
           var u = new SpeechSynthesisUtterance(w.pt);
+          // ALWAYS set lang to pt-PT so browser knows this is Portuguese text
+          u.lang = "pt-PT";
           // Natural speech settings — slightly slow for a child learner
           u.rate = 0.85;
           u.pitch = 1.0;
           u.volume = 1.0;
-          if (ptVoice) u.voice = ptVoice;
-          else u.lang = "pt-PT";
+          // Set specific voice if we found one (overrides lang)
+          if (ptVoice) {
+            u.voice = ptVoice;
+            u.lang = ptVoice.lang; // Match lang to the voice's actual language
+          }
           var btn = document.getElementById("speak-btn");
           btn.classList.add("playing");
           u.onend = function () {
