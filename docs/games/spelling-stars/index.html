@@ -1068,6 +1068,7 @@
         document.getElementById("s-" + id).classList.add("active");
       }
       function goHub() {
+        stopIntroNarration();
         goScreen("hub");
         buildHub();
       }
@@ -1829,51 +1830,35 @@
       }
 
       // =====================
-      // INTRO VOICE NARRATION
+      // INTRO VOICE NARRATION (pre-recorded Microsoft AriaNeural)
       // =====================
+      var introAudio = null;
       function narrateIntro() {
-        if (!window.speechSynthesis) return;
         try {
-          speechSynthesis.cancel();
-          var text =
-            "Brave Explorer! The Universe is in trouble. Nine galaxies have gone dark. Their stars are scattered, their words completely forgotten. You are the only one who can bring them back. Each galaxy is a puzzle made of Portuguese words. Spell a word correctly and a piece of the galaxy lights up. Spell them all and the whole galaxy comes back to life, spinning through space! Restore all nine galaxies and the Universe will be whole again. Ready, Explorer?";
-          var u = new SpeechSynthesisUtterance(text);
-          u.rate = 0.9;
-          u.pitch = 1.05;
-          u.lang = "en-US";
-          var voices = speechSynthesis.getVoices();
-          var enVoice = null;
-          for (var i = 0; i < voices.length; i++) {
-            if (
-              /en.*US|en.*GB|en-/i.test(voices[i].lang) &&
-              /samantha|karen|daniel|natural|premium|neural/i.test(
-                voices[i].name,
-              )
-            ) {
-              enVoice = voices[i];
-              break;
-            }
-          }
-          if (!enVoice) {
-            for (var j = 0; j < voices.length; j++) {
-              if (/^en/i.test(voices[j].lang)) {
-                enVoice = voices[j];
-                break;
-              }
-            }
-          }
-          if (enVoice) u.voice = enVoice;
-          speechSynthesis.speak(u);
+          introAudio = new Audio("audio/intro_narration.mp3");
+          introAudio.play().catch(function () {
+            console.warn("[SpellingStars] Intro audio autoplay blocked");
+          });
         } catch (e) {}
       }
+      function stopIntroNarration() {
+        // Stop pre-recorded audio
+        if (introAudio) {
+          try {
+            introAudio.pause();
+            introAudio.currentTime = 0;
+          } catch (e) {}
+          introAudio = null;
+        }
+        // Also stop any SpeechSynthesis just in case
+        if (window.speechSynthesis) {
+          try {
+            speechSynthesis.cancel();
+          } catch (e) {}
+        }
+      }
       // Start narration after a short delay
-      setTimeout(function () {
-        if (speechSynthesis.getVoices().length) narrateIntro();
-        else
-          speechSynthesis.onvoiceschanged = function () {
-            narrateIntro();
-          };
-      }, 800);
+      setTimeout(narrateIntro, 800);
     </script>
   </body>
 </html>
