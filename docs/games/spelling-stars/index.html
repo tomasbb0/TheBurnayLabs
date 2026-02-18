@@ -1543,34 +1543,99 @@
       }
 
       // =====================
-      // SPEECH
+      // SPEECH — Natural Voice Selection
       // =====================
       var ptVoice = null,
         voicesReady = false;
+
+      function scoreVoice(v) {
+        // Score voices by quality — higher = more natural sounding
+        var s = 0,
+          name = v.name.toLowerCase(),
+          lang = v.lang || "";
+        // Premium voices (macOS Sequoia+) — best quality, truly natural
+        if (/premium/.test(name)) s += 200;
+        // Enhanced voices (macOS) — very good quality
+        if (/enhanced/.test(name)) s += 150;
+        // Google TTS voices (Chrome) — natural sounding
+        if (/google/.test(name)) s += 120;
+        // Neural / Natural keywords
+        if (/neural/.test(name)) s += 100;
+        if (/natural/.test(name)) s += 80;
+        // Prefer specific high-quality named voices
+        if (/joana/.test(name)) s += 30;
+        if (/catarina/.test(name)) s += 25;
+        if (/luciana/.test(name)) s += 20; // pt-BR but natural
+        // Penalize compact/low-quality voices heavily
+        if (/compact|espeak|mbrola/.test(name)) s -= 500;
+        // Prefer pt-PT over pt-BR over generic pt
+        if (lang === "pt-PT" || lang === "pt_PT") s += 40;
+        else if (lang === "pt-BR" || lang === "pt_BR") s += 20;
+        else if (lang.startsWith("pt")) s += 10;
+        // Non-local voices get a small boost (network voices tend to be better)
+        if (!v.localService) s += 30;
+        return s;
+      }
+
       function findPtVoice() {
         if (!window.speechSynthesis) return;
         var v = speechSynthesis.getVoices();
         if (!v.length) return;
         voicesReady = true;
-        var best = null,
-          ptPT = null,
-          ptG = null;
+        // Collect all Portuguese voices with scores
+        var candidates = [];
         for (var i = 0; i < v.length; i++) {
           var vo = v[i];
-          if (vo.lang === "pt-PT" || vo.lang === "pt_PT") {
-            if (
-              !best &&
-              /premium|enhanced|neural|natural|joana|catarina/i.test(vo.name)
-            )
-              best = vo;
-            if (!ptPT) ptPT = vo;
-          } else if (vo.lang === "pt" && !ptG) ptG = vo;
+          var lang = vo.lang || "";
+          if (
+            lang === "pt-PT" ||
+            lang === "pt_PT" ||
+            lang === "pt-BR" ||
+            lang === "pt_BR" ||
+            lang === "pt" ||
+            lang.startsWith("pt-") ||
+            lang.startsWith("pt_")
+          ) {
+            candidates.push({ voice: vo, score: scoreVoice(vo) });
+          }
         }
-        ptVoice = best || ptPT || ptG || null;
+        // Sort by score descending — pick the best
+        candidates.sort(function (a, b) {
+          return b.score - a.score;
+        });
+        if (candidates.length > 0) {
+          ptVoice = candidates[0].voice;
+          console.log(
+            '[SpellingStars] Voice selected: "' +
+              ptVoice.name +
+              '" (' +
+              ptVoice.lang +
+              ") score=" +
+              candidates[0].score +
+              " local=" +
+              ptVoice.localService,
+          );
+          if (candidates.length > 1) {
+            console.log(
+              "[SpellingStars] Other voices:",
+              candidates
+                .slice(1, 5)
+                .map(function (c) {
+                  return c.voice.name + " (" + c.score + ")";
+                })
+                .join(", "),
+            );
+          }
+        } else {
+          ptVoice = null;
+          console.warn("[SpellingStars] No Portuguese voice found");
+        }
       }
       if (window.speechSynthesis) {
         speechSynthesis.onvoiceschanged = findPtVoice;
         findPtVoice();
+        // Some browsers need a retry after a short delay
+        setTimeout(findPtVoice, 500);
       }
 
       function speakWord() {
@@ -1583,8 +1648,10 @@
           var w = cat.words[currentWordIdx];
           if (!w) return;
           var u = new SpeechSynthesisUtterance(w.pt);
-          u.rate = 0.75;
-          u.pitch = 1.1;
+          // Natural speech settings — slightly slow for a child learner
+          u.rate = 0.85;
+          u.pitch = 1.0;
+          u.volume = 1.0;
           if (ptVoice) u.voice = ptVoice;
           else u.lang = "pt-PT";
           var btn = document.getElementById("speak-btn");
