@@ -1563,7 +1563,8 @@
         if (/neural/.test(name)) s += 100;
         if (/natural/.test(name)) s += 80;
         // macOS novelty/character voices — very robotic, penalize
-        if (/eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley/i.test(name)) s -= 300;
+        if (/eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley/i.test(name))
+          s -= 300;
         // Basic named voices WITHOUT quality keywords are still robotic
         var hasQuality = /premium|enhanced|google|neural|natural/i.test(name);
         if (/joana/.test(name)) s += hasQuality ? 30 : -50;
@@ -1643,47 +1644,77 @@
         setTimeout(findPtVoice, 3000);
       }
 
+      // Convert Portuguese word to audio filename
+      function wordToAudioFile(word) {
+        return (
+          "audio/" +
+          word.replace(/ /g, "_").replace(/-/g, "_").toLowerCase() +
+          ".mp3"
+        );
+      }
+
       function speakWord() {
-        if (!window.speechSynthesis) return;
-        if (!voicesReady || !ptVoice) findPtVoice();
-        // Debug: log available voices on first speak if no PT voice found
-        if (!ptVoice) {
-          var allV = speechSynthesis.getVoices();
-          console.warn(
-            "[SpellingStars] NO PT voice found! Available voices:",
-            allV.map(function (v) {
-              return v.name + " (" + v.lang + ")";
-            }),
-          );
+        var cat = CATEGORIES[currentCat];
+        if (!cat) return;
+        var w = cat.words[currentWordIdx];
+        if (!w) return;
+        var btn = document.getElementById("speak-btn");
+        btn.classList.add("playing");
+        function done() {
+          btn.classList.remove("playing");
         }
+
+        // Try pre-recorded MP3 first (Microsoft Neural TTS — pt-PT-RaquelNeural)
+        var audioFile = wordToAudioFile(w.pt);
+        try {
+          var audio = new Audio(audioFile);
+          audio.onended = done;
+          audio.onerror = function () {
+            console.warn(
+              "[SpellingStars] MP3 not found: " +
+                audioFile +
+                ", falling back to SpeechSynthesis",
+            );
+            speakWordFallback(w.pt, done);
+          };
+          audio.play().catch(function () {
+            speakWordFallback(w.pt, done);
+          });
+          return;
+        } catch (e) {
+          // Audio element failed, use fallback
+        }
+        speakWordFallback(w.pt, done);
+      }
+
+      // Fallback: browser SpeechSynthesis (only if MP3 unavailable)
+      function speakWordFallback(text, done) {
+        if (!window.speechSynthesis) {
+          if (done) done();
+          return;
+        }
+        if (!voicesReady || !ptVoice) findPtVoice();
         try {
           speechSynthesis.cancel();
-          var cat = CATEGORIES[currentCat];
-          if (!cat) return;
-          var w = cat.words[currentWordIdx];
-          if (!w) return;
-          var u = new SpeechSynthesisUtterance(w.pt);
-          // ALWAYS set lang to pt-PT so browser knows this is Portuguese text
+          var u = new SpeechSynthesisUtterance(text);
           u.lang = "pt-PT";
-          // Natural speech settings — slightly slow for a child learner
           u.rate = 0.85;
           u.pitch = 1.0;
           u.volume = 1.0;
-          // Set specific voice if we found one (overrides lang)
           if (ptVoice) {
             u.voice = ptVoice;
-            u.lang = ptVoice.lang; // Match lang to the voice's actual language
+            u.lang = ptVoice.lang;
           }
-          var btn = document.getElementById("speak-btn");
-          btn.classList.add("playing");
           u.onend = function () {
-            btn.classList.remove("playing");
+            if (done) done();
           };
           u.onerror = function () {
-            btn.classList.remove("playing");
+            if (done) done();
           };
           speechSynthesis.speak(u);
-        } catch (e) {}
+        } catch (e) {
+          if (done) done();
+        }
       }
 
       // =====================

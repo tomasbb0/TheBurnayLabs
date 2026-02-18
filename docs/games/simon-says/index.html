@@ -1575,7 +1575,8 @@
         if (/google/.test(name)) s += 120;
         if (/neural/.test(name)) s += 100;
         if (/natural/.test(name)) s += 80;
-        if (/eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley/i.test(name)) s -= 300;
+        if (/eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley/i.test(name))
+          s -= 300;
         var hasQuality = /premium|enhanced|google|neural|natural/i.test(name);
         if (/joana/.test(name)) s += hasQuality ? 30 : -50;
         if (/catarina/.test(name)) s += hasQuality ? 25 : -40;
