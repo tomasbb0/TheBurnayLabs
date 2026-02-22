@@ -97,6 +97,7 @@
         </div>
     </div>
     
+    <script src="../game-firebase.js"></script>
     <script>
         const levels = [
             { theme: 'Cores', questions: [
@@ -190,6 +191,10 @@
                 currentLevel++;
                 currentQ = 0;
                 if (currentLevel >= levels.length) {
+                    // Save completion to cloud
+                    if (window.GameFirebase && window.GameFirebase.ready) {
+                        window.GameFirebase.saveProgress({ completed: true, stars: stars, parts: parts, levelsCompleted: currentLevel });
+                    }
                     document.getElementById('celebration').classList.remove('hidden');
                     return;
                 }

@@ -8055,11 +8055,14 @@
           }
           if (!docId) return;
 
-          // Intercept play button click to track
-          var origHref = playBtn.href;
-          playBtn.onclick = function () {
-            trackGamePlay(docId);
-          };
+          // Add student context to game URL (play counting happens in-game)
+          try {
+            var gameUrl = new URL(playBtn.href);
+            gameUrl.searchParams.set('student', selectedStudent.id);
+            gameUrl.searchParams.set('game', docId);
+            gameUrl.searchParams.set('source', 'teacher');
+            playBtn.href = gameUrl.toString();
+          } catch(e) {}
 
           // Load and display stats
           db.collection("students")

@@ -539,6 +539,7 @@
       </div>
     </div>
 
+    <script src="../game-firebase.js"></script>
     <script>
       const levels = [
         {
@@ -849,6 +850,10 @@
           currentLevel++;
           currentQ = 0;
           if (currentLevel >= levels.length) {
+            // Save completion to cloud
+            if (window.GameFirebase && window.GameFirebase.ready) {
+              window.GameFirebase.saveProgress({ completed: true, stars: stars, tickets: tickets, levelsCompleted: currentLevel });
+            }
             launchConfetti();
             setTimeout(() => {
               document.getElementById("final-score").textContent =

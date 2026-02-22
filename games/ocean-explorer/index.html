@@ -425,6 +425,7 @@
       </div>
     </div>
 
+    <script src="../game-firebase.js"></script>
     <script>
       // Create background bubbles
       for (let i = 0; i < 15; i++) {
@@ -681,6 +682,10 @@
           currentLevel++;
           currentQ = 0;
           if (currentLevel >= levels.length) {
+            // Save completion to cloud
+            if (window.GameFirebase && window.GameFirebase.ready) {
+              window.GameFirebase.saveProgress({ completed: true, stars: stars, parts: parts, levelsCompleted: currentLevel });
+            }
             launchBubbles();
             setTimeout(
               () =>

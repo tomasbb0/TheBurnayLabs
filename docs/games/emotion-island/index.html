@@ -450,6 +450,7 @@
       </div>
     </div>
 
+    <script src="../game-firebase.js"></script>
     <script>
       // Floating background emojis
       const bgEmojis = [
@@ -743,6 +744,10 @@
           currentLevel++;
           currentQ = 0;
           if (currentLevel >= levels.length) {
+            // Save completion to cloud
+            if (window.GameFirebase && window.GameFirebase.ready) {
+              window.GameFirebase.saveProgress({ completed: true, stars: stars, levelsCompleted: currentLevel });
+            }
             launchEmojis();
             setTimeout(
               () =>

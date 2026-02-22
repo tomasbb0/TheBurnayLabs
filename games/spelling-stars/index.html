@@ -848,6 +848,7 @@
 
     <div class="toast" id="toast"></div>
 
+    <script src="../game-firebase.js"></script>
     <script>
       // =====================
       // DATA
@@ -995,6 +996,27 @@
             { pt: "leite", en: "milk", emoji: "🥛" },
           ],
         },
+        {
+          id: "simaodiz",
+          name: "Simão Diz",
+          nameEn: "Simon Says",
+          icon: "🧙‍♂️",
+          color: "#7c3aed",
+          words: [
+            { pt: "dança", en: "dance", emoji: "💃" },
+            { pt: "canta", en: "sing", emoji: "🎤" },
+            { pt: "corre", en: "run", emoji: "🏃" },
+            { pt: "acena", en: "wave", emoji: "👋" },
+            { pt: "roda", en: "spin", emoji: "🌀" },
+            { pt: "sopra", en: "blow", emoji: "🌬️" },
+            { pt: "grita", en: "shout", emoji: "📣" },
+            { pt: "sorri", en: "smile", emoji: "😊" },
+            { pt: "abraça", en: "hug", emoji: "🤗" },
+            { pt: "anda", en: "walk", emoji: "🚶" },
+            { pt: "para", en: "stop", emoji: "🛑" },
+            { pt: "aponta", en: "point", emoji: "👆" },
+          ],
+        },
       ];
 
       // =====================
@@ -1018,13 +1040,33 @@
           totalStars = pp.totalStars || 0;
         }
       } catch (e) {}
+
+      // Load cloud progress when Firebase is ready (overrides localStorage)
+      window.addEventListener("gameFirebaseReady", function () {
+        window.GameFirebase.loadProgress(function (data) {
+          if (data && data.progress) {
+            progress = data.progress;
+            totalStars = data.totalStars || 0;
+            if (typeof showMap === "function") showMap();
+          }
+        });
+      });
+
       function saveProgress() {
+        // Always save to localStorage (offline fallback)
         try {
           localStorage.setItem(
             "spelling-stars-v2",
             JSON.stringify({ progress: progress, totalStars: totalStars }),
           );
         } catch (e) {}
+        // Also save to cloud if connected
+        if (window.GameFirebase && window.GameFirebase.ready) {
+          window.GameFirebase.saveProgress({
+            progress: progress,
+            totalStars: totalStars,
+          });
+        }
       }
 
       // =====================
