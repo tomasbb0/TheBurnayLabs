@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>🚗 Constrói o Teu Carro! — Sentence Builder Game</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f0f0f0;
+      color: #1a1a2e;
+    }
+    
+    /* ============ A4 PAGE SETUP ============ */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 12mm 15mm;
+      margin: 10px auto;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+    }
+    .page:last-child { page-break-after: avoid; }
+    
+    @media print {
+      body { background: white; }
+      .page {
+        margin: 0;
+        box-shadow: none;
+        padding: 10mm 12mm;
+      }
+      .no-print { display: none !important; }
+    }
+    
+    /* ============ PRINT BUTTON ============ */
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #4F46E5;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(79,70,229,0.3);
+    }
+    .print-btn:hover { background: #4338CA; }
+    
+    /* ============ PAGE 1: COVER ============ */
+    .cover-title {
+      text-align: center;
+      font-size: 36px;
+      font-weight: 900;
+      color: #1a1a2e;
+      margin-top: 15mm;
+      line-height: 1.2;
+    }
+    .cover-subtitle {
+      text-align: center;
+      font-size: 18px;
+      color: #6366f1;
+      margin-top: 8px;
+      font-weight: 700;
+    }
+    .cover-car {
+      text-align: center;
+      font-size: 120px;
+      margin: 12mm 0 8mm;
+    }
+    .cover-info {
+      max-width: 150mm;
+      margin: 0 auto;
+      background: #f8f7ff;
+      border: 2px solid #e0e0f0;
+      border-radius: 12px;
+      padding: 15px 20px;
+    }
+    .cover-info h3 {
+      color: #4F46E5;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    .cover-info p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #444;
+    }
+    .cover-info ul {
+      font-size: 13px;
+      line-height: 1.8;
+      color: #444;
+      padding-left: 20px;
+    }
+    .how-to-play {
+      max-width: 150mm;
+      margin: 8mm auto 0;
+      background: #fff7ed;
+      border: 2px solid #fed7aa;
+      border-radius: 12px;
+      padding: 15px 20px;
+    }
+    .how-to-play h3 {
+      color: #ea580c;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    .how-to-play ol {
+      font-size: 13px;
+      line-height: 1.8;
+      color: #444;
+      padding-left: 20px;
+    }
+    .player-name {
+      text-align: center;
+      margin-top: 10mm;
+      font-size: 15px;
+      color: #888;
+    }
+    .player-name span {
+      display: inline-block;
+      border-bottom: 2px dotted #ccc;
+      width: 60mm;
+      margin-left: 5px;
+    }
+    
+    /* ============ SCISSORS LINE ============ */
+    .cut-line {
+      border: none;
+      border-top: 2px dashed #ccc;
+      margin: 5mm 0;
+      position: relative;
+    }
+    .cut-line::before {
+      content: '✂️';
+      position: absolute;
+      top: -12px;
+      left: -3px;
+      font-size: 16px;
+    }
+    
+    /* ============ PAGE HEADER ============ */
+    .page-header {
+      text-align: center;
+      margin-bottom: 6mm;
+    }
+    .page-header h2 {
+      font-size: 22px;
+      font-weight: 800;
+    }
+    .page-header p {
+      font-size: 12px;
+      color: #666;
+      margin-top: 4px;
+    }
+    
+    /* ============ CARD GRID ============ */
+    .card-grid {
+      display: grid;
+      gap: 4mm;
+    }
+    .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .card-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .card-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .card-grid.cols-5 { grid-template-columns: repeat(5, 1fr); }
+    
+    /* ============ PUZZLE CARDS ============ */
+    .card {
+      border: 2.5px solid #333;
+      border-radius: 10px;
+      padding: 8px 6px;
+      text-align: center;
+      position: relative;
+      min-height: 22mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .card .emoji {
+      font-size: 28px;
+      margin-bottom: 2px;
+    }
+    .card .pt-word {
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+    .card .en-word {
+      font-size: 10px;
+      color: #888;
+      margin-top: 2px;
+    }
+    .card .card-type {
+      position: absolute;
+      top: 3px;
+      right: 5px;
+      font-size: 8px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Jigsaw shape indicators */
+    .card::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    
+    /* ---- PRONOUN CARDS (Blue) ---- */
+    .card.pronoun {
+      background: #eff6ff;
+      border-color: #3b82f6;
+    }
+    .card.pronoun .card-type { color: #3b82f6; }
+    .card.pronoun::after {
+      background: #3b82f6;
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .card.pronoun .pt-word { color: #1d4ed8; }
+    
+    /* ---- VERB CARDS (Green) ---- */
+    .card.verb {
+      background: #f0fdf4;
+      border-color: #22c55e;
+    }
+    .card.verb .card-type { color: #22c55e; }
+    .card.verb::before {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid #22c55e;
+      left: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .card.verb::after {
+      background: #22c55e;
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .card.verb .pt-word { color: #15803d; }
+    
+    /* ---- OBJECT CARDS (Orange) ---- */
+    .card.object {
+      background: #fff7ed;
+      border-color: #f97316;
+    }
+    .card.object .card-type { color: #f97316; }
+    .card.object::before {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid #f97316;
+      left: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .card.object::after { display: none; }
+    .card.object .pt-word { color: #c2410c; }
+
+    /* ---- POSSESSIVE CARDS (Purple) ---- */
+    .card.possessive {
+      background: #faf5ff;
+      border-color: #a855f7;
+    }
+    .card.possessive .card-type { color: #a855f7; }
+    .card.possessive::after {
+      background: #a855f7;
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .card.possessive .pt-word { color: #7e22ce; }
+    
+    /* ============ SENTENCE BOARD ============ */
+    .sentence-board {
+      border: 3px solid #333;
+      border-radius: 12px;
+      padding: 6mm;
+      margin: 4mm 0;
+      background: #fafafa;
+    }
+    .sentence-slots {
+      display: flex;
+      gap: 3mm;
+      align-items: stretch;
+    }
+    .slot {
+      flex: 1;
+      border: 2.5px dashed #aaa;
+      border-radius: 10px;
+      min-height: 22mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #aaa;
+      font-weight: 700;
+      text-align: center;
+      padding: 4px;
+    }
+    .slot.blue { border-color: #93c5fd; background: #eff6ff40; color: #93c5fd; }
+    .slot.green { border-color: #86efac; background: #f0fdf440; color: #86efac; }
+    .slot.orange { border-color: #fdba74; background: #fff7ed40; color: #fdba74; }
+    .slot.purple { border-color: #c084fc; background: #faf5ff40; color: #c084fc; }
+    
+    .sentence-num {
+      display: inline-block;
+      background: #4F46E5;
+      color: white;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 22px;
+      font-size: 12px;
+      font-weight: 800;
+      margin-right: 4px;
+      flex-shrink: 0;
+    }
+    .sentence-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4mm;
+    }
+    .sentence-row:last-child { margin-bottom: 0; }
+    
+    /* ============ CAR PARTS ============ */
+    .car-part {
+      border: 2.5px dashed #333;
+      border-radius: 12px;
+      padding: 8px;
+      text-align: center;
+      background: #fafafa;
+    }
+    .car-part .part-emoji {
+      font-size: 42px;
+    }
+    .car-part .part-name {
+      font-size: 11px;
+      font-weight: 700;
+      margin-top: 3px;
+      color: #555;
+    }
+    .car-part .part-task {
+      font-size: 9px;
+      color: #999;
+      margin-top: 2px;
+    }
+    .car-assembly {
+      border: 3px solid #333;
+      border-radius: 16px;
+      padding: 8mm;
+      text-align: center;
+      background: #f0f9ff;
+      min-height: 70mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .car-assembly h3 {
+      font-size: 18px;
+      margin-bottom: 5mm;
+    }
+    .car-outline {
+      font-size: 14px;
+      color: #888;
+      margin-top: 5mm;
+    }
+    .car-slots {
+      display: flex;
+      gap: 4mm;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 4mm;
+    }
+    .car-slot {
+      width: 25mm;
+      height: 25mm;
+      border: 2px dashed #93c5fd;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: #93c5fd;
+      text-align: center;
+    }
+    
+    /* ============ ANSWER SECTION ============ */
+    .answers {
+      margin-top: 4mm;
+    }
+    .answer-row {
+      display: flex;
+      align-items: center;
+      padding: 3px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 12px;
+    }
+    .answer-row .num {
+      background: #4F46E5;
+      color: white;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 20px;
+      font-size: 10px;
+      font-weight: 800;
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+    .answer-row .sentence {
+      font-weight: 700;
+      color: #333;
+    }
+    .answer-row .translation {
+      color: #888;
+      margin-left: 8px;
+      font-style: italic;
+    }
+    
+    .section-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #999;
+      margin: 5mm 0 3mm;
+    }
+    
+    /* ============ CONJUGATION TABLE ============ */
+    .conj-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      margin: 3mm 0;
+    }
+    .conj-table th {
+      background: #f0f0f0;
+      padding: 4px 6px;
+      text-align: left;
+      font-weight: 700;
+      border: 1px solid #ddd;
+    }
+    .conj-table td {
+      padding: 4px 6px;
+      border: 1px solid #ddd;
+    }
+    .conj-table tr:nth-child(even) { background: #fafafa; }
+    .conj-highlight {
+      background: #eff6ff !important;
+      font-weight: 700;
+    }
+
+    /* ============ WORKSHEET ============ */
+    .worksheet-item {
+      display: flex;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+    }
+    .worksheet-item .ws-num {
+      background: #6366f1;
+      color: white;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 22px;
+      font-size: 11px;
+      font-weight: 800;
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+    .worksheet-item .ws-blank {
+      display: inline-block;
+      border-bottom: 2px solid #333;
+      width: 35mm;
+      margin: 0 4px;
+    }
+    .worksheet-item .ws-hint {
+      font-size: 10px;
+      color: #999;
+      margin-left: 8px;
+    }
+
+    .match-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 3mm 8mm;
+      align-items: center;
+      font-size: 14px;
+    }
+    .match-left {
+      text-align: right;
+      font-weight: 700;
+      color: #1d4ed8;
+      padding: 4px 8px;
+      background: #eff6ff;
+      border-radius: 8px;
+      border: 2px solid #93c5fd;
+    }
+    .match-middle {
+      text-align: center;
+      color: #ccc;
+      font-size: 18px;
+    }
+    .match-right {
+      font-weight: 700;
+      color: #15803d;
+      padding: 4px 8px;
+      background: #f0fdf4;
+      border-radius: 8px;
+      border: 2px solid #86efac;
+    }
+
+    .hint-box {
+      background: #fefce8;
+      border: 2px solid #fde047;
+      border-radius: 10px;
+      padding: 10px 15px;
+      margin: 4mm 0;
+      font-size: 12px;
+    }
+    .hint-box b { color: #ca8a04; }
+    
+    .footer-note {
+      text-align: center;
+      font-size: 9px;
+      color: #ccc;
+      position: absolute;
+      bottom: 8mm;
+      left: 0;
+      right: 0;
+    }
+  </style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">🖨️ Print All Pages</button>
+
+<!-- ==================== PAGE 1: COVER ==================== -->
+<div class="page">
+  <div class="cover-title">🚗 Constrói o Teu Carro!</div>
+  <div class="cover-subtitle">Build Your Car — Sentence Builder Puzzle Game</div>
+  <div class="cover-car">🚗</div>
+  
+  <div class="cover-info">
+    <h3>📋 What's In This Game? (12 pages!)</h3>
+    <ul>
+      <li><b style="color:#3b82f6">🔵 Blue cards</b> — Who? Pronouns (Eu, Tu, Ele, Ela, Nós, Eles, Elas)</li>
+      <li><b style="color:#22c55e">🟢 Green cards</b> — What do they do? Verbs (gosto de, quero, tenho, como)</li>
+      <li><b style="color:#f97316">🟠 Orange cards</b> — What? Objects (gato, bola, gelado...)</li>
+      <li><b style="color:#a855f7">🟣 Purple cards</b> — Whose? Possessives (meu, teu, nosso...)</li>
+      <li><b>🚗 Car parts</b> — Earn one for each correct sentence!</li>
+    </ul>
+  </div>
+  
+  <div class="how-to-play">
+    <h3>🎮 Como Jogar / How To Play</h3>
+    <ol>
+      <li>✂️ <b>Cut out</b> all the cards on pages 2–6</li>
+      <li>Pick a <b style="color:#3b82f6">blue PRONOUN card</b> (Who?)</li>
+      <li>Find the matching <b style="color:#22c55e">green VERB card</b> (What do they do?)</li>
+      <li>Choose an <b style="color:#f97316">orange OBJECT card</b> (What?)</li>
+      <li>Place them left → right on the <b>Sentence Board</b> (pages 7–8)</li>
+      <li>Read the sentence aloud in Portuguese! 🗣️</li>
+      <li>Each correct sentence = earn a <b>🚗 car part</b>!</li>
+      <li>Collect all 12 parts to <b>build your super car</b>! (page 9)</li>
+    </ol>
+  </div>
+  
+  <div class="player-name">
+    Jogador / Player: <span>&nbsp;</span>
+  </div>
+  
+  <div class="footer-note">The Burnay Labs — Portuguese for Young Learners 🇵🇹</div>
+</div>
+
+<!-- ==================== PAGE 2: PRONOUN CARDS ==================== -->
+<div class="page">
+  <div class="page-header">
+    <h2>🔵 Pronomes / Pronouns — WHO?</h2>
+    <p>Cut out each card. These tell us WHO does the action.</p>
+  </div>
+  
+  <hr class="cut-line">
+  
+  <div class="card-grid cols-3" style="margin-bottom: 5mm;">
+    <div class="card pronoun">
+      <div class="card-type">pronome</div>
+      <div class="emoji">🙋‍♂️</div>
+      <div class="pt-word">Eu</div>
+      <div class="en-word">I / me</div>
+    </div>
+    <div class="card pronoun">
+      <div class="card-type">pronome</div>
+      <div class="emoji">👉</div>
+      <div class="pt-word">Tu</div>
+      <div class="en-word">You</div>
+    </div>
+    <div class="card pronoun">
+      <div class="card-type">pronome</div>
+      <div class="emoji">👨</div>
+      <div class="pt-word">Ele</div>
+      <div class="en-word">He / him</div>
+    </div>
+  </div>
+  
+  <div class="card-grid cols-3" style="margin-bottom: 5mm;">
+    <div class="card pronoun">
+      <div class="card-type">pronome</div>
+      <div class="emoji">👩</div>
+      <div class="pt-word">Ela</div>
+      <div class="en-word">She / her</div>
+    </div>
+    <div class="card pronoun">
+      <div class="card-type">pronome</div>
+      <div class="emoji">👫</div>
+      <div class="pt-word">Nós</div>
+      <div class="en-word">We / us / ours</div>
+    </div>
+    <div class="card pronoun">
+      <div class="card-type">pronome</div>
+      <div class="emoji">👨‍👩‍👦</div>
+      <div class="pt-word">Eles</div>
+      <div class="en-word">They / them (boys)</div>
+    </div>
+  </div>
+
+  <div class="card-grid cols-3">
+    <div class="card pronoun">
+      <div class="card-type">pronome</div>
+      <div class="emoji">👩‍👧</div>
+      <div class="pt-word">Elas</div>
+      <div class="en-word">They / them (girls)</div>
+    </div>
+    <div style="visibility:hidden"></div>
+    <div style="visibility:hidden"></div>
+  </div>
+  
+  <hr class="cut-line" style="margin-top: 8mm;">
+  
+  <div class="section-label">📖 Quick Reference — Pronoun Guide</div>
+  <table class="conj-table">
+    <tr>
+      <th>Português</th>
+      <th>English</th>
+      <th>When to use</th>
+      <th>Example</th>
+    </tr>
+    <tr class="conj-highlight">
+      <td><b>Eu</b> 🙋‍♂️</td>
+      <td>I / me</td>
+      <td>Talking about ME</td>
+      <td>Eu gosto de gatos.</td>
+    </tr>
+    <tr>
+      <td><b>Tu</b> 👉</td>
+      <td>You</td>
+      <td>Talking to a FRIEND</td>
+      <td>Tu gostas de gelado?</td>
+    </tr>
+    <tr>
+      <td><b>Ele</b> 👨</td>
+      <td>He / him</td>
+      <td>A boy or man</td>
+      <td>Ele gosta de futebol.</td>
+    </tr>
+    <tr>
+      <td><b>Ela</b> 👩</td>
+      <td>She / her</td>
+      <td>A girl or woman</td>
+      <td>Ela gosta de livros.</td>
+    </tr>
+    <tr>
+      <td><b>Nós</b> 👫</td>
+      <td>We / us</td>
+      <td>Me + other people</td>
+      <td>Nós gostamos de brincar.</td>
+    </tr>
+    <tr>
+      <td><b>Eles</b> 👨‍👩‍👦</td>
+      <td>They / them (m.)</td>
+      <td>A group (with boys)</td>
+      <td>Eles gostam de bola.</td>
+    </tr>
+    <tr>
+      <td><b>Elas</b> 👩‍👧</td>
+      <td>They / them (f.)</td>
+      <td>A group (all girls)</td>
+      <td>Elas gostam de dançar.</td>
+    </tr>
+  </table>
+  
+  <div class="footer-note">The Burnay Labs — Page 2/12 — Pronomes 🔵</div>
+</div>
+
+<!-- ==================== PAGE 3: VERB CARDS — GOSTAR DE + QUERER ==================== -->
+<div class="page">
+  <div class="page-header">
+    <h2>🟢 Verbos: GOSTAR DE + QUERER</h2>
+    <p>Cut out each card. Match the verb to the correct pronoun! Jigsaw dots connect them.</p>
+  </div>
+  
+  <hr class="cut-line">
+  
+  <div class="section-label">🟢 "GOSTAR DE" — to like (I like / You like / He likes...)</div>
+  
+  <div class="card-grid cols-3" style="margin-bottom: 4mm;">
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">🙋‍♂️❤️</div>
+      <div class="pt-word">gosto de</div>
+      <div class="en-word">I like</div>
+    </div>
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">👉❤️</div>
+      <div class="pt-word">gostas de</div>
+      <div class="en-word">you like</div>
+    </div>
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">👨❤️ / 👩❤️</div>
+      <div class="pt-word">gosta de</div>
+      <div class="en-word">he/she likes</div>
+    </div>
+  </div>
+  
+  <div class="card-grid cols-3" style="margin-bottom: 6mm;">
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">👫❤️</div>
+      <div class="pt-word">gostamos de</div>
+      <div class="en-word">we like</div>
+    </div>
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">👨‍👩‍👦❤️</div>
+      <div class="pt-word">gostam de</div>
+      <div class="en-word">they like</div>
+    </div>
+    <div style="visibility:hidden"></div>
+  </div>
+  
+  <hr class="cut-line">
+  
+  <div class="section-label">🟢 "QUERER" — to want (I want / You want / He wants...)</div>
+  
+  <div class="card-grid cols-3" style="margin-bottom: 4mm;">
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">🙋‍♂️🙏</div>
+      <div class="pt-word">quero</div>
+      <div class="en-word">I want</div>
+    </div>
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">👉🙏</div>
+      <div class="pt-word">queres</div>
+      <div class="en-word">you want</div>
+    </div>
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">👨🙏 / 👩🙏</div>
+      <div class="pt-word">quer</div>
+      <div class="en-word">he/she wants</div>
+    </div>
+  </div>
+  
+  <div class="card-grid cols-3" style="margin-bottom: 4mm;">
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">👫🙏</div>
+      <div class="pt-word">queremos</div>
+      <div class="en-word">we want</div>
+    </div>
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">👨‍👩‍👦🙏</div>
+      <div class="pt-word">querem</div>
+      <div class="en-word">they want</div>
+    </div>
+    <div style="visibility:hidden"></div>
+  </div>
+
+  <div class="hint-box">
+    <b>💡 Remember:</b> The verb changes depending on WHO is doing the action!<br>
+    <b>Eu</b> → gost<b>o</b> / quer<b>o</b> &nbsp;|&nbsp;
+    <b>Tu</b> → gost<b>as</b> / quer<b>es</b> &nbsp;|&nbsp;
+    <b>Ele/Ela</b> → gost<b>a</b> / quer<br>
+    <b>Nós</b> → gost<b>amos</b> / quer<b>emos</b> &nbsp;|&nbsp;
+    <b>Eles/Elas</b> → gost<b>am</b> / quer<b>em</b>
+  </div>
+  
+  <div class="footer-note">The Burnay Labs — Page 3/12 — Verbos 🟢</div>
+</div>
+
+<!-- ==================== PAGE 4: VERB CARDS — TER + COMER ==================== -->
+<div class="page">
+  <div class="page-header">
+    <h2>🟢 Verbos: TER + COMER</h2>
+    <p>Two more verbs! Cut them out and use with your pronoun + object cards.</p>
+  </div>
+  
+  <hr class="cut-line">
+  
+  <div class="section-label">🟢 "TER" — to have (I have / You have / He has...)</div>
+  
+  <div class="card-grid cols-3" style="margin-bottom: 4mm;">
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">🙋‍♂️✨</div>
+      <div class="pt-word">tenho</div>
+      <div class="en-word">I have</div>
+    </div>
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">👉✨</div>
+      <div class="pt-word">tens</div>
+      <div class="en-word">you have</div>
+    </div>
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">👨✨ / 👩✨</div>
+      <div class="pt-word">tem</div>
+      <div class="en-word">he/she has</div>
+    </div>
+  </div>
+  
+  <div class="card-grid cols-3" style="margin-bottom: 6mm;">
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">👫✨</div>
+      <div class="pt-word">temos</div>
+      <div class="en-word">we have</div>
+    </div>
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">👨‍👩‍👦✨</div>
+      <div class="pt-word">têm</div>
+      <div class="en-word">they have</div>
+    </div>
+    <div style="visibility:hidden"></div>
+  </div>
+  
+  <hr class="cut-line">
+  
+  <div class="section-label">🟢 "COMER" — to eat (I eat / You eat / He eats...)</div>
+  
+  <div class="card-grid cols-3" style="margin-bottom: 4mm;">
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">🙋‍♂️🍽️</div>
+      <div class="pt-word">como</div>
+      <div class="en-word">I eat</div>
+    </div>
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">👉🍽️</div>
+      <div class="pt-word">comes</div>
+      <div class="en-word">you eat</div>
+    </div>
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">👨🍽️ / 👩🍽️</div>
+      <div class="pt-word">come</div>
+      <div class="en-word">he/she eats</div>
+    </div>
+  </div>
+  
+  <div class="card-grid cols-3" style="margin-bottom: 4mm;">
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">👫🍽️</div>
+      <div class="pt-word">comemos</div>
+      <div class="en-word">we eat</div>
+    </div>
+    <div class="card verb">
+      <div class="card-type">verbo</div>
+      <div class="emoji">👨‍👩‍👦🍽️</div>
+      <div class="pt-word">comem</div>
+      <div class="en-word">they eat</div>
+    </div>
+    <div style="visibility:hidden"></div>
+  </div>
+
+  <div class="hint-box">
+    <b>💡 Verb Patterns:</b><br>
+    <b>TER</b> is <b>irregular</b> — the forms look different (tenh<b>o</b>, t<b>ens</b>, t<b>em</b>, t<b>emos</b>, têm)<br>
+    <b>COMER</b> is <b>regular</b> — just change the ending! (com<b>o</b>, com<b>es</b>, com<b>e</b>, com<b>emos</b>, com<b>em</b>)<br>
+    <i>Notice: Regular verbs follow a pattern! -o, -es, -e, -emos, -em</i> 🧩
+  </div>
+  
+  <div class="footer-note">The Burnay Labs — Page 4/12 — Verbos 🟢</div>
+</div>
+
+<!-- ==================== PAGE 5: OBJECT / NOUN CARDS — PAGE 1 ==================== -->
+<div class="page">
+  <div class="page-header">
+    <h2>🟠 Objetos & Animais / Objects & Animals</h2>
+    <p>Cut out each card. These complete your sentences — WHAT do you like/want/have/eat?</p>
+  </div>
+  
+  <hr class="cut-line">
+  
+  <div class="section-label">🐾 Animais / Animals</div>
+  <div class="card-grid cols-4" style="margin-bottom: 5mm;">
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">🐈</div>
+      <div class="pt-word">gatos</div>
+      <div class="en-word">cats</div>
+    </div>
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">🐕</div>
+      <div class="pt-word">cães</div>
+      <div class="en-word">dogs</div>
+    </div>
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">🐴</div>
+      <div class="pt-word">cavalos</div>
+      <div class="en-word">horses</div>
+    </div>
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">🦁</div>
+      <div class="pt-word">leões</div>
+      <div class="en-word">lions</div>
+    </div>
+  </div>
+  
+  <div class="section-label">🍎 Comida / Food</div>
+  <div class="card-grid cols-4" style="margin-bottom: 5mm;">
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">🍦</div>
+      <div class="pt-word">gelado</div>
+      <div class="en-word">ice cream</div>
+    </div>
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">🍌</div>
+      <div class="pt-word">bananas</div>
+      <div class="en-word">bananas</div>
+    </div>
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">💧</div>
+      <div class="pt-word">água</div>
+      <div class="en-word">water</div>
+    </div>
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">🍞</div>
+      <div class="pt-word">pão</div>
+      <div class="en-word">bread</div>
+    </div>
+  </div>
+
+  <div class="card-grid cols-4" style="margin-bottom: 5mm;">
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">🍎</div>
+      <div class="pt-word">maçãs</div>
+      <div class="en-word">apples</div>
+    </div>
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">🥛</div>
+      <div class="pt-word">leite</div>
+      <div class="en-word">milk</div>
+    </div>
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">🍪</div>
+      <div class="pt-word">bolachas</div>
+      <div class="en-word">cookies</div>
+    </div>
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">🧀</div>
+      <div class="pt-word">queijo</div>
+      <div class="en-word">cheese</div>
+    </div>
+  </div>
+  
+  <div class="section-label">📦 Objetos / Objects</div>
+  <div class="card-grid cols-4" style="margin-bottom: 5mm;">
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">📚</div>
+      <div class="pt-word">livros</div>
+      <div class="en-word">books</div>
+    </div>
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">⚽</div>
+      <div class="pt-word">bola</div>
+      <div class="en-word">ball</div>
+    </div>
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">🚗</div>
+      <div class="pt-word">carros</div>
+      <div class="en-word">cars</div>
+    </div>
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">🎮</div>
+      <div class="pt-word">jogos</div>
+      <div class="en-word">games</div>
+    </div>
+  </div>
+
+  <div class="section-label">🎨 Cores & Ações / Colors & Activities</div>
+  <div class="card-grid cols-4">
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">🔴</div>
+      <div class="pt-word">vermelho</div>
+      <div class="en-word">red</div>
+    </div>
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">🔵</div>
+      <div class="pt-word">azul</div>
+      <div class="en-word">blue</div>
+    </div>
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">💃</div>
+      <div class="pt-word">dançar</div>
+      <div class="en-word">dancing</div>
+    </div>
+    <div class="card object">
+      <div class="card-type">objeto</div>
+      <div class="emoji">🎤</div>
+      <div class="pt-word">cantar</div>
+      <div class="en-word">singing</div>
+    </div>
+  </div>
+  
+  <div class="footer-note">The Burnay Labs — Page 5/12 — Objetos 🟠</div>
+</div>
+
+<!-- ==================== PAGE 6: POSSESSIVE PRONOUN CARDS ==================== -->
+<div class="page">
+  <div class="page-header">
+    <h2>🟣 Pronomes Possessivos / Possessive Pronouns — WHOSE?</h2>
+    <p>These tell us WHO something belongs to. "My cat", "Your ball", "Our dog"</p>
+  </div>
+  
+  <hr class="cut-line">
+
+  <div class="section-label">🟣 Possessivos Masculinos (for boy words: o gato, o cão, o livro...)</div>
+  <div class="card-grid cols-5" style="margin-bottom: 5mm;">
+    <div class="card possessive">
+      <div class="card-type">meu</div>
+      <div class="emoji">🙋‍♂️</div>
+      <div class="pt-word">O meu</div>
+      <div class="en-word">My (m.)</div>
+    </div>
+    <div class="card possessive">
+      <div class="card-type">teu</div>
+      <div class="emoji">👉</div>
+      <div class="pt-word">O teu</div>
+      <div class="en-word">Your (m.)</div>
+    </div>
+    <div class="card possessive">
+      <div class="card-type">dele</div>
+      <div class="emoji">👨</div>
+      <div class="pt-word">O ___ dele</div>
+      <div class="en-word">His</div>
+    </div>
+    <div class="card possessive">
+      <div class="card-type">nosso</div>
+      <div class="emoji">👫</div>
+      <div class="pt-word">O nosso</div>
+      <div class="en-word">Our (m.)</div>
+    </div>
+    <div class="card possessive">
+      <div class="card-type">deles</div>
+      <div class="emoji">👨‍👩‍👦</div>
+      <div class="pt-word">O ___ deles</div>
+      <div class="en-word">Their (m.)</div>
+    </div>
+  </div>
+
+  <div class="section-label">🟣 Possessivos Femininos (for girl words: a bola, a água, a cadeira...)</div>
+  <div class="card-grid cols-5" style="margin-bottom: 5mm;">
+    <div class="card possessive">
+      <div class="card-type">minha</div>
+      <div class="emoji">🙋‍♂️</div>
+      <div class="pt-word">A minha</div>
+      <div class="en-word">My (f.)</div>
+    </div>
+    <div class="card possessive">
+      <div class="card-type">tua</div>
+      <div class="emoji">👉</div>
+      <div class="pt-word">A tua</div>
+      <div class="en-word">Your (f.)</div>
+    </div>
+    <div class="card possessive">
+      <div class="card-type">dela</div>
+      <div class="emoji">👩</div>
+      <div class="pt-word">A ___ dela</div>
+      <div class="en-word">Her</div>
+    </div>
+    <div class="card possessive">
+      <div class="card-type">nossa</div>
+      <div class="emoji">👫</div>
+      <div class="pt-word">A nossa</div>
+      <div class="en-word">Our (f.)</div>
+    </div>
+    <div class="card possessive">
+      <div class="card-type">delas</div>
+      <div class="emoji">👩‍👧</div>
+      <div class="pt-word">A ___ delas</div>
+      <div class="en-word">Their (f.)</div>
+    </div>
+  </div>
+  
+  <hr class="cut-line">
+  
+  <div class="section-label">📖 How Possessives Work</div>
+  <table class="conj-table">
+    <tr>
+      <th>English</th>
+      <th>Boy word (o gato)</th>
+      <th>Girl word (a bola)</th>
+    </tr>
+    <tr class="conj-highlight">
+      <td>My</td>
+      <td><b>O meu</b> gato</td>
+      <td><b>A minha</b> bola</td>
+    </tr>
+    <tr>
+      <td>Your</td>
+      <td><b>O teu</b> gato</td>
+      <td><b>A tua</b> bola</td>
+    </tr>
+    <tr>
+      <td>His</td>
+      <td>O gato <b>dele</b></td>
+      <td>A bola <b>dele</b></td>
+    </tr>
+    <tr>
+      <td>Her</td>
+      <td>O gato <b>dela</b></td>
+      <td>A bola <b>dela</b></td>
+    </tr>
+    <tr>
+      <td>Our</td>
+      <td><b>O nosso</b> gato</td>
+      <td><b>A nossa</b> bola</td>
+    </tr>
+    <tr>
+      <td>Their</td>
+      <td>O gato <b>deles/delas</b></td>
+      <td>A bola <b>deles/delas</b></td>
+    </tr>
+  </table>
+
+  <div class="hint-box">
+    <b>💡 Easy rule:</b> Portuguese words are "boys" or "girls"! 🧒👧<br>
+    <b>"O" words</b> (boy) → use <b>meu, teu, nosso</b><br>
+    <b>"A" words</b> (girl) → use <b>minha, tua, nossa</b><br>
+    <b>dele/dela</b> go AFTER the word: "O gato <b>dele</b>" = "His cat"
+  </div>
+  
+  <div class="footer-note">The Burnay Labs — Page 6/12 — Possessivos 🟣</div>
+</div>
+
+<!-- ==================== PAGE 7: SENTENCE BUILDING BOARD 1 ==================== -->
+<div class="page">
+  <div class="page-header">
+    <h2>🧩 Tabuleiro de Frases 1 / Sentence Board 1</h2>
+    <p>Place your cards in the slots below. Read the sentence aloud! Each correct sentence = 1 car part! 🚗</p>
+  </div>
+  
+  <div class="sentence-board">
+    <div class="sentence-row">
+      <span class="sentence-num">1</span>
+      <div class="sentence-slots">
+        <div class="slot blue">🔵 QUEM?<br><small>Who?</small></div>
+        <div class="slot green">🟢 VERBO<br><small>Verb</small></div>
+        <div class="slot orange">🟠 O QUÊ?<br><small>What?</small></div>
+      </div>
+    </div>
+    <div class="sentence-row">
+      <span class="sentence-num">2</span>
+      <div class="sentence-slots">
+        <div class="slot blue">🔵 QUEM?</div>
+        <div class="slot green">🟢 VERBO</div>
+        <div class="slot orange">🟠 O QUÊ?</div>
+      </div>
+    </div>
+    <div class="sentence-row">
+      <span class="sentence-num">3</span>
+      <div class="sentence-slots">
+        <div class="slot blue">🔵 QUEM?</div>
+        <div class="slot green">🟢 VERBO</div>
+        <div class="slot orange">🟠 O QUÊ?</div>
+      </div>
+    </div>
+    <div class="sentence-row">
+      <span class="sentence-num">4</span>
+      <div class="sentence-slots">
+        <div class="slot blue">🔵 QUEM?</div>
+        <div class="slot green">🟢 VERBO</div>
+        <div class="slot orange">🟠 O QUÊ?</div>
+      </div>
+    </div>
+    <div class="sentence-row">
+      <span class="sentence-num">5</span>
+      <div class="sentence-slots">
+        <div class="slot blue">🔵 QUEM?</div>
+        <div class="slot green">🟢 VERBO</div>
+        <div class="slot orange">🟠 O QUÊ?</div>
+      </div>
+    </div>
+    <div class="sentence-row">
+      <span class="sentence-num">6</span>
+      <div class="sentence-slots">
+        <div class="slot blue">🔵 QUEM?</div>
+        <div class="slot green">🟢 VERBO</div>
+        <div class="slot orange">🟠 O QUÊ?</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hint-box">
+    <b>⭐ Bonus Challenge — Try saying these too!</b><br>
+    <b>Negative:</b> "Eu <b>não</b> gosto de gatos." (I don't like cats.)<br>
+    <b>Question:</b> "Tu gostas de gelado<b>?</b>" (Do you like ice cream?)
+  </div>
+  
+  <p style="text-align:center; font-size:14px; font-weight:700; color:#4F46E5; margin-top:4mm;">
+    ✅ 6 frases corretas = 6 peças de carro! 🚗
+  </p>
+  
+  <div class="footer-note">The Burnay Labs — Page 7/12 — Tabuleiro 1 🧩</div>
+</div>
+
+<!-- ==================== PAGE 8: SENTENCE BUILDING BOARD 2 — CHALLENGE ==================== -->
+<div class="page">
+  <div class="page-header">
+    <h2>🧩 Tabuleiro de Frases 2 — Desafio! / Challenge Board!</h2>
+    <p>Harder sentences! Use COMER, TER, and possessive cards too! 6 more car parts to earn! 💪</p>
+  </div>
+  
+  <div class="sentence-board">
+    <div class="sentence-row">
+      <span class="sentence-num">7</span>
+      <div class="sentence-slots">
+        <div class="slot blue">🔵 QUEM?</div>
+        <div class="slot green">🟢 VERBO<br><small>Comer!</small></div>
+        <div class="slot orange">🟠 O QUÊ?<br><small>Food!</small></div>
+      </div>
+    </div>
+    <div class="sentence-row">
+      <span class="sentence-num">8</span>
+      <div class="sentence-slots">
+        <div class="slot blue">🔵 QUEM?</div>
+        <div class="slot green">🟢 VERBO<br><small>Ter!</small></div>
+        <div class="slot orange">🟠 O QUÊ?<br><small>Animal!</small></div>
+      </div>
+    </div>
+    <div class="sentence-row">
+      <span class="sentence-num">9</span>
+      <div class="sentence-slots">
+        <div class="slot blue">🔵 QUEM?</div>
+        <div class="slot green">🟢 VERBO<br><small>Querer!</small></div>
+        <div class="slot orange">🟠 O QUÊ?<br><small>Object!</small></div>
+      </div>
+    </div>
+    <div class="sentence-row">
+      <span class="sentence-num">10</span>
+      <div class="sentence-slots">
+        <div class="slot purple">🟣 DE QUEM?<br><small>Whose?</small></div>
+        <div class="slot orange">🟠 O QUÊ?<br><small>Thing</small></div>
+        <div class="slot" style="flex:0.5; font-size:10px;">Write sentence:<br>______________</div>
+      </div>
+    </div>
+    <div class="sentence-row">
+      <span class="sentence-num">11</span>
+      <div class="sentence-slots">
+        <div class="slot blue">🔵 QUEM?</div>
+        <div class="slot green">🟢 VERBO</div>
+        <div class="slot purple">🟣 POSSESSIVO</div>
+        <div class="slot orange">🟠 O QUÊ?</div>
+      </div>
+    </div>
+    <div class="sentence-row">
+      <span class="sentence-num">12</span>
+      <div class="sentence-slots">
+        <div class="slot blue">🔵 QUEM?</div>
+        <div class="slot green">🟢 VERBO</div>
+        <div class="slot orange">🟠 O QUÊ?</div>
+        <div class="slot" style="flex:0.5; font-size:10px;">⭐ Free<br>choice!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hint-box">
+    <b>💡 Challenge hints:</b><br>
+    #7: "Eu <b>como</b> pão." (I eat bread) &nbsp; #8: "Ela <b>tem</b> gatos." (She has cats)<br>
+    #10: "O <b>meu</b> gato" (My cat) or "A <b>tua</b> bola" (Your ball)<br>
+    #11: "Eu quero <b>o meu</b> livro." (I want my book) — 4-piece sentence!
+  </div>
+  
+  <p style="text-align:center; font-size:14px; font-weight:700; color:#4F46E5; margin-top:3mm;">
+    ✅ 12 frases corretas = 🚗 Carro completo! You WIN! 🏆
+  </p>
+  
+  <div class="footer-note">The Burnay Labs — Page 8/12 — Tabuleiro 2 🧩</div>
+</div>
+
+<!-- ==================== PAGE 9: CAR PARTS TO COLLECT ==================== -->
+<div class="page">
+  <div class="page-header">
+    <h2>🚗 Peças do Carro / Car Parts</h2>
+    <p>Cut out each part! Earn one for each correct sentence. Collect all 12 to build your car!</p>
+  </div>
+  
+  <hr class="cut-line">
+  
+  <div class="card-grid cols-4" style="margin-bottom: 4mm;">
+    <div class="car-part">
+      <div class="part-emoji">🛞</div>
+      <div class="part-name">Roda 1 / Wheel 1</div>
+      <div class="part-task">Frase 1</div>
+    </div>
+    <div class="car-part">
+      <div class="part-emoji">🛞</div>
+      <div class="part-name">Roda 2 / Wheel 2</div>
+      <div class="part-task">Frase 2</div>
+    </div>
+    <div class="car-part">
+      <div class="part-emoji">🛞</div>
+      <div class="part-name">Roda 3 / Wheel 3</div>
+      <div class="part-task">Frase 3</div>
+    </div>
+    <div class="car-part">
+      <div class="part-emoji">🛞</div>
+      <div class="part-name">Roda 4 / Wheel 4</div>
+      <div class="part-task">Frase 4</div>
+    </div>
+  </div>
+  
+  <div class="card-grid cols-4" style="margin-bottom: 4mm;">
+    <div class="car-part">
+      <div class="part-emoji">🚪</div>
+      <div class="part-name">Porta / Door</div>
+      <div class="part-task">Frase 5</div>
+    </div>
+    <div class="car-part">
+      <div class="part-emoji">🪟</div>
+      <div class="part-name">Janela / Window</div>
+      <div class="part-task">Frase 6</div>
+    </div>
+    <div class="car-part">
+      <div class="part-emoji">💡</div>
+      <div class="part-name">Farol / Headlight</div>
+      <div class="part-task">Frase 7</div>
+    </div>
+    <div class="car-part">
+      <div class="part-emoji">🏎️</div>
+      <div class="part-name">Motor / Engine</div>
+      <div class="part-task">Frase 8</div>
+    </div>
+  </div>
+
+  <div class="card-grid cols-4" style="margin-bottom: 6mm;">
+    <div class="car-part">
+      <div class="part-emoji">🪑</div>
+      <div class="part-name">Banco / Seat</div>
+      <div class="part-task">Frase 9</div>
+    </div>
+    <div class="car-part">
+      <div class="part-emoji">🔑</div>
+      <div class="part-name">Chave / Key</div>
+      <div class="part-task">Frase 10</div>
+    </div>
+    <div class="car-part">
+      <div class="part-emoji">📻</div>
+      <div class="part-name">Rádio / Radio</div>
+      <div class="part-task">Frase 11</div>
+    </div>
+    <div class="car-part">
+      <div class="part-emoji">🏁</div>
+      <div class="part-name">Bandeira / Flag</div>
+      <div class="part-task">Frase 12</div>
+    </div>
+  </div>
+  
+  <hr class="cut-line">
+  
+  <div class="car-assembly">
+    <h3>🏁 Cola as peças aqui! / Glue your parts here!</h3>
+    <div class="car-slots">
+      <div class="car-slot">🛞<br>Roda 1</div>
+      <div class="car-slot">🛞<br>Roda 2</div>
+      <div class="car-slot">🛞<br>Roda 3</div>
+      <div class="car-slot">🛞<br>Roda 4</div>
+      <div class="car-slot">🚪<br>Porta</div>
+      <div class="car-slot">🪟<br>Janela</div>
+    </div>
+    <div class="car-slots">
+      <div class="car-slot">💡<br>Farol</div>
+      <div class="car-slot">🏎️<br>Motor</div>
+      <div class="car-slot">🪑<br>Banco</div>
+      <div class="car-slot">🔑<br>Chave</div>
+      <div class="car-slot">📻<br>Rádio</div>
+      <div class="car-slot">🏁<br>Bandeira</div>
+    </div>
+    <div class="car-outline">When all 12 parts are glued, your super car is complete! 🎉🚗💨</div>
+  </div>
+  
+  <div class="footer-note">The Burnay Labs — Page 9/12 — Peças do Carro 🚗</div>
+</div>
+
+<!-- ==================== PAGE 10: PRACTICE WORKSHEET — MATCHING ==================== -->
+<div class="page">
+  <div class="page-header">
+    <h2>✏️ Exercício 1: Liga Pronome ao Verbo / Match Pronoun to Verb</h2>
+    <p>Draw a line to connect each pronoun with the correct verb form!</p>
+  </div>
+
+  <div class="section-label">🔗 GOSTAR DE — Draw lines to match!</div>
+  <div class="match-grid" style="margin-bottom: 6mm;">
+    <div class="match-left">🙋‍♂️ Eu</div>
+    <div class="match-middle">↔</div>
+    <div class="match-right">gostam de</div>
+
+    <div class="match-left">👉 Tu</div>
+    <div class="match-middle">↔</div>
+    <div class="match-right">gosto de</div>
+
+    <div class="match-left">👨 Ele</div>
+    <div class="match-middle">↔</div>
+    <div class="match-right">gostamos de</div>
+
+    <div class="match-left">👫 Nós</div>
+    <div class="match-middle">↔</div>
+    <div class="match-right">gostas de</div>
+
+    <div class="match-left">👨‍👩‍👦 Eles</div>
+    <div class="match-middle">↔</div>
+    <div class="match-right">gosta de</div>
+  </div>
+
+  <div class="section-label">🔗 QUERER — Draw lines to match!</div>
+  <div class="match-grid" style="margin-bottom: 6mm;">
+    <div class="match-left">🙋‍♂️ Eu</div>
+    <div class="match-middle">↔</div>
+    <div class="match-right">querem</div>
+
+    <div class="match-left">👉 Tu</div>
+    <div class="match-middle">↔</div>
+    <div class="match-right">quer</div>
+
+    <div class="match-left">👩 Ela</div>
+    <div class="match-middle">↔</div>
+    <div class="match-right">queremos</div>
+
+    <div class="match-left">👫 Nós</div>
+    <div class="match-middle">↔</div>
+    <div class="match-right">quero</div>
+
+    <div class="match-left">👩‍👧 Elas</div>
+    <div class="match-middle">↔</div>
+    <div class="match-right">queres</div>
+  </div>
+
+  <hr class="cut-line">
+
+  <div class="section-label">✏️ Exercício 2: Completa a Frase / Fill in the Blank</div>
+  <p style="font-size:12px; color:#666; margin-bottom:3mm;">Write the correct verb form in the blank.</p>
+
+  <div class="worksheet-item">
+    <span class="ws-num">1</span>
+    Eu <span class="ws-blank">&nbsp;</span> de gatos. <span class="ws-hint">(gostar — I like cats)</span>
+  </div>
+  <div class="worksheet-item">
+    <span class="ws-num">2</span>
+    Tu <span class="ws-blank">&nbsp;</span> gelado? <span class="ws-hint">(querer — Do you want ice cream?)</span>
+  </div>
+  <div class="worksheet-item">
+    <span class="ws-num">3</span>
+    Ele <span class="ws-blank">&nbsp;</span> livros. <span class="ws-hint">(ter — He has books)</span>
+  </div>
+  <div class="worksheet-item">
+    <span class="ws-num">4</span>
+    Nós <span class="ws-blank">&nbsp;</span> bola. <span class="ws-hint">(querer — We want a ball)</span>
+  </div>
+  <div class="worksheet-item">
+    <span class="ws-num">5</span>
+    Elas <span class="ws-blank">&nbsp;</span> de dançar. <span class="ws-hint">(gostar — They like dancing)</span>
+  </div>
+  <div class="worksheet-item">
+    <span class="ws-num">6</span>
+    Eu <span class="ws-blank">&nbsp;</span> pão. <span class="ws-hint">(comer — I eat bread)</span>
+  </div>
+  <div class="worksheet-item">
+    <span class="ws-num">7</span>
+    Ela <span class="ws-blank">&nbsp;</span> maçãs. <span class="ws-hint">(comer — She eats apples)</span>
+  </div>
+  <div class="worksheet-item">
+    <span class="ws-num">8</span>
+    Nós <span class="ws-blank">&nbsp;</span> cães. <span class="ws-hint">(ter — We have dogs)</span>
+  </div>
+  
+  <div class="footer-note">The Burnay Labs — Page 10/12 — Exercícios ✏️</div>
+</div>
+
+<!-- ==================== PAGE 11: PRACTICE WORKSHEET — POSSESSIVES + BUILD SENTENCES ==================== -->
+<div class="page">
+  <div class="page-header">
+    <h2>✏️ Exercício 3: Possessivos / Possessives Practice</h2>
+    <p>Fill in MEU/MINHA or TEU/TUA. Remember: "O" words → meu/teu, "A" words → minha/tua!</p>
+  </div>
+
+  <div class="section-label">📝 Circle the correct possessive!</div>
+
+  <div class="worksheet-item">
+    <span class="ws-num">1</span>
+    O <b>( meu / minha )</b> gato é bonito. <span class="ws-hint">(My cat is pretty — gato = "O" word)</span>
+  </div>
+  <div class="worksheet-item">
+    <span class="ws-num">2</span>
+    A <b>( meu / minha )</b> bola é vermelha. <span class="ws-hint">(My ball is red — bola = "A" word)</span>
+  </div>
+  <div class="worksheet-item">
+    <span class="ws-num">3</span>
+    O <b>( teu / tua )</b> livro é azul. <span class="ws-hint">(Your book is blue — livro = "O" word)</span>
+  </div>
+  <div class="worksheet-item">
+    <span class="ws-num">4</span>
+    A <b>( teu / tua )</b> casa é grande. <span class="ws-hint">(Your house is big — casa = "A" word)</span>
+  </div>
+  <div class="worksheet-item">
+    <span class="ws-num">5</span>
+    O <b>( nosso / nossa )</b> cão é feliz. <span class="ws-hint">(Our dog is happy — cão = "O" word)</span>
+  </div>
+  <div class="worksheet-item">
+    <span class="ws-num">6</span>
+    A <b>( nosso / nossa )</b> escola é fixe! <span class="ws-hint">(Our school is cool — escola = "A" word)</span>
+  </div>
+
+  <hr class="cut-line">
+
+  <div class="section-label">🏗️ Exercício 4: Constrói Frases / Build Your Own Sentences!</div>
+  <p style="font-size:12px; color:#666; margin-bottom:3mm;">Write 4 complete sentences using your cards. Use a PRONOUN + VERB + OBJECT!</p>
+
+  <div class="worksheet-item" style="min-height:18mm;">
+    <span class="ws-num">1</span>
+    <span style="flex:1; border-bottom:2px dotted #ccc;">&nbsp;</span>
+  </div>
+  <div class="worksheet-item" style="min-height:18mm;">
+    <span class="ws-num">2</span>
+    <span style="flex:1; border-bottom:2px dotted #ccc;">&nbsp;</span>
+  </div>
+  <div class="worksheet-item" style="min-height:18mm;">
+    <span class="ws-num">3</span>
+    <span style="flex:1; border-bottom:2px dotted #ccc;">&nbsp;</span>
+  </div>
+  <div class="worksheet-item" style="min-height:18mm;">
+    <span class="ws-num">4</span>
+    <span style="flex:1; border-bottom:2px dotted #ccc;">&nbsp;</span>
+  </div>
+
+  <div class="hint-box" style="margin-top:5mm;">
+    <b>💡 Ideas:</b> "Eu gosto de gatos." / "Nós queremos gelado." / "Ele come pão." / "O meu cão é bonito."
+  </div>
+  
+  <div class="footer-note">The Burnay Labs — Page 11/12 — Exercícios ✏️</div>
+</div>
+
+<!-- ==================== PAGE 12: ANSWER KEY ==================== -->
+<div class="page">
+  <div class="page-header">
+    <h2>📋 Chave de Respostas / Answer Key</h2>
+    <p>For parent/teacher only! Example sentences and exercise answers.</p>
+  </div>
+  
+  <div class="section-label">⭐ Suggested 12 Sentences (1 per car part)</div>
+  <div class="answers">
+    <div class="answer-row">
+      <span class="num">1</span>
+      <span class="sentence">Eu gosto de gatos.</span>
+      <span class="translation">I like cats.</span>
+    </div>
+    <div class="answer-row">
+      <span class="num">2</span>
+      <span class="sentence">Eu quero gelado.</span>
+      <span class="translation">I want ice cream.</span>
+    </div>
+    <div class="answer-row">
+      <span class="num">3</span>
+      <span class="sentence">Tu gostas de bola?</span>
+      <span class="translation">Do you like ball?</span>
+    </div>
+    <div class="answer-row">
+      <span class="num">4</span>
+      <span class="sentence">Ele gosta de carros.</span>
+      <span class="translation">He likes cars.</span>
+    </div>
+    <div class="answer-row">
+      <span class="num">5</span>
+      <span class="sentence">Ela tem livros.</span>
+      <span class="translation">She has books.</span>
+    </div>
+    <div class="answer-row">
+      <span class="num">6</span>
+      <span class="sentence">Nós gostamos de dançar.</span>
+      <span class="translation">We like to dance.</span>
+    </div>
+    <div class="answer-row">
+      <span class="num">7</span>
+      <span class="sentence">Eu como pão.</span>
+      <span class="translation">I eat bread.</span>
+    </div>
+    <div class="answer-row">
+      <span class="num">8</span>
+      <span class="sentence">Ela tem gatos.</span>
+      <span class="translation">She has cats.</span>
+    </div>
+    <div class="answer-row">
+      <span class="num">9</span>
+      <span class="sentence">Eles querem bola.</span>
+      <span class="translation">They want a ball.</span>
+    </div>
+    <div class="answer-row">
+      <span class="num">10</span>
+      <span class="sentence">O meu gato. / A minha bola.</span>
+      <span class="translation">My cat. / My ball.</span>
+    </div>
+    <div class="answer-row">
+      <span class="num">11</span>
+      <span class="sentence">Eu quero o meu livro.</span>
+      <span class="translation">I want my book.</span>
+    </div>
+    <div class="answer-row">
+      <span class="num">12</span>
+      <span class="sentence">Elas gostam de cantar.</span>
+      <span class="translation">They (f.) like singing.</span>
+    </div>
+  </div>
+
+  <div class="section-label">✏️ Exercise Answers</div>
+  <div class="answers" style="margin-bottom: 3mm;">
+    <div class="answer-row"><span class="num">M1</span><span class="sentence">Gostar: Eu→gosto de, Tu→gostas de, Ele→gosta de, Nós→gostamos de, Eles→gostam de</span></div>
+    <div class="answer-row"><span class="num">M2</span><span class="sentence">Querer: Eu→quero, Tu→queres, Ela→quer, Nós→queremos, Elas→querem</span></div>
+    <div class="answer-row"><span class="num">F1</span><span class="sentence">1: gosto  2: queres  3: tem  4: queremos  5: gostam  6: como  7: come  8: temos</span></div>
+    <div class="answer-row"><span class="num">P</span><span class="sentence">Possessives: 1: meu  2: minha  3: teu  4: tua  5: nosso  6: nossa</span></div>
+  </div>
+  
+  <div class="section-label">💡 Full Conjugation Tables</div>
+  <table class="conj-table">
+    <tr>
+      <th>Pronome</th>
+      <th>Gostar de<br><small>(to like)</small></th>
+      <th>Querer<br><small>(to want)</small></th>
+      <th>Ter<br><small>(to have)</small></th>
+      <th>Comer<br><small>(to eat)</small></th>
+    </tr>
+    <tr>
+      <td>🙋‍♂️ <b>Eu</b></td>
+      <td><b>gosto de</b></td>
+      <td><b>quero</b></td>
+      <td><b>tenho</b></td>
+      <td><b>como</b></td>
+    </tr>
+    <tr>
+      <td>👉 <b>Tu</b></td>
+      <td><b>gostas de</b></td>
+      <td><b>queres</b></td>
+      <td><b>tens</b></td>
+      <td><b>comes</b></td>
+    </tr>
+    <tr>
+      <td>👨/👩 <b>Ele/Ela</b></td>
+      <td><b>gosta de</b></td>
+      <td><b>quer</b></td>
+      <td><b>tem</b></td>
+      <td><b>come</b></td>
+    </tr>
+    <tr>
+      <td>👫 <b>Nós</b></td>
+      <td><b>gostamos de</b></td>
+      <td><b>queremos</b></td>
+      <td><b>temos</b></td>
+      <td><b>comemos</b></td>
+    </tr>
+    <tr>
+      <td>👨‍👩‍👦/👩‍👧 <b>Eles/Elas</b></td>
+      <td><b>gostam de</b></td>
+      <td><b>querem</b></td>
+      <td><b>têm</b></td>
+      <td><b>comem</b></td>
+    </tr>
+  </table>
+
+  <div class="section-label">💡 Possessive Pronouns Summary</div>
+  <table class="conj-table">
+    <tr>
+      <th></th>
+      <th>Masculino (O)</th>
+      <th>Feminino (A)</th>
+      <th>Example</th>
+    </tr>
+    <tr>
+      <td><b>My</b></td>
+      <td>O <b>meu</b></td>
+      <td>A <b>minha</b></td>
+      <td>O meu gato / A minha bola</td>
+    </tr>
+    <tr>
+      <td><b>Your</b></td>
+      <td>O <b>teu</b></td>
+      <td>A <b>tua</b></td>
+      <td>O teu livro / A tua casa</td>
+    </tr>
+    <tr>
+      <td><b>His/Her</b></td>
+      <td colspan="2">___ <b>dele</b> / <b>dela</b></td>
+      <td>O gato dele / A bola dela</td>
+    </tr>
+    <tr>
+      <td><b>Our</b></td>
+      <td>O <b>nosso</b></td>
+      <td>A <b>nossa</b></td>
+      <td>O nosso cão / A nossa escola</td>
+    </tr>
+    <tr>
+      <td><b>Their</b></td>
+      <td colspan="2">___ <b>deles</b> / <b>delas</b></td>
+      <td>O carro deles / A casa delas</td>
+    </tr>
+  </table>
+  
+  <p style="margin-top:4mm; font-size:11px; color:#888; text-align:center;">
+    <b>Tip:</b> Accept ANY grammatically correct combination!<br>
+    7 pronouns × 4 verbs × 20 objects = <b>560+ possible sentences!</b><br>
+    The key is matching the verb conjugation to the right pronoun. 🧩
+  </p>
+  
+  <div class="footer-note">The Burnay Labs — Page 12/12 — Respostas 📋</div>
+</div>
+
+</body>
+</html>
