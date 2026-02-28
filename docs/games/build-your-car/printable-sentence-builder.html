@@ -1,1138 +1,802 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt">
-  <head>
-    <meta charset="UTF-8" />
-    <title>🚗 Constrói o Teu Carro! — The Burnay Labs</title>
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap");
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      body {
-        font-family: "Nunito", sans-serif;
-        background: #f0f0f0;
-        color: #1a1a2e;
-      }
+<head>
+  <meta charset="UTF-8">
+  <title>Constroi o Teu Carro! - The Burnay Labs</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Nunito', sans-serif; background: #f0f0f0; color: #1a1a2e; }
 
-      .page {
-        width: 210mm;
-        min-height: 297mm;
-        padding: 10mm 12mm;
-        margin: 10px auto;
-        background: white;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        page-break-after: always;
-        position: relative;
-        overflow: hidden;
-      }
-      .page:last-child {
-        page-break-after: avoid;
-      }
+    .page {
+      width: 210mm; min-height: 297mm; padding: 10mm 14mm;
+      margin: 10px auto; background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      page-break-after: always; position: relative; overflow: hidden;
+    }
+    .page:last-child { page-break-after: avoid; }
 
-      @media print {
-        body {
-          background: white;
-        }
-        .page {
-          box-shadow: none;
-          margin: 0;
-        }
-        .no-print {
-          display: none !important;
-        }
-      }
+    @media print {
+      body { background: white; }
+      .page { box-shadow: none; margin: 0; }
+      .no-print { display: none !important; }
+    }
 
-      /* ═══ COVER PAGE ═══ */
-      .cover {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 277mm;
-        text-align: center;
-        background: linear-gradient(180deg, #e8f4fd 0%, #fff 50%, #f0f9ff 100%);
-      }
-      .cover-car {
-        font-size: 120px;
-        margin-bottom: 20px;
-        animation: bounce 2s ease-in-out infinite;
-      }
-      @keyframes bounce {
-        0%,
-        100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-10px);
-        }
-      }
-      .cover h1 {
-        font-size: 42px;
-        color: #1a56db;
-        margin-bottom: 8px;
-      }
-      .cover h2 {
-        font-size: 22px;
-        color: #6b7280;
-        font-weight: 600;
-        margin-bottom: 30px;
-      }
-      .cover .subtitle {
-        font-size: 16px;
-        color: #9ca3af;
-        margin-bottom: 40px;
-      }
-      .cover .player-box {
-        border: 3px dashed #4f46e5;
-        border-radius: 16px;
-        padding: 16px 40px;
-        font-size: 20px;
-        color: #4f46e5;
-        font-weight: 700;
-      }
-      .cover .player-box span {
-        font-size: 16px;
-        color: #6b7280;
-        font-weight: 400;
-      }
+    /* COMMON */
+    h3.section-title {
+      font-size: 20px; color: #1a56db; margin-bottom: 6px;
+      padding-bottom: 4px; border-bottom: 2px solid #dbeafe;
+    }
+    .page-footer {
+      position: absolute; bottom: 5mm; left: 14mm; right: 14mm;
+      text-align: center; font-size: 10px; color: #9ca3af;
+    }
 
-      /* ═══ MOM INSTRUCTIONS PAGE ═══ */
-      .mom-page {
-        padding: 12mm 15mm;
-        background: #fffbeb;
-      }
-      .mom-header {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 24px;
-        padding-bottom: 16px;
-        border-bottom: 3px solid #f59e0b;
-      }
-      .mom-header .emoji {
-        font-size: 48px;
-      }
-      .mom-header h2 {
-        font-size: 28px;
-        color: #92400e;
-      }
-      .mom-header p {
-        font-size: 14px;
-        color: #b45309;
-      }
-      .mom-box {
-        background: white;
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 16px;
-        border-left: 4px solid #f59e0b;
-      }
-      .mom-box h3 {
-        font-size: 18px;
-        color: #92400e;
-        margin-bottom: 10px;
-      }
-      .mom-box p,
-      .mom-box li {
-        font-size: 14px;
-        line-height: 1.7;
-        color: #44403c;
-      }
-      .mom-box ul {
-        padding-left: 20px;
-      }
-      .mom-box li {
-        margin-bottom: 6px;
-      }
-      .mom-script {
-        background: #fef3c7;
-        border-radius: 8px;
-        padding: 12px 16px;
-        margin: 10px 0;
-        font-style: italic;
-        color: #78350f;
-        font-size: 14px;
-        border-left: 3px solid #f59e0b;
-      }
-      .mom-tip {
-        background: #ecfdf5;
-        border-radius: 8px;
-        padding: 12px 16px;
-        margin: 8px 0;
-        color: #065f46;
-        font-size: 13px;
-        border-left: 3px solid #10b981;
-      }
+    /* COVER */
+    .cover {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; min-height: 277mm; text-align: center;
+      background: linear-gradient(180deg, #e8f4fd 0%, #fff 50%, #f0f9ff 100%);
+    }
+    .cover h1 { font-size: 40px; color: #1a56db; margin-bottom: 8px; }
+    .cover h2 { font-size: 20px; color: #6b7280; font-weight: 600; margin-bottom: 24px; }
 
-      /* ═══ PART CARDS ═══ */
-      .cards-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-        margin: 16px 0;
-      }
-      .part-card {
-        border: 3px dashed #d1d5db;
-        border-radius: 16px;
-        padding: 16px 12px;
-        text-align: center;
-        position: relative;
-        background: #fafafa;
-        min-height: 120px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-      }
-      .part-card .part-emoji {
-        font-size: 48px;
-        margin-bottom: 8px;
-      }
-      .part-card .part-name {
-        font-size: 16px;
-        font-weight: 800;
-        color: #1f2937;
-      }
-      .part-card .part-en {
-        font-size: 12px;
-        color: #9ca3af;
-      }
-      .part-card .sentence-prompt {
-        margin-top: 8px;
-        font-size: 11px;
-        color: #4f46e5;
-        font-weight: 600;
-        background: #eef2ff;
-        padding: 4px 8px;
-        border-radius: 8px;
-      }
-      .part-card .scissors {
-        position: absolute;
-        top: -8px;
-        right: -8px;
-        font-size: 20px;
-      }
+    /* MOM PAGE */
+    .mom-page { padding: 10mm 14mm; background: #fffbeb; }
+    .mom-header {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 16px; padding-bottom: 12px; border-bottom: 3px solid #f59e0b;
+    }
+    .mom-header .emoji { font-size: 42px; }
+    .mom-header h2 { font-size: 24px; color: #92400e; }
+    .mom-box {
+      background: white; border-radius: 10px; padding: 14px 16px;
+      margin-bottom: 12px; border-left: 4px solid #f59e0b;
+    }
+    .mom-box h3 { font-size: 16px; color: #92400e; margin-bottom: 6px; }
+    .mom-box p, .mom-box li { font-size: 13px; line-height: 1.6; color: #44403c; }
+    .mom-box ul { padding-left: 18px; }
+    .mom-box li { margin-bottom: 4px; }
+    .mom-script {
+      background: #fef3c7; border-radius: 6px; padding: 8px 12px;
+      margin: 6px 0; font-style: italic; color: #78350f; font-size: 13px;
+    }
+    .mom-tip {
+      background: #ecfdf5; border-radius: 6px; padding: 8px 12px;
+      margin: 6px 0; color: #065f46; font-size: 12px;
+    }
 
-      /* ═══ CAR ASSEMBLY PAGE ═══ */
-      .assembly-page {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-top: 8mm;
-      }
-      .assembly-page h2 {
-        font-size: 26px;
-        color: #1a56db;
-        margin-bottom: 4px;
-      }
-      .assembly-page .sub {
-        font-size: 14px;
-        color: #6b7280;
-        margin-bottom: 16px;
-      }
+    /* PRONOUN TABLE */
+    .pronoun-table {
+      width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 14px;
+    }
+    .pronoun-table th {
+      background: #1a56db; color: white; padding: 8px 10px;
+      text-align: left; font-weight: 700;
+    }
+    .pronoun-table td {
+      padding: 7px 10px; border-bottom: 1px solid #e5e7eb;
+    }
+    .pronoun-table tr:nth-child(even) td { background: #f0f4ff; }
+    .pronoun-table .pronoun {
+      font-weight: 800; color: #4f46e5; font-size: 16px;
+    }
+    .pronoun-table .conj { font-weight: 700; color: #1a56db; }
 
-      .car-body-container {
-        width: 170mm;
-        height: 200mm;
-        position: relative;
-        border: 3px solid #e5e7eb;
-        border-radius: 24px;
-        background: linear-gradient(
-          180deg,
-          #dbeafe 0%,
-          #eff6ff 40%,
-          #e5e7eb 100%
-        );
-        overflow: hidden;
-      }
-      /* Road */
-      .road {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 50mm;
-        background: #374151;
-      }
-      .road::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: repeating-linear-gradient(
-          90deg,
-          #fbbf24 0,
-          #fbbf24 20px,
-          transparent 20px,
-          transparent 40px
-        );
-      }
-      /* Car outline */
-      .car-outline {
-        position: absolute;
-        bottom: 35mm;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 140mm;
-        height: 70mm;
-      }
-      /* Car body shape */
-      .car-shape {
-        position: absolute;
-        bottom: 15mm;
-        left: 10mm;
-        right: 10mm;
-        height: 30mm;
-        border: 3px dashed #9ca3af;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 14px;
-        color: #9ca3af;
-      }
-      /* Cabin */
-      .car-cabin {
-        position: absolute;
-        bottom: 42mm;
-        left: 30mm;
-        right: 30mm;
-        height: 22mm;
-        border: 3px dashed #9ca3af;
-        border-radius: 12px 12px 0 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 14px;
-        color: #9ca3af;
-      }
+    /* EXERCISE */
+    .exercise {
+      border: 2px solid #e5e7eb; border-radius: 12px; padding: 12px 14px;
+      margin-bottom: 10px; position: relative;
+    }
+    .exercise .ex-num {
+      position: absolute; top: -10px; left: 12px;
+      background: #4f46e5; color: white; font-size: 12px; font-weight: 800;
+      padding: 2px 10px; border-radius: 10px;
+    }
+    .exercise .ex-part {
+      position: absolute; top: -10px; right: 12px;
+      background: #f59e0b; color: white; font-size: 11px; font-weight: 700;
+      padding: 2px 8px; border-radius: 10px;
+    }
+    .exercise .ex-prompt {
+      font-size: 14px; font-weight: 700; color: #1f2937;
+      margin-top: 6px; margin-bottom: 6px;
+    }
+    .exercise .ex-hint {
+      font-size: 12px; color: #6b7280; margin-bottom: 8px;
+    }
+    .exercise .ex-write {
+      display: flex; align-items: center; gap: 8px; margin-top: 6px;
+    }
+    .exercise .ex-write .label {
+      font-size: 13px; font-weight: 700; color: #4f46e5; white-space: nowrap;
+    }
+    .exercise .ex-write .line {
+      flex: 1; border-bottom: 2px solid #c7d2fe; min-height: 26px;
+    }
 
-      /* Numbered placement spots */
-      .spot {
-        position: absolute;
-        width: 28mm;
-        height: 22mm;
-        border: 2px dashed #818cf8;
-        border-radius: 12px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255, 255, 255, 0.7);
-        font-size: 11px;
-        color: #4f46e5;
-        font-weight: 700;
-        text-align: center;
-      }
-      .spot .spot-num {
-        position: absolute;
-        top: -8px;
-        left: -8px;
-        width: 20px;
-        height: 20px;
-        background: #4f46e5;
-        color: white;
-        border-radius: 50%;
-        font-size: 11px;
-        font-weight: 800;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .spot .spot-emoji {
-        font-size: 24px;
-      }
+    /* WRITE BOX */
+    .write-box {
+      border: 2px solid #d1d5db; border-radius: 8px;
+      min-height: 30px; padding: 4px 8px; display: inline-block;
+      min-width: 80px; background: #fafafa;
+    }
 
-      /* Spot positions on the car */
-      .spot-1 {
-        bottom: 3mm;
-        left: 12mm;
-      } /* Roda esq frente */
-      .spot-2 {
-        bottom: 3mm;
-        right: 12mm;
-      } /* Roda dir frente */
-      .spot-3 {
-        bottom: 3mm;
-        left: 50mm;
-      } /* Roda esq trás */
-      .spot-4 {
-        bottom: 3mm;
-        right: 50mm;
-      } /* Roda dir trás */
-      .spot-5 {
-        bottom: 20mm;
-        left: 5mm;
-      } /* Motor */
-      .spot-6 {
-        bottom: 20mm;
-        right: 5mm;
-      } /* Mala */
-      .spot-7 {
-        bottom: 48mm;
-        left: 32mm;
-      } /* Janela esq */
-      .spot-8 {
-        bottom: 48mm;
-        right: 32mm;
-      } /* Janela dir */
-      .spot-9 {
-        bottom: 36mm;
-        left: 2mm;
-      } /* Farol esq */
-      .spot-10 {
-        bottom: 36mm;
-        right: 2mm;
-      } /* Farol dir */
-      .spot-11 {
-        bottom: 55mm;
-        left: 52mm;
-      } /* Volante */
-      .spot-12 {
-        bottom: 68mm;
-        left: 45mm;
-        right: 45mm;
-      } /* Teto */
+    /* CAR ASSEMBLY */
+    .car-container {
+      width: 170mm; height: 110mm; position: relative; margin: 0 auto;
+      border: 3px solid #e5e7eb; border-radius: 20px; overflow: hidden;
+      background: linear-gradient(180deg, #dbeafe 0%, #eff6ff 60%, #6b7280 60%, #4b5563 100%);
+    }
+    .road-line {
+      position: absolute; bottom: 20mm; left: 0; right: 0; height: 2px;
+      background: repeating-linear-gradient(90deg, #fbbf24 0, #fbbf24 15px, transparent 15px, transparent 30px);
+    }
+    .car-spot {
+      position: absolute; width: 22mm; height: 18mm;
+      border: 2px dashed #818cf8; border-radius: 10px;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; background: rgba(255,255,255,0.8);
+      font-size: 10px; color: #4f46e5; font-weight: 700; text-align: center;
+    }
+    .car-spot .cs-num {
+      position: absolute; top: -6px; left: -6px;
+      width: 16px; height: 16px; background: #4f46e5; color: white;
+      border-radius: 50%; font-size: 9px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+    }
 
-      /* ═══ SENTENCE CARDS ═══ */
-      .sentence-section {
-        margin-top: 16px;
-      }
-      .sentence-section h3 {
-        font-size: 18px;
-        color: #1a56db;
-        margin-bottom: 12px;
-      }
-      .sentence-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-      }
-      .s-card {
-        border: 2px solid #e5e7eb;
-        border-radius: 12px;
-        padding: 12px;
-        display: flex;
-        align-items: flex-start;
-        gap: 10px;
-      }
-      .s-card .s-num {
-        width: 28px;
-        height: 28px;
-        min-width: 28px;
-        background: #4f46e5;
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 800;
-        font-size: 13px;
-      }
-      .s-card .s-content {
-      }
-      .s-card .s-prompt {
-        font-size: 13px;
-        font-weight: 700;
-        color: #1f2937;
-      }
-      .s-card .s-hint {
-        font-size: 11px;
-        color: #6b7280;
-        margin-top: 2px;
-      }
-      .s-card .s-answer {
-        margin-top: 6px;
-        border-bottom: 2px solid #d1d5db;
-        min-height: 20px;
-        font-size: 13px;
-      }
+    /* CUT-OUT CARDS */
+    .cards-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 8px; margin: 10px 0;
+    }
+    .part-card {
+      border: 2px dashed #d1d5db; border-radius: 12px;
+      padding: 10px 8px; text-align: center; background: #fafafa;
+      min-height: 80px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; position: relative;
+    }
+    .part-card .scissors { position: absolute; top: -6px; right: -6px; font-size: 16px; }
+    .part-card .part-emoji { font-size: 32px; margin-bottom: 4px; }
+    .part-card .part-name { font-size: 13px; font-weight: 800; }
+    .part-card .part-num { font-size: 10px; color: #6b7280; }
 
-      /* ═══ SCORE STRIP ═══ */
-      .score-strip {
-        display: flex;
-        gap: 6px;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin: 12px 0;
-      }
-      .score-box {
-        width: 30px;
-        height: 30px;
-        border: 2px solid #d1d5db;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 14px;
-        background: #fafafa;
-      }
+    /* SCORE */
+    .score-strip {
+      display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; margin: 8px 0;
+    }
+    .score-box {
+      width: 24px; height: 24px; border: 2px solid #d1d5db; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; background: #fafafa;
+    }
 
-      h3.section-title {
-        font-size: 20px;
-        color: #1a56db;
-        margin-bottom: 8px;
-        padding-bottom: 6px;
-        border-bottom: 2px solid #dbeafe;
-      }
-      .page-footer {
-        position: absolute;
-        bottom: 6mm;
-        left: 15mm;
-        right: 15mm;
-        text-align: center;
-        font-size: 10px;
-        color: #9ca3af;
-      }
+    /* Print bar */
+    .print-bar {
+      position: sticky; top: 0; z-index: 100; background: #1a56db;
+      padding: 10px 20px; display: flex; align-items: center; justify-content: center; gap: 16px;
+    }
+    .print-bar button {
+      background: white; color: #1a56db; border: none; padding: 10px 24px;
+      border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer;
+      font-family: inherit;
+    }
+    .print-bar button:hover { background: #dbeafe; }
+    .print-bar span { color: white; font-size: 13px; }
+  </style>
+</head>
+<body>
 
-      /* Print buttons */
-      .print-bar {
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        background: #1a56db;
-        padding: 12px 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 16px;
-      }
-      .print-bar button {
-        background: white;
-        color: #1a56db;
-        border: none;
-        padding: 10px 24px;
-        border-radius: 8px;
-        font-size: 15px;
-        font-weight: 700;
-        cursor: pointer;
-        font-family: inherit;
-      }
-      .print-bar button:hover {
-        background: #dbeafe;
-      }
-      .print-bar span {
-        color: white;
-        font-size: 14px;
-      }
-    </style>
-  </head>
-  <body>
-    <!-- PRINT BAR -->
-    <div class="print-bar no-print">
-      <span>🚗 Constrói o Teu Carro! — 6 páginas para imprimir</span>
-      <button onclick="window.print()">🖨️ Imprimir Tudo</button>
+<div class="print-bar no-print">
+  <span>Constroi o Teu Carro! - 8 paginas para imprimir</span>
+  <button onclick="window.print()">Imprimir Tudo</button>
+</div>
+
+<!-- ===================== PAGE 1: COVER ===================== -->
+<div class="page">
+  <div class="cover">
+    <div style="font-size: 100px; margin-bottom: 16px;">&#x1F697;</div>
+    <h1>Constroi o Teu Carro!</h1>
+    <h2>Aprende os Pronomes + Frases em Portugues</h2>
+    <p style="font-size: 15px; color: #6b7280; margin-bottom: 24px; max-width: 420px; line-height: 1.6;">
+      Escreve frases em portugues para ganhar pecas e construir o teu carro!<br>
+      <em style="font-size: 13px;">Write Portuguese sentences to earn parts and build your car!</em>
+    </p>
+    <div style="margin: 20px 0; font-size: 15px; color: #4b5563; line-height: 1.8;">
+      <strong>O que precisas:</strong><br>
+      Lapis / Pencil<br>
+      Tesoura / Scissors<br>
+      Cola / Glue stick<br>
+      Mae = <strong>Dona da Loja de Pecas!</strong>
+    </div>
+    <div style="border: 3px dashed #4f46e5; border-radius: 16px; padding: 16px 40px; font-size: 18px; color: #4f46e5; font-weight: 700;">
+      Mecanico: ___________________<br>
+      <span style="font-size: 14px; color: #6b7280; font-weight: 400;">Escreve o teu nome!</span>
+    </div>
+  </div>
+  <div class="page-footer">The Burnay Labs - Pagina 1/8 - Capa</div>
+</div>
+
+<!-- ===================== PAGE 2: MOM INSTRUCTIONS ===================== -->
+<div class="page mom-page">
+  <div class="mom-header">
+    <div class="emoji">&#x1F469;&#x200D;&#x1F527;</div>
+    <div>
+      <h2>Guia da Mae - Dona da Loja de Pecas</h2>
+      <p style="font-size: 13px; color: #b45309;">Mom's Guide - You are the Parts Store Owner!</p>
+    </div>
+  </div>
+
+  <div class="mom-box">
+    <h3>O Teu Papel / Your Role</h3>
+    <p>Tu es a <strong>Dona da Loja de Pecas</strong>! O teu filho e o <strong>Mecanico</strong> que precisa de comprar pecas para construir o carro. Mas na tua loja, as pecas compram-se com <strong>frases escritas em portugues!</strong></p>
+    <div class="mom-tip">You're the Car Parts Store Owner. Your child writes Portuguese sentences to "buy" each car part from you. 12 sentences = 12 parts = complete car!</div>
+  </div>
+
+  <div class="mom-box">
+    <h3>Como Jogar / How To Play</h3>
+    <ul>
+      <li><strong>1. Recorta</strong> as 12 pecas do carro (pagina 7). Guarda-as - tu es a loja!</li>
+      <li><strong>2. Pagina de Pronomes</strong> (pag. 3): Ensina os pronomes primeiro. Passa 5-10 min aqui.</li>
+      <li><strong>3. Exercicios</strong> (pags. 4-6): O mecanico <strong>ESCREVE</strong> as frases nos espacos. Cada exercicio feito = 1 peca ganha!</li>
+      <li><strong>4. Cola a peca</strong>: Quando acertar, da-lhe a peca e ele cola na garagem (pag. 8).</li>
+      <li><strong>5. Certificado</strong>: No fim, assina o certificado como Dona da Loja!</li>
+    </ul>
+  </div>
+
+  <div class="mom-box">
+    <h3>Guiao / Store Script</h3>
+    <div class="mom-script">"Bem-vindo a Loja de Pecas! Hoje precisas de escrever frases para comprar pecas!"</div>
+    <div class="mom-script">"Hmmm, quase! Olha para a tabela dos pronomes e tenta outra vez." (se errar)</div>
+    <div class="mom-script">"PERFEITO! Aqui tens a tua [peca]! Cola-a no carro!" (quando acertar)</div>
+    <div class="mom-script">"PARABENS MECANICO! O carro esta pronto!" (no final)</div>
+  </div>
+
+  <div class="mom-box">
+    <h3>Dicas / Tips</h3>
+    <ul>
+      <li>Ele pode <strong>consultar a tabela de pronomes</strong> (pag. 3) a qualquer momento</li>
+      <li>Se bloquear, <strong>soletra a frase devagar</strong> e pede para copiar</li>
+      <li>Nao precisa de ser perfeito - qualquer tentativa razoavel conta!</li>
+      <li>Sessoes de 15-20 min. Se cansar, para e continua depois</li>
+      <li>Faz vozes engracadas de vendedora!</li>
+    </ul>
+    <div class="mom-tip">Goal: The child learns eu/tu/ele/nos/vos/eles + basic verb conjugation by WRITING. Repetition through writing builds muscle memory for Portuguese.</div>
+  </div>
+
+  <div class="page-footer">The Burnay Labs - Pagina 2/8 - Guia da Mae</div>
+</div>
+
+<!-- ===================== PAGE 3: PRONOUN REFERENCE + VERB TABLE ===================== -->
+<div class="page">
+  <h3 class="section-title" style="margin-top: 4mm;">A Tabela dos Pronomes - Pronoun Reference Sheet</h3>
+  <p style="font-size: 13px; color: #6b7280; margin-bottom: 10px;">
+    Aprende estes pronomes! Usa esta tabela para te ajudar nos exercicios.<br>
+    <em>Learn these pronouns! Use this table to help with the exercises.</em>
+  </p>
+
+  <!-- PRONOUN CHART -->
+  <div style="background: #eef2ff; border-radius: 12px; padding: 14px; margin-bottom: 12px;">
+    <h4 style="font-size: 16px; color: #4f46e5; margin-bottom: 8px;">Os Pronomes Pessoais / Personal Pronouns</h4>
+    <table class="pronoun-table">
+      <tr>
+        <th style="width: 20%;">Pronome</th>
+        <th style="width: 25%;">English</th>
+        <th style="width: 55%;">Exemplo / Example</th>
+      </tr>
+      <tr>
+        <td class="pronoun">Eu</td>
+        <td>I</td>
+        <td><strong>Eu</strong> gosto de carros. - <em>I like cars.</em></td>
+      </tr>
+      <tr>
+        <td class="pronoun">Tu</td>
+        <td>You</td>
+        <td><strong>Tu</strong> gostas de gelado. - <em>You like ice cream.</em></td>
+      </tr>
+      <tr>
+        <td class="pronoun">Ele / Ela</td>
+        <td>He / She</td>
+        <td><strong>Ele</strong> gosta de futebol. - <em>He likes football.</em></td>
+      </tr>
+      <tr>
+        <td class="pronoun">N&#243;s</td>
+        <td>We</td>
+        <td><strong>N&#243;s</strong> gostamos de brincar. - <em>We like to play.</em></td>
+      </tr>
+      <tr>
+        <td class="pronoun">V&#243;s</td>
+        <td>You (plural)</td>
+        <td><strong>V&#243;s</strong> gostais de m&#250;sica. - <em>You all like music.</em></td>
+      </tr>
+      <tr>
+        <td class="pronoun">Eles / Elas</td>
+        <td>They</td>
+        <td><strong>Eles</strong> gostam de pizza. - <em>They like pizza.</em></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- VERB CONJUGATION TABLES -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+    <!-- GOSTAR -->
+    <div style="background: #f0fdf4; border-radius: 10px; padding: 12px;">
+      <h4 style="font-size: 15px; color: #065f46; margin-bottom: 6px;">GOSTAR DE <span style="font-size: 12px; font-weight: 400;">(to like)</span></h4>
+      <table class="pronoun-table" style="font-size: 13px;">
+        <tr><th>Pronome</th><th>Conjugacao</th></tr>
+        <tr><td class="pronoun">Eu</td><td class="conj">gosto de</td></tr>
+        <tr><td class="pronoun">Tu</td><td class="conj">gostas de</td></tr>
+        <tr><td class="pronoun">Ele/Ela</td><td class="conj">gosta de</td></tr>
+        <tr><td class="pronoun">N&#243;s</td><td class="conj">gostamos de</td></tr>
+        <tr><td class="pronoun">V&#243;s</td><td class="conj">gostais de</td></tr>
+        <tr><td class="pronoun">Eles/Elas</td><td class="conj">gostam de</td></tr>
+      </table>
     </div>
 
-    <!-- ════════════════════════════════════
-     PAGE 1: COVER
-     ════════════════════════════════════ -->
-    <div class="page">
-      <div class="cover">
-        <div class="cover-car">🚗</div>
-        <h1>Constrói o Teu Carro!</h1>
-        <h2>Build Your Car — Portuguese Sentence Game</h2>
-        <p class="subtitle">
-          Aprende português a construir o teu carro de sonho! 🇵🇹<br />
-          Learn Portuguese by building your dream car!
-        </p>
-        <div
-          style="
-            margin: 20px 0;
-            font-size: 16px;
-            color: #4b5563;
-            max-width: 400px;
-            line-height: 1.6;
-          "
-        >
-          <strong>📦 O que precisas / What you need:</strong><br />
-          ✂️ Tesoura / Scissors<br />
-          🖍️ Lápis de cor / Colored pencils<br />
-          🧴 Cola / Glue stick<br />
-          👩 Uma mãe que é a <strong>Dona da Loja de Peças!</strong> 🏪
-        </div>
-        <div class="player-box">
-          Mecânico / Mechanic: ___________________<br />
-          <span>Escreve o teu nome! / Write your name!</span>
-        </div>
-      </div>
-      <div class="page-footer">The Burnay Labs — Página 1/6 — Capa 🚗</div>
+    <!-- QUERER -->
+    <div style="background: #fef3c7; border-radius: 10px; padding: 12px;">
+      <h4 style="font-size: 15px; color: #92400e; margin-bottom: 6px;">QUERER <span style="font-size: 12px; font-weight: 400;">(to want)</span></h4>
+      <table class="pronoun-table" style="font-size: 13px;">
+        <tr><th>Pronome</th><th>Conjugacao</th></tr>
+        <tr><td class="pronoun">Eu</td><td class="conj">quero</td></tr>
+        <tr><td class="pronoun">Tu</td><td class="conj">queres</td></tr>
+        <tr><td class="pronoun">Ele/Ela</td><td class="conj">quer</td></tr>
+        <tr><td class="pronoun">N&#243;s</td><td class="conj">queremos</td></tr>
+        <tr><td class="pronoun">V&#243;s</td><td class="conj">quereis</td></tr>
+        <tr><td class="pronoun">Eles/Elas</td><td class="conj">querem</td></tr>
+      </table>
     </div>
 
-    <!-- ════════════════════════════════════
-     PAGE 2: MOM INSTRUCTIONS
-     ════════════════════════════════════ -->
-    <div class="page mom-page">
-      <div class="mom-header">
-        <div class="emoji">👩‍🔧</div>
-        <div>
-          <h2>Guia da Mãe — Dona da Loja de Peças</h2>
-          <p>Mom's Guide — You are the Parts Store Owner!</p>
-        </div>
-      </div>
-
-      <div class="mom-box">
-        <h3>🎭 O Teu Papel / Your Role</h3>
-        <p>
-          Tu és a <strong>Dona da Loja de Peças de Carro</strong>! 🏪 O teu
-          filho é o <strong>Mecânico</strong> que precisa de comprar peças para
-          construir o carro. Mas na tua loja, as peças não se compram com
-          dinheiro — <strong>compram-se com frases em português!</strong> 🇵🇹
-        </p>
-        <div class="mom-tip">
-          💡 You are the Car Parts Store Owner. Your child is the Mechanic who
-          needs to buy parts. In your store, parts aren't bought with money —
-          they're bought with Portuguese sentences!
-        </div>
-      </div>
-
-      <div class="mom-box">
-        <h3>📋 Como Jogar / How To Play</h3>
-        <ul>
-          <li>
-            <strong>Preparação:</strong> Recorta as 12 peças do carro (página
-            4). Guarda-as contigo — tu és a loja!
-          </li>
-          <li>
-            <strong>Peça a peça:</strong> O mecânico vem à tua loja e diz:
-            <em>"Olá! Quero comprar uma roda!"</em>
-          </li>
-          <li>
-            <strong>Tu respondes:</strong>
-            <em>"Claro! Mas primeiro tens de dizer uma frase em português!"</em>
-          </li>
-          <li>
-            <strong>Dás a pista:</strong> Lê a frase-desafio do cartão
-            correspondente (página 5)
-          </li>
-          <li>
-            <strong>Ele tenta:</strong> Se disser corretamente → dá-lhe a peça!
-            Se precisar de ajuda → ajuda!
-          </li>
-          <li>
-            <strong>Cola a peça:</strong> Ele cola a peça no lugar certo na
-            página do carro (página 3)
-          </li>
-          <li><strong>Repete:</strong> Até as 12 peças estarem no carro! 🏁</li>
-        </ul>
-      </div>
-
-      <div class="mom-box">
-        <h3>🎬 Guião da Loja / Store Script</h3>
-        <p>Usa estas frases para tornar divertido:</p>
-        <div class="mom-script">
-          "Bem-vindo à Loja de Peças da Mãe! Hoje temos peças fantásticas. Mas
-          cuidado — só aceito frases em português!" 🏪
-        </div>
-        <div class="mom-script">
-          "Boa tentativa! Quase… tenta outra vez. Diz: <em>[frase]</em>" (se
-          precisar de ajuda)
-        </div>
-        <div class="mom-script">
-          "PERFEITO! 🌟 Aqui tens a tua [peça]! Vai colá-la no carro!" (quando
-          acertar)
-        </div>
-        <div class="mom-script">
-          "Uau, o carro está quase pronto! Faltam só [X] peças!" (motivação)
-        </div>
-        <div class="mom-script">
-          "PARABÉNS MECÂNICO! 🏆 O carro está completo! Que carro lindo!"
-          (final)
-        </div>
-      </div>
-
-      <div class="mom-box">
-        <h3>💡 Dicas / Tips</h3>
-        <ul>
-          <li>
-            Se ele bloquear, <strong>diz a frase devagar</strong> e pede para
-            repetir
-          </li>
-          <li>
-            Valoriza qualquer tentativa — <strong>"Boa! Quase lá!"</strong>
-          </li>
-          <li>
-            Não precisa de ser perfeito — o objetivo é
-            <strong>tentar falar português</strong>
-          </li>
-          <li>Faz vozes engraçadas de vendedora! 🤪</li>
-          <li>
-            Se ele estiver cansado, para e continua noutra sessão (marca as
-            peças já dadas)
-          </li>
-        </ul>
-        <div class="mom-tip">
-          🌟 The secret: this isn't really about getting sentences perfect. It's
-          about your child hearing and trying Portuguese in a fun context. Every
-          attempt counts!
-        </div>
-      </div>
-
-      <div class="page-footer">
-        The Burnay Labs — Página 2/6 — Guia da Mãe 👩‍🔧
-      </div>
+    <!-- TER -->
+    <div style="background: #eef2ff; border-radius: 10px; padding: 12px;">
+      <h4 style="font-size: 15px; color: #3730a3; margin-bottom: 6px;">TER <span style="font-size: 12px; font-weight: 400;">(to have)</span></h4>
+      <table class="pronoun-table" style="font-size: 13px;">
+        <tr><th>Pronome</th><th>Conjugacao</th></tr>
+        <tr><td class="pronoun">Eu</td><td class="conj">tenho</td></tr>
+        <tr><td class="pronoun">Tu</td><td class="conj">tens</td></tr>
+        <tr><td class="pronoun">Ele/Ela</td><td class="conj">tem</td></tr>
+        <tr><td class="pronoun">N&#243;s</td><td class="conj">temos</td></tr>
+        <tr><td class="pronoun">V&#243;s</td><td class="conj">tendes</td></tr>
+        <tr><td class="pronoun">Eles/Elas</td><td class="conj">t&#234;m</td></tr>
+      </table>
     </div>
 
-    <!-- ════════════════════════════════════
-     PAGE 3: CAR ASSEMBLY — Cola as peças aqui!
-     ════════════════════════════════════ -->
-    <div class="page">
-      <div class="assembly-page">
-        <h2>🚗 A Garagem do Mecânico</h2>
-        <p class="sub">
-          Cola cada peça no sítio certo quando a comprares na loja! / Glue each
-          part here!
-        </p>
-
-        <div class="car-body-container">
-          <!-- Road -->
-          <div class="road"></div>
-
-          <!-- Car outline with numbered spots -->
-          <div class="car-outline">
-            <!-- Wheels -->
-            <div class="spot spot-1">
-              <span class="spot-num">1</span
-              ><span class="spot-emoji">🛞</span>Roda 1
-            </div>
-            <div class="spot spot-2">
-              <span class="spot-num">2</span
-              ><span class="spot-emoji">🛞</span>Roda 2
-            </div>
-            <div class="spot spot-3">
-              <span class="spot-num">3</span
-              ><span class="spot-emoji">🛞</span>Roda 3
-            </div>
-            <div class="spot spot-4">
-              <span class="spot-num">4</span
-              ><span class="spot-emoji">🛞</span>Roda 4
-            </div>
-            <!-- Body -->
-            <div class="spot spot-5">
-              <span class="spot-num">5</span
-              ><span class="spot-emoji">🏎️</span>Motor
-            </div>
-            <div class="spot spot-6">
-              <span class="spot-num">6</span
-              ><span class="spot-emoji">📦</span>Mala
-            </div>
-            <!-- Windows -->
-            <div class="spot spot-7">
-              <span class="spot-num">7</span
-              ><span class="spot-emoji">🪟</span>Janela
-            </div>
-            <div class="spot spot-8">
-              <span class="spot-num">8</span
-              ><span class="spot-emoji">🪟</span>Janela
-            </div>
-            <!-- Headlights -->
-            <div class="spot spot-9">
-              <span class="spot-num">9</span
-              ><span class="spot-emoji">💡</span>Farol
-            </div>
-            <div class="spot spot-10">
-              <span class="spot-num">10</span
-              ><span class="spot-emoji">💡</span>Farol
-            </div>
-            <!-- Interior -->
-            <div class="spot spot-11">
-              <span class="spot-num">11</span
-              ><span class="spot-emoji">🎵</span>Rádio
-            </div>
-            <div class="spot spot-12">
-              <span class="spot-num">12</span
-              ><span class="spot-emoji">🏁</span>Bandeira
-            </div>
-          </div>
-        </div>
-
-        <!-- Score tracker -->
-        <div style="margin-top: 12px; text-align: center">
-          <strong style="font-size: 14px; color: #4f46e5"
-            >⭐ Peças Ganhas / Parts Earned:</strong
-          >
-          <div class="score-strip">
-            <div class="score-box">1</div>
-            <div class="score-box">2</div>
-            <div class="score-box">3</div>
-            <div class="score-box">4</div>
-            <div class="score-box">5</div>
-            <div class="score-box">6</div>
-            <div class="score-box">7</div>
-            <div class="score-box">8</div>
-            <div class="score-box">9</div>
-            <div class="score-box">10</div>
-            <div class="score-box">11</div>
-            <div class="score-box">12</div>
-          </div>
-          <span style="font-size: 11px; color: #6b7280"
-            >Pinta cada número quando ganhares a peça! / Color each number when
-            you earn the part!</span
-          >
-        </div>
-      </div>
-      <div class="page-footer">The Burnay Labs — Página 3/6 — Garagem 🚗</div>
+    <!-- COMER -->
+    <div style="background: #fef2f2; border-radius: 10px; padding: 12px;">
+      <h4 style="font-size: 15px; color: #991b1b; margin-bottom: 6px;">COMER <span style="font-size: 12px; font-weight: 400;">(to eat)</span></h4>
+      <table class="pronoun-table" style="font-size: 13px;">
+        <tr><th>Pronome</th><th>Conjugacao</th></tr>
+        <tr><td class="pronoun">Eu</td><td class="conj">como</td></tr>
+        <tr><td class="pronoun">Tu</td><td class="conj">comes</td></tr>
+        <tr><td class="pronoun">Ele/Ela</td><td class="conj">come</td></tr>
+        <tr><td class="pronoun">N&#243;s</td><td class="conj">comemos</td></tr>
+        <tr><td class="pronoun">V&#243;s</td><td class="conj">comeis</td></tr>
+        <tr><td class="pronoun">Eles/Elas</td><td class="conj">comem</td></tr>
+      </table>
     </div>
+  </div>
 
-    <!-- ════════════════════════════════════
-     PAGE 4: CUT-OUT CAR PARTS
-     ════════════════════════════════════ -->
-    <div class="page">
-      <h3 class="section-title" style="margin-top: 4mm">
-        ✂️ Peças do Carro — Recortar! / Car Parts — Cut Out!
-      </h3>
-      <p style="font-size: 13px; color: #6b7280; margin-bottom: 12px">
-        <strong>MÃE:</strong> Recorta estas peças e guarda-as contigo. Tu és a
-        Loja! 🏪<br />
-        <strong>MOM:</strong> Cut these out and keep them. You're the Store!
-      </p>
+  <div style="margin-top: 10px; background: #f0f4ff; padding: 10px 14px; border-radius: 10px; text-align: center;">
+    <strong style="color: #4f46e5; font-size: 14px;">Padrao / Pattern:</strong>
+    <span style="font-size: 14px; color: #1f2937;">
+      <strong style="color: #4f46e5;">PRONOME</strong> +
+      <strong style="color: #059669;">VERBO</strong> +
+      <strong style="color: #dc2626;">O QUE?</strong>
+    </span><br>
+    <span style="font-size: 13px; color: #6b7280;">Exemplo: <strong>Eu</strong> <strong style="color: #059669;">gosto de</strong> <strong style="color: #dc2626;">carros</strong>.</span>
+  </div>
 
-      <div class="cards-grid">
-        <div class="part-card">
-          <span class="scissors">✂️</span>
-          <div class="part-emoji">🛞</div>
-          <div class="part-name">Roda 1</div>
-          <div class="part-en">Wheel 1</div>
-          <div class="sentence-prompt">Peça #1</div>
-        </div>
-        <div class="part-card">
-          <span class="scissors">✂️</span>
-          <div class="part-emoji">🛞</div>
-          <div class="part-name">Roda 2</div>
-          <div class="part-en">Wheel 2</div>
-          <div class="sentence-prompt">Peça #2</div>
-        </div>
-        <div class="part-card">
-          <span class="scissors">✂️</span>
-          <div class="part-emoji">🛞</div>
-          <div class="part-name">Roda 3</div>
-          <div class="part-en">Wheel 3</div>
-          <div class="sentence-prompt">Peça #3</div>
-        </div>
-        <div class="part-card">
-          <span class="scissors">✂️</span>
-          <div class="part-emoji">🛞</div>
-          <div class="part-name">Roda 4</div>
-          <div class="part-en">Wheel 4</div>
-          <div class="sentence-prompt">Peça #4</div>
-        </div>
-        <div class="part-card">
-          <span class="scissors">✂️</span>
-          <div class="part-emoji">🏎️</div>
-          <div class="part-name">Motor</div>
-          <div class="part-en">Engine</div>
-          <div class="sentence-prompt">Peça #5</div>
-        </div>
-        <div class="part-card">
-          <span class="scissors">✂️</span>
-          <div class="part-emoji">📦</div>
-          <div class="part-name">Mala</div>
-          <div class="part-en">Trunk</div>
-          <div class="sentence-prompt">Peça #6</div>
-        </div>
-        <div class="part-card">
-          <span class="scissors">✂️</span>
-          <div class="part-emoji">🪟</div>
-          <div class="part-name">Janela Esquerda</div>
-          <div class="part-en">Left Window</div>
-          <div class="sentence-prompt">Peça #7</div>
-        </div>
-        <div class="part-card">
-          <span class="scissors">✂️</span>
-          <div class="part-emoji">🪟</div>
-          <div class="part-name">Janela Direita</div>
-          <div class="part-en">Right Window</div>
-          <div class="sentence-prompt">Peça #8</div>
-        </div>
-        <div class="part-card">
-          <span class="scissors">✂️</span>
-          <div class="part-emoji">💡</div>
-          <div class="part-name">Farol Esquerdo</div>
-          <div class="part-en">Left Headlight</div>
-          <div class="sentence-prompt">Peça #9</div>
-        </div>
-        <div class="part-card">
-          <span class="scissors">✂️</span>
-          <div class="part-emoji">💡</div>
-          <div class="part-name">Farol Direito</div>
-          <div class="part-en">Right Headlight</div>
-          <div class="sentence-prompt">Peça #10</div>
-        </div>
-        <div class="part-card">
-          <span class="scissors">✂️</span>
-          <div class="part-emoji">🎵</div>
-          <div class="part-name">Rádio</div>
-          <div class="part-en">Radio</div>
-          <div class="sentence-prompt">Peça #11</div>
-        </div>
-        <div class="part-card">
-          <span class="scissors">✂️</span>
-          <div class="part-emoji">🏁</div>
-          <div class="part-name">Bandeira de Chegada</div>
-          <div class="part-en">Finish Flag</div>
-          <div class="sentence-prompt">Peça #12</div>
-        </div>
-      </div>
+  <div class="page-footer">The Burnay Labs - Pagina 3/8 - Pronomes</div>
+</div>
 
-      <div class="page-footer">The Burnay Labs — Página 4/6 — Peças ✂️</div>
+<!-- ===================== PAGE 4: EXERCISES 1-4 (GOSTAR DE) ===================== -->
+<div class="page">
+  <h3 class="section-title" style="margin-top: 4mm;">Exercicios - Parte 1: GOSTAR DE (to like)</h3>
+  <p style="font-size: 12px; color: #6b7280; margin-bottom: 12px;">
+    Escreve a frase completa! Usa a tabela da pagina 3 para te ajudar. Cada exercicio = 1 peca!
+  </p>
+
+  <!-- Exercise 1 -->
+  <div class="exercise">
+    <span class="ex-num">1</span>
+    <span class="ex-part">Roda 1</span>
+    <div class="ex-prompt">Escreve: "Eu gosto de carros."</div>
+    <div class="ex-hint">Write: "I like cars." - Copy the sentence below:</div>
+    <div class="ex-write" style="margin-top: 8px;">
+      <span class="label">Resposta:</span>
+      <span class="line"></span>
     </div>
+  </div>
 
-    <!-- ════════════════════════════════════
-     PAGE 5: SENTENCE CHALLENGES (Mom reads these!)
-     ════════════════════════════════════ -->
-    <div class="page">
-      <h3 class="section-title" style="margin-top: 4mm">
-        🏪 Desafios da Loja — Frases Portuguesas
-      </h3>
-      <p style="font-size: 13px; color: #6b7280; margin-bottom: 8px">
-        <strong>MÃE:</strong> Lê o desafio. O mecânico tem de dizer a frase para
-        ganhar a peça!<br />
-        <strong>MOM:</strong> Read the challenge. The mechanic must say the
-        sentence to earn the part!
-      </p>
-
-      <div class="sentence-grid">
-        <div class="s-card">
-          <div class="s-num">1</div>
-          <div class="s-content">
-            <div class="s-prompt">🛞 Roda 1 — Diz: "Eu gosto de carros!"</div>
-            <div class="s-hint">I like cars! (gostar de = to like)</div>
-          </div>
-        </div>
-        <div class="s-card">
-          <div class="s-num">2</div>
-          <div class="s-content">
-            <div class="s-prompt">🛞 Roda 2 — Diz: "Tu gostas de gelado?"</div>
-            <div class="s-hint">Do you like ice cream? (question!)</div>
-          </div>
-        </div>
-        <div class="s-card">
-          <div class="s-num">3</div>
-          <div class="s-content">
-            <div class="s-prompt">🛞 Roda 3 — Diz: "Ele gosta de futebol."</div>
-            <div class="s-hint">He likes football. (ele = he)</div>
-          </div>
-        </div>
-        <div class="s-card">
-          <div class="s-num">4</div>
-          <div class="s-content">
-            <div class="s-prompt">
-              🛞 Roda 4 — Diz: "Nós gostamos de brincar!"
-            </div>
-            <div class="s-hint">We like to play! (nós = we)</div>
-          </div>
-        </div>
-        <div class="s-card">
-          <div class="s-num">5</div>
-          <div class="s-content">
-            <div class="s-prompt">
-              🏎️ Motor — Diz: "Eu quero um carro rápido!"
-            </div>
-            <div class="s-hint">I want a fast car! (querer = to want)</div>
-          </div>
-        </div>
-        <div class="s-card">
-          <div class="s-num">6</div>
-          <div class="s-content">
-            <div class="s-prompt">📦 Mala — Diz: "Ela tem livros na mala."</div>
-            <div class="s-hint">
-              She has books in the trunk. (ter = to have)
-            </div>
-          </div>
-        </div>
-        <div class="s-card">
-          <div class="s-num">7</div>
-          <div class="s-content">
-            <div class="s-prompt">
-              🪟 Janela — Diz: "Eu como pão ao pequeno-almoço."
-            </div>
-            <div class="s-hint">I eat bread at breakfast. (comer = to eat)</div>
-          </div>
-        </div>
-        <div class="s-card">
-          <div class="s-num">8</div>
-          <div class="s-content">
-            <div class="s-prompt">🪟 Janela — Diz: "O meu gato é bonito."</div>
-            <div class="s-hint">My cat is pretty. (o meu = my)</div>
-          </div>
-        </div>
-        <div class="s-card">
-          <div class="s-num">9</div>
-          <div class="s-content">
-            <div class="s-prompt">💡 Farol — Diz: "Eles gostam de bola."</div>
-            <div class="s-hint">They like ball. (eles = they)</div>
-          </div>
-        </div>
-        <div class="s-card">
-          <div class="s-num">10</div>
-          <div class="s-content">
-            <div class="s-prompt">💡 Farol — Diz: "A minha casa é grande!"</div>
-            <div class="s-hint">My house is big! (a minha = my, feminine)</div>
-          </div>
-        </div>
-        <div class="s-card">
-          <div class="s-num">11</div>
-          <div class="s-content">
-            <div class="s-prompt">
-              🎵 Rádio — Diz: "Nós queremos ouvir música!"
-            </div>
-            <div class="s-hint">
-              We want to listen to music! (queremos = we want)
-            </div>
-          </div>
-        </div>
-        <div class="s-card">
-          <div class="s-num">12</div>
-          <div class="s-content">
-            <div class="s-prompt">
-              🏁 Bandeira — Diz: "O meu carro é o melhor!"
-            </div>
-            <div class="s-hint">My car is the best! (o melhor = the best)</div>
-          </div>
-        </div>
-      </div>
-
-      <div
-        style="
-          margin-top: 12px;
-          background: #f0fdf4;
-          padding: 12px 16px;
-          border-radius: 12px;
-          border-left: 4px solid #10b981;
-        "
-      >
-        <strong style="color: #065f46">💡 Dica para a mãe:</strong>
-        <span style="font-size: 13px; color: #065f46"
-          >Se ele bloquear, diz a frase devagar e pede para repetir. Aceita
-          qualquer tentativa razoável — o objetivo é tentar! Se acertar à
-          primeira, reage com entusiasmo: "UAUU! Perfeito, mecânico!" 🌟</span
-        >
-      </div>
-
-      <div class="page-footer">The Burnay Labs — Página 5/6 — Desafios 🏪</div>
+  <!-- Exercise 2 -->
+  <div class="exercise">
+    <span class="ex-num">2</span>
+    <span class="ex-part">Roda 2</span>
+    <div class="ex-prompt">Completa a frase: "Tu ________ de gelado."</div>
+    <div class="ex-hint">Fill in: "You _____ ice cream." (use GOSTAR - tu = gostas)</div>
+    <div class="ex-write" style="margin-top: 8px;">
+      <span class="label">Frase completa:</span>
+      <span class="line"></span>
     </div>
+  </div>
 
-    <!-- ════════════════════════════════════
-     PAGE 6: CERTIFICATE + COLORING
-     ═══════════���════════════════════════ -->
-    <div class="page">
-      <div style="text-align: center; padding-top: 10mm">
-        <div style="font-size: 80px; margin-bottom: 16px">🏆</div>
-        <h2 style="font-size: 32px; color: #f59e0b; margin-bottom: 8px">
-          CERTIFICADO DO MECÂNICO
-        </h2>
-        <h3
-          style="
-            font-size: 20px;
-            color: #6b7280;
-            font-weight: 600;
-            margin-bottom: 30px;
-          "
-        >
-          Mechanic Certificate
-        </h3>
+  <!-- Exercise 3 -->
+  <div class="exercise">
+    <span class="ex-num">3</span>
+    <span class="ex-part">Roda 3</span>
+    <div class="ex-prompt">Traduz para portugues: "He likes football."</div>
+    <div class="ex-hint">Translate! Pronome = Ele. Verbo = gosta de. Football = futebol.</div>
+    <div class="ex-write" style="margin-top: 8px;">
+      <span class="label">Resposta:</span>
+      <span class="line"></span>
+    </div>
+  </div>
 
-        <div
-          style="
-            border: 4px solid #f59e0b;
-            border-radius: 20px;
-            padding: 30px 40px;
-            max-width: 150mm;
-            margin: 0 auto;
-            background: linear-gradient(135deg, #fffbeb, #fff);
-          "
-        >
-          <p style="font-size: 16px; color: #44403c; line-height: 2">
-            Este certificado confirma que<br />
-            <span
-              style="
-                font-size: 24px;
-                font-weight: 900;
-                color: #1a56db;
-                border-bottom: 3px solid #1a56db;
-              "
-            >
-              _________________________ </span
-            ><br />
-            completou <strong>12 frases em português</strong> 🇵🇹<br />
-            e construiu um carro completo! 🚗<br /><br />
-            <em style="font-size: 14px"
-              >"O melhor mecânico do The Burnay Labs!"</em
-            >
-          </p>
+  <!-- Exercise 4 -->
+  <div class="exercise">
+    <span class="ex-num">4</span>
+    <span class="ex-part">Roda 4</span>
+    <div class="ex-prompt">Traduz para portugues: "We like to play."</div>
+    <div class="ex-hint">N&#243;s = we. Gostamos de = we like. Brincar = to play.</div>
+    <div class="ex-write" style="margin-top: 8px;">
+      <span class="label">Resposta:</span>
+      <span class="line"></span>
+    </div>
+  </div>
 
-          <div
-            style="
-              display: flex;
-              justify-content: space-between;
-              margin-top: 30px;
-              padding-top: 20px;
-              border-top: 1px solid #e5e7eb;
-            "
-          >
-            <div style="text-align: center">
-              <div
-                style="
-                  border-bottom: 2px solid #1a1a2e;
-                  width: 50mm;
-                  margin-bottom: 4px;
-                "
-              ></div>
-              <span style="font-size: 12px; color: #6b7280"
-                >Assinatura da Dona da Loja 🏪</span
-              >
-            </div>
-            <div style="text-align: center">
-              <div
-                style="
-                  border-bottom: 2px solid #1a1a2e;
-                  width: 40mm;
-                  margin-bottom: 4px;
-                "
-              ></div>
-              <span style="font-size: 12px; color: #6b7280">Data / Date</span>
-            </div>
-          </div>
-        </div>
+  <div style="background: #f0fdf4; border-radius: 10px; padding: 12px; margin-top: 10px;">
+    <strong style="color: #065f46; font-size: 14px;">Checklist - Pecas ganhas:</strong>
+    <div class="score-strip">
+      <div class="score-box">1</div><div class="score-box">2</div><div class="score-box">3</div><div class="score-box">4</div>
+    </div>
+    <span style="font-size: 11px; color: #065f46;">Pinta quando ganhares a peca! Cola as pecas na garagem! (pag. 8)</span>
+  </div>
 
-        <div style="margin-top: 30px">
-          <h3 style="font-size: 18px; color: #1a56db; margin-bottom: 12px">
-            🎨 Pinta o teu carro! / Color your car!
-          </h3>
-          <div
-            style="
-              border: 3px solid #e5e7eb;
-              border-radius: 20px;
-              padding: 20px;
-              min-height: 60mm;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              background: #fafafa;
-            "
-          >
-            <div style="text-align: center">
-              <div
-                style="font-size: 100px; filter: grayscale(100%) opacity(0.3)"
-              >
-                🚗
-              </div>
-              <p style="font-size: 14px; color: #9ca3af; margin-top: 8px">
-                Desenha e pinta o teu carro de sonho aqui! ✏️🖍️<br />
-                Draw and color your dream car here!
-              </p>
-            </div>
-          </div>
-        </div>
+  <div style="background: #fffbeb; border-radius: 10px; padding: 10px 14px; margin-top: 8px;">
+    <strong style="color: #92400e; font-size: 13px;">Mae diz:</strong>
+    <span style="font-size: 12px; color: #78350f; font-style: italic;">"Fantastico! Ja tens 4 rodas! Agora o carro ja pode andar... mas precisa de motor!"</span>
+  </div>
+
+  <div class="page-footer">The Burnay Labs - Pagina 4/8 - Exercicios 1-4</div>
+</div>
+
+<!-- ===================== PAGE 5: EXERCISES 5-8 (QUERER + TER) ===================== -->
+<div class="page">
+  <h3 class="section-title" style="margin-top: 4mm;">Exercicios - Parte 2: QUERER + TER</h3>
+  <p style="font-size: 12px; color: #6b7280; margin-bottom: 12px;">
+    Agora com verbos novos! Olha para a tabela da pagina 3 se precisares de ajuda.
+  </p>
+
+  <!-- Exercise 5 -->
+  <div class="exercise">
+    <span class="ex-num">5</span>
+    <span class="ex-part">Motor</span>
+    <div class="ex-prompt">Escreve: "Eu quero um carro rapido!"</div>
+    <div class="ex-hint">Write: "I want a fast car!" - Copy below:</div>
+    <div class="ex-write" style="margin-top: 8px;">
+      <span class="label">Resposta:</span>
+      <span class="line"></span>
+    </div>
+  </div>
+
+  <!-- Exercise 6 -->
+  <div class="exercise">
+    <span class="ex-num">6</span>
+    <span class="ex-part">Mala</span>
+    <div class="ex-prompt">Completa: "Ela ________ dois gatos."</div>
+    <div class="ex-hint">"She _____ two cats." (use TER - ela = tem)</div>
+    <div class="ex-write" style="margin-top: 8px;">
+      <span class="label">Frase completa:</span>
+      <span class="line"></span>
+    </div>
+  </div>
+
+  <!-- Exercise 7 -->
+  <div class="exercise">
+    <span class="ex-num">7</span>
+    <span class="ex-part">Janela Esq.</span>
+    <div class="ex-prompt">Traduz: "They want pizza."</div>
+    <div class="ex-hint">Eles = They. Querem = they want. Pizza = pizza.</div>
+    <div class="ex-write" style="margin-top: 8px;">
+      <span class="label">Resposta:</span>
+      <span class="line"></span>
+    </div>
+  </div>
+
+  <!-- Exercise 8 -->
+  <div class="exercise">
+    <span class="ex-num">8</span>
+    <span class="ex-part">Janela Dir.</span>
+    <div class="ex-prompt">Escolhe o pronome certo e escreve a frase:</div>
+    <div class="ex-hint">"_____ temos um cao grande." (Who has a big dog? - We!)</div>
+    <div class="ex-write" style="margin-top: 8px;">
+      <span class="label">Resposta:</span>
+      <span class="line"></span>
+    </div>
+  </div>
+
+  <div style="background: #f0fdf4; border-radius: 10px; padding: 12px; margin-top: 10px;">
+    <strong style="color: #065f46; font-size: 14px;">Checklist - Pecas ganhas:</strong>
+    <div class="score-strip">
+      <div class="score-box">5</div><div class="score-box">6</div><div class="score-box">7</div><div class="score-box">8</div>
+    </div>
+    <span style="font-size: 11px; color: #065f46;">Pinta quando ganhares a peca!</span>
+  </div>
+
+  <div style="background: #fffbeb; border-radius: 10px; padding: 10px 14px; margin-top: 8px;">
+    <strong style="color: #92400e; font-size: 13px;">Mae diz:</strong>
+    <span style="font-size: 12px; color: #78350f; font-style: italic;">"Uau! O carro ja tem motor e janelas! Mas precisa de luzes para conduzir a noite..."</span>
+  </div>
+
+  <div class="page-footer">The Burnay Labs - Pagina 5/8 - Exercicios 5-8</div>
+</div>
+
+<!-- ===================== PAGE 6: EXERCISES 9-12 (COMER + MIX) ===================== -->
+<div class="page">
+  <h3 class="section-title" style="margin-top: 4mm;">Exercicios - Parte 3: COMER + Mistura!</h3>
+  <p style="font-size: 12px; color: #6b7280; margin-bottom: 12px;">
+    Ultimas pecas! Aqui usas todos os verbos. Quase la, mecanico!
+  </p>
+
+  <!-- Exercise 9 -->
+  <div class="exercise">
+    <span class="ex-num">9</span>
+    <span class="ex-part">Farol Esq.</span>
+    <div class="ex-prompt">Escreve: "Tu comes fruta ao lanche."</div>
+    <div class="ex-hint">Write: "You eat fruit at snack time." - Copy below:</div>
+    <div class="ex-write" style="margin-top: 8px;">
+      <span class="label">Resposta:</span>
+      <span class="line"></span>
+    </div>
+  </div>
+
+  <!-- Exercise 10 -->
+  <div class="exercise">
+    <span class="ex-num">10</span>
+    <span class="ex-part">Farol Dir.</span>
+    <div class="ex-prompt">Traduz: "They eat rice and chicken."</div>
+    <div class="ex-hint">Eles = They. Comem = they eat. Arroz e frango = rice and chicken.</div>
+    <div class="ex-write" style="margin-top: 8px;">
+      <span class="label">Resposta:</span>
+      <span class="line"></span>
+    </div>
+  </div>
+
+  <!-- Exercise 11 -->
+  <div class="exercise">
+    <span class="ex-num">11</span>
+    <span class="ex-part">Radio</span>
+    <div class="ex-prompt">Constroi uma frase! Escolhe: pronome + verbo + o que?</div>
+    <div class="ex-hint">Build your own sentence! Pick a pronoun + verb + something you like/want/have/eat.</div>
+    <div style="display: flex; gap: 6px; margin: 8px 0; flex-wrap: wrap;">
+      <div class="write-box" style="min-width: 55px; text-align: center; font-size: 11px; color: #4f46e5;">PRONOME<br><span class="line" style="display: block; min-height: 20px; border-bottom: 2px solid #c7d2fe;"></span></div>
+      <span style="font-size: 20px; line-height: 50px;">+</span>
+      <div class="write-box" style="min-width: 80px; text-align: center; font-size: 11px; color: #059669;">VERBO<br><span class="line" style="display: block; min-height: 20px; border-bottom: 2px solid #a7f3d0;"></span></div>
+      <span style="font-size: 20px; line-height: 50px;">+</span>
+      <div class="write-box" style="min-width: 100px; text-align: center; font-size: 11px; color: #dc2626;">O QUE?<br><span class="line" style="display: block; min-height: 20px; border-bottom: 2px solid #fecaca;"></span></div>
+    </div>
+    <div class="ex-write">
+      <span class="label">Frase completa:</span>
+      <span class="line"></span>
+    </div>
+  </div>
+
+  <!-- Exercise 12 -->
+  <div class="exercise">
+    <span class="ex-num">12</span>
+    <span class="ex-part">Bandeira</span>
+    <div class="ex-prompt">Desafio Final: Escreve DUAS frases sobre ti!</div>
+    <div class="ex-hint">Write 2 sentences about yourself using different pronouns and verbs!</div>
+    <div class="ex-write" style="margin-top: 8px;">
+      <span class="label">1.</span>
+      <span class="line"></span>
+    </div>
+    <div class="ex-write" style="margin-top: 10px;">
+      <span class="label">2.</span>
+      <span class="line"></span>
+    </div>
+  </div>
+
+  <div style="background: #f0fdf4; border-radius: 10px; padding: 12px; margin-top: 10px;">
+    <strong style="color: #065f46; font-size: 14px;">Checklist - Pecas ganhas:</strong>
+    <div class="score-strip">
+      <div class="score-box">9</div><div class="score-box">10</div><div class="score-box">11</div><div class="score-box">12</div>
+    </div>
+    <span style="font-size: 11px; color: #065f46;">Ultimas pecas! Cola tudo na garagem!</span>
+  </div>
+
+  <div style="background: #fffbeb; border-radius: 10px; padding: 10px 14px; margin-top: 8px;">
+    <strong style="color: #92400e; font-size: 13px;">Mae diz:</strong>
+    <span style="font-size: 12px; color: #78350f; font-style: italic;">"PARABENS MECANICO! Todas as pecas ganhas! Vai montar o carro na garagem!"</span>
+  </div>
+
+  <div class="page-footer">The Burnay Labs - Pagina 6/8 - Exercicios 9-12</div>
+</div>
+
+<!-- ===================== PAGE 7: CUT-OUT CAR PARTS ===================== -->
+<div class="page">
+  <h3 class="section-title" style="margin-top: 4mm;">Pecas do Carro - Recortar!</h3>
+  <p style="font-size: 12px; color: #6b7280; margin-bottom: 8px;">
+    <strong>MAE:</strong> Recorta estas pecas antes de comecar. Tu guardas - tu es a Loja!
+  </p>
+
+  <div class="cards-grid">
+    <div class="part-card">
+      <span class="scissors">&#x2702;&#xFE0F;</span>
+      <div class="part-emoji">&#x1F6DE;</div>
+      <div class="part-name">Roda 1</div>
+      <div class="part-num">Peca #1</div>
+    </div>
+    <div class="part-card">
+      <span class="scissors">&#x2702;&#xFE0F;</span>
+      <div class="part-emoji">&#x1F6DE;</div>
+      <div class="part-name">Roda 2</div>
+      <div class="part-num">Peca #2</div>
+    </div>
+    <div class="part-card">
+      <span class="scissors">&#x2702;&#xFE0F;</span>
+      <div class="part-emoji">&#x1F6DE;</div>
+      <div class="part-name">Roda 3</div>
+      <div class="part-num">Peca #3</div>
+    </div>
+    <div class="part-card">
+      <span class="scissors">&#x2702;&#xFE0F;</span>
+      <div class="part-emoji">&#x1F6DE;</div>
+      <div class="part-name">Roda 4</div>
+      <div class="part-num">Peca #4</div>
+    </div>
+    <div class="part-card">
+      <span class="scissors">&#x2702;&#xFE0F;</span>
+      <div class="part-emoji">&#x1F3CE;&#xFE0F;</div>
+      <div class="part-name">Motor</div>
+      <div class="part-num">Peca #5</div>
+    </div>
+    <div class="part-card">
+      <span class="scissors">&#x2702;&#xFE0F;</span>
+      <div class="part-emoji">&#x1F4E6;</div>
+      <div class="part-name">Mala</div>
+      <div class="part-num">Peca #6</div>
+    </div>
+    <div class="part-card">
+      <span class="scissors">&#x2702;&#xFE0F;</span>
+      <div class="part-emoji">&#x1FA9F;</div>
+      <div class="part-name">Janela Esq.</div>
+      <div class="part-num">Peca #7</div>
+    </div>
+    <div class="part-card">
+      <span class="scissors">&#x2702;&#xFE0F;</span>
+      <div class="part-emoji">&#x1FA9F;</div>
+      <div class="part-name">Janela Dir.</div>
+      <div class="part-num">Peca #8</div>
+    </div>
+    <div class="part-card">
+      <span class="scissors">&#x2702;&#xFE0F;</span>
+      <div class="part-emoji">&#x1F4A1;</div>
+      <div class="part-name">Farol Esq.</div>
+      <div class="part-num">Peca #9</div>
+    </div>
+    <div class="part-card">
+      <span class="scissors">&#x2702;&#xFE0F;</span>
+      <div class="part-emoji">&#x1F4A1;</div>
+      <div class="part-name">Farol Dir.</div>
+      <div class="part-num">Peca #10</div>
+    </div>
+    <div class="part-card">
+      <span class="scissors">&#x2702;&#xFE0F;</span>
+      <div class="part-emoji">&#x1F3B5;</div>
+      <div class="part-name">Radio</div>
+      <div class="part-num">Peca #11</div>
+    </div>
+    <div class="part-card">
+      <span class="scissors">&#x2702;&#xFE0F;</span>
+      <div class="part-emoji">&#x1F3C1;</div>
+      <div class="part-name">Bandeira</div>
+      <div class="part-num">Peca #12</div>
+    </div>
+  </div>
+
+  <!-- ANSWER KEY for Mom -->
+  <div style="background: #fffbeb; border-radius: 12px; padding: 14px; margin-top: 10px; border: 2px solid #f59e0b;">
+    <h4 style="font-size: 15px; color: #92400e; margin-bottom: 8px;">Respostas para a Mae / Answer Key for Mom</h4>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 11px; color: #44403c;">
+      <div><strong>1.</strong> Eu gosto de carros.</div>
+      <div><strong>2.</strong> Tu gostas de gelado.</div>
+      <div><strong>3.</strong> Ele gosta de futebol.</div>
+      <div><strong>4.</strong> N&#243;s gostamos de brincar.</div>
+      <div><strong>5.</strong> Eu quero um carro r&#225;pido!</div>
+      <div><strong>6.</strong> Ela tem dois gatos.</div>
+      <div><strong>7.</strong> Eles querem pizza.</div>
+      <div><strong>8.</strong> N&#243;s temos um c&#227;o grande.</div>
+      <div><strong>9.</strong> Tu comes fruta ao lanche.</div>
+      <div><strong>10.</strong> Eles comem arroz e frango.</div>
+      <div><strong>11.</strong> (frase livre / free sentence)</div>
+      <div><strong>12.</strong> (2 frases livres / 2 free sentences)</div>
+    </div>
+  </div>
+
+  <div class="page-footer">The Burnay Labs - Pagina 7/8 - Pecas</div>
+</div>
+
+<!-- ===================== PAGE 8: CAR ASSEMBLY GARAGE + CERTIFICATE ===================== -->
+<div class="page">
+  <h3 class="section-title" style="margin-top: 4mm;">A Garagem do Mecanico - Cola as pecas!</h3>
+  <p style="font-size: 12px; color: #6b7280; margin-bottom: 8px;">
+    Cola cada peca no sitio certo! / Glue each part in the right spot!
+  </p>
+
+  <div class="car-container">
+    <div class="road-line"></div>
+    <!-- SVG Car Outline -->
+    <svg viewBox="0 0 480 300" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+      <!-- Car body outline -->
+      <path d="M 60 200 L 60 170 Q 60 155 75 155 L 180 155 L 210 110 Q 215 105 225 105 L 320 105 Q 330 105 335 110 L 370 155 L 410 155 Q 425 155 425 170 L 425 200" fill="none" stroke="#c7d2fe" stroke-width="2" stroke-dasharray="8,4"/>
+      <line x1="80" y1="200" x2="410" y2="200" stroke="#c7d2fe" stroke-width="2" stroke-dasharray="8,4"/>
+    </svg>
+
+    <!-- Numbered spots -->
+    <div class="car-spot" style="bottom: 8mm; left: 12mm;">
+      <span class="cs-num">1</span>&#x1F6DE;<br><span style="font-size:8px">Roda 1</span>
+    </div>
+    <div class="car-spot" style="bottom: 8mm; left: 42mm;">
+      <span class="cs-num">2</span>&#x1F6DE;<br><span style="font-size:8px">Roda 2</span>
+    </div>
+    <div class="car-spot" style="bottom: 8mm; right: 38mm;">
+      <span class="cs-num">3</span>&#x1F6DE;<br><span style="font-size:8px">Roda 3</span>
+    </div>
+    <div class="car-spot" style="bottom: 8mm; right: 8mm;">
+      <span class="cs-num">4</span>&#x1F6DE;<br><span style="font-size:8px">Roda 4</span>
+    </div>
+    <div class="car-spot" style="bottom: 32mm; left: 8mm;">
+      <span class="cs-num">5</span>&#x1F3CE;&#xFE0F;<br><span style="font-size:8px">Motor</span>
+    </div>
+    <div class="car-spot" style="bottom: 32mm; right: 8mm;">
+      <span class="cs-num">6</span>&#x1F4E6;<br><span style="font-size:8px">Mala</span>
+    </div>
+    <div class="car-spot" style="bottom: 56mm; left: 38mm;">
+      <span class="cs-num">7</span>&#x1FA9F;<br><span style="font-size:8px">Janela</span>
+    </div>
+    <div class="car-spot" style="bottom: 56mm; right: 38mm;">
+      <span class="cs-num">8</span>&#x1FA9F;<br><span style="font-size:8px">Janela</span>
+    </div>
+    <div class="car-spot" style="bottom: 32mm; left: 38mm;">
+      <span class="cs-num">9</span>&#x1F4A1;<br><span style="font-size:8px">Farol</span>
+    </div>
+    <div class="car-spot" style="bottom: 32mm; right: 38mm;">
+      <span class="cs-num">10</span>&#x1F4A1;<br><span style="font-size:8px">Farol</span>
+    </div>
+    <div class="car-spot" style="bottom: 56mm; left: 72mm;">
+      <span class="cs-num">11</span>&#x1F3B5;<br><span style="font-size:8px">Radio</span>
+    </div>
+    <div class="car-spot" style="bottom: 78mm; left: 60mm; right: 60mm;">
+      <span class="cs-num">12</span>&#x1F3C1;<br><span style="font-size:8px">Bandeira</span>
+    </div>
+  </div>
+
+  <!-- Mini Certificate -->
+  <div style="margin-top: 10px; border: 3px solid #f59e0b; border-radius: 16px; padding: 16px 20px; text-align: center; background: linear-gradient(135deg, #fffbeb, #fff);">
+    <div style="font-size: 36px;">&#x1F3C6;</div>
+    <h3 style="font-size: 20px; color: #f59e0b; margin-bottom: 4px;">CERTIFICADO DO MECANICO</h3>
+    <p style="font-size: 14px; color: #44403c; line-height: 1.8;">
+      <span style="font-size: 18px; font-weight: 900; color: #1a56db; border-bottom: 2px solid #1a56db;">
+        _________________________
+      </span><br>
+      completou <strong>12 exercicios em portugues</strong> e construiu um carro!
+    </p>
+    <div style="display: flex; justify-content: space-around; margin-top: 14px; padding-top: 10px; border-top: 1px solid #e5e7eb;">
+      <div style="text-align: center;">
+        <div style="border-bottom: 2px solid #1a1a2e; width: 45mm; margin-bottom: 2px;"></div>
+        <span style="font-size: 10px; color: #6b7280;">Dona da Loja</span>
       </div>
-
-      <div class="page-footer">
-        The Burnay Labs — Página 6/6 — Certificado 🏆
+      <div style="text-align: center;">
+        <div style="border-bottom: 2px solid #1a1a2e; width: 35mm; margin-bottom: 2px;"></div>
+        <span style="font-size: 10px; color: #6b7280;">Data</span>
       </div>
     </div>
-  </body>
+  </div>
+
+  <div class="page-footer">The Burnay Labs - Pagina 8/8 - Garagem + Certificado</div>
+</div>
+
+</body>
 </html>
