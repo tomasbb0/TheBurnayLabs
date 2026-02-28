@@ -4183,12 +4183,6 @@
       };
       firebase.initializeApp(firebaseConfig);
       var db = firebase.firestore();
-      console.log("[BurnayLabs] Firebase initialized, testing Firestore...");
-      db.collection("students").get().then(function(s) {
-        console.log("[BurnayLabs] Firestore test: " + s.size + " students found");
-      }).catch(function(e) {
-        console.error("[BurnayLabs] Firestore test FAILED:", e.code, e.message);
-      });
 
       // Users
       var USERS = {
@@ -4472,18 +4466,11 @@
       // Load Students
       function loadStudents() {
         var list = document.getElementById("student-list");
-        console.log(
-          "[BurnayLabs] loadStudents() called, querying Firestore...",
-        );
         db.collection("students")
           .get()
           .then(function (snapshot) {
-            console.log(
-              "[BurnayLabs] Firestore returned " + snapshot.size + " students",
-            );
             if (snapshot.empty) {
-              list.innerHTML =
-                '<div class="empty-state">No students yet — Firestore returned 0 documents. Check Firebase Console → Firestore → students collection.</div>';
+              list.innerHTML = '<div class="empty-state">No students yet</div>';
               return;
             }
             list.innerHTML = "";
@@ -4531,11 +4518,8 @@
             document.getElementById("students-content").classList.add("open");
           })
           .catch(function (e) {
-            console.error("[BurnayLabs] Firestore error loading students:", e);
             list.innerHTML =
-              '<div class="empty-state" style="color:#ef4444">⚠️ Error loading students: ' +
-              e.message +
-              ". <br><br>This usually means Firestore security rules expired. Go to <b>Firebase Console → Firestore → Rules</b> and update the expiry date.</div>";
+              '<div class="empty-state">Error loading: ' + e.message + "</div>";
           });
       }
 
